@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Vouchers — PUKHTOON SOCIETY IST</title>
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sofia-pro">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-pukhtoon-grid">
+
+  <div class="app-layout">
+    <!-- Desktop Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="society-logo">
+          <div class="logo-symbol">
+            <img src="images/logo.png" alt="Pukhtoon Society" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <svg style="display:none;" viewBox="0 0 40 40" fill="none" width="20" height="20">
+              <polygon points="20,2 25,14 38,14 28,22 32,35 20,27 8,35 12,22 2,14 15,14" stroke="currentColor" stroke-width="2" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">PUKHTOON <span>SOCIETY</span></span>
+            <span class="logo-subtitle">COMMAND HUB</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-heading">Operations</div>
+        <a href="dashboard.html" class="sidebar-link"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+        <a href="students.html" class="sidebar-link"><i data-lucide="users" class="w-4 h-4"></i><span>Students Directory</span></a>
+        <a href="contributions.html" class="sidebar-link"><i data-lucide="coins" class="w-4 h-4"></i><span>Contribution Cycles</span></a>
+        <a href="events.html" class="sidebar-link"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events & Budgets</span></a>
+        <a href="expenses.html" class="sidebar-link active"><i data-lucide="receipt" class="w-4 h-4"></i><span>Expense Vouchers</span></a>
+        <a href="ledger.html" class="sidebar-link"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Master Ledger</span></a>
+
+        <div class="sidebar-heading" style="margin-top: 0.5rem;">Intelligence</div>
+        <a href="analytics.html" class="sidebar-link"><i data-lucide="bar-chart-3" class="w-4 h-4"></i><span>Financial Analytics</span></a>
+        <a href="reports.html" class="sidebar-link"><i data-lucide="printer" class="w-4 h-4"></i><span>Audit Reports</span></a>
+        <a href="organizers.html" class="sidebar-link"><i data-lucide="shield-check" class="w-4 h-4"></i><span>Council Roster</span></a>
+        <a href="audit-logs.html" class="sidebar-link"><i data-lucide="history" class="w-4 h-4"></i><span>Security Logs</span></a>
+        <a href="settings.html" class="sidebar-link"><i data-lucide="settings" class="w-4 h-4"></i><span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="userAvatar">AK</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Muhammad Ahmad</span>
+            <span class="user-role" id="userRole">Super Admin</span>
+          </div>
+        </div>
+        <button class="btn btn-icon" onclick="Auth.logout()" title="Sign Out">
+          <i data-lucide="log-out" class="w-4 h-4 text-accent-red"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+      <header class="app-header">
+        <button class="header-search-btn" onclick="openModal('cmdPaletteModal')">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <span>Search expense voucher, title, or ref...</span>
+          <kbd style="margin-left: auto; padding: 0.125rem 0.375rem; border-radius: 0.375rem; background: var(--surface); border: 1px solid var(--border); font-size: 0.6875rem;">Ctrl+K</kbd>
+        </button>
+
+        <div class="header-actions">
+          <button class="btn btn-icon theme-toggle-btn" onclick="Theme.toggle()" title="Toggle Theme">
+            <i data-lucide="moon" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-body">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;">Expense Vouchers Ledger</h1>
+            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.25rem;">
+              Audited operational costs, catering advances, and sound & venue rental receipts at IST Islamabad.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-primary btn-sm" onclick="openModal('addExpenseModal')">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>Log Expense Voucher</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Strip -->
+        <div class="card card-glass" style="padding: 1rem; margin-bottom: 1.5rem;">
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.75rem;">
+            <input type="text" id="expenseSearch" class="form-input" placeholder="Search by expense title, voucher #, or event..." oninput="filterExpenses()">
+            <select id="expenseCategoryFilter" class="form-select" onchange="filterExpenses()">
+              <option value="ALL">All Categories</option>
+              <option value="Food">Food & Catering</option>
+              <option value="Decoration">Decoration & Stage</option>
+              <option value="Sound & Media">Sound & Media</option>
+              <option value="Printing">Printing & Souvenirs</option>
+              <option value="Venue">Venue & Hall</option>
+              <option value="Transport">Transport</option>
+              <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Expenses Table -->
+        <div class="card card-glass">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Voucher Ref</th>
+                  <th>Date</th>
+                  <th>Expense Item</th>
+                  <th>Associated Event</th>
+                  <th>Category</th>
+                  <th style="text-align: right;">Amount</th>
+                  <th>Approved By</th>
+                </tr>
+              </thead>
+              <tbody id="allExpensesBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Tab Bar -->
+  <nav class="mobile-bottom-nav">
+    <a href="dashboard.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+    <a href="students.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="users" class="w-4 h-4"></i><span>Students</span></a>
+    <a href="contributions.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="coins" class="w-4 h-4"></i><span>Dues</span></a>
+    <a href="events.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events</span></a>
+    <a href="ledger.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Ledger</span></a>
+  </nav>
+
+  <!-- Modal: Add Expense -->
+  <div id="addExpenseModal" class="modal-backdrop" onclick="closeModal('addExpenseModal')">
+    <div class="modal-dialog" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">Log Itemized Expense Voucher</h3>
+        <button class="btn btn-icon" onclick="closeModal('addExpenseModal')"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="handleGeneralExpenseSubmit(event)">
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Expense Title / Item</label>
+            <input type="text" id="geTitle" class="form-input" required placeholder="e.g. Traditional Attan Shawls Rental">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target Event</label>
+            <select id="geEventSelect" class="form-select" required></select>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select id="geCategory" class="form-select">
+                <option value="Food">Food & Catering</option>
+                <option value="Decoration">Decoration & Stage</option>
+                <option value="Sound & Media">Sound & Media</option>
+                <option value="Printing">Printing & Badges</option>
+                <option value="Venue">Venue & Hall</option>
+                <option value="Transport">Transport</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Amount (PKR)</label>
+              <input type="number" id="geAmount" class="form-input" required value="10000" step="500">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Voucher Reference</label>
+            <input type="text" id="geRef" class="form-input" required placeholder="VCH-2026-086">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('addExpenseModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Deduct & Reconcile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderExpensesTable();
+      populateEventSelect();
+    });
+
+    function renderExpensesTable(filteredList = null) {
+      const data = DataStore.load();
+      const expenses = filteredList || data.expenses;
+      const tbody = document.getElementById('allExpensesBody');
+
+      if (!tbody) return;
+
+      if (expenses.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">No expense vouchers matching criteria.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = expenses.map(e => `
+        <tr>
+          <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle);">${e.voucherRef}</td>
+          <td style="font-size: 0.75rem; color: var(--text-muted);">${formatDate(e.date)}</td>
+          <td style="font-weight: 700; color: var(--text-primary);">${e.title}</td>
+          <td style="font-size: 0.8125rem; color: var(--text-secondary);">${e.eventTitle}</td>
+          <td><span class="badge badge-purple">${e.category}</span></td>
+          <td style="text-align: right; font-weight: 700; color: var(--accent-red);" class="num-tabular">-${formatPKR(e.amount)}</td>
+          <td style="font-size: 0.75rem; color: var(--text-muted);">${e.approvedBy}</td>
+        </tr>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function populateEventSelect() {
+      const data = DataStore.load();
+      const sel = document.getElementById('geEventSelect');
+      if (sel && data.events) {
+        sel.innerHTML = data.events.map(ev => `
+          <option value="${ev.id}">${ev.title} (${formatPKR(ev.plannedBudget)})</option>
+        `).join('');
+      }
+    }
+
+    function filterExpenses() {
+      const q = document.getElementById('expenseSearch').value.toLowerCase().trim();
+      const cat = document.getElementById('expenseCategoryFilter').value;
+
+      const data = DataStore.load();
+      const filtered = data.expenses.filter(e => {
+        const matchQ = !q || e.title.toLowerCase().includes(q) || e.voucherRef.toLowerCase().includes(q) || e.eventTitle.toLowerCase().includes(q);
+        const matchCat = cat === 'ALL' || e.category === cat;
+        return matchQ && matchCat;
+      });
+
+      renderExpensesTable(filtered);
+    }
+
+    function handleGeneralExpenseSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('geTitle').value;
+      const evId = document.getElementById('geEventSelect').value;
+      const cat = document.getElementById('geCategory').value;
+      const amount = Number(document.getElementById('geAmount').value);
+      const ref = document.getElementById('geRef').value;
+
+      const data = DataStore.load();
+      const eventObj = data.events.find(ev => ev.id === evId) || data.events[0];
+
+      const newExpense = {
+        id: 'exp_' + Date.now(),
+        eventId: eventObj.id,
+        eventTitle: eventObj.title,
+        title: title,
+        amount: amount,
+        category: cat,
+        date: new Date().toISOString().split('T')[0],
+        voucherRef: ref,
+        approvedBy: Auth.getUser().name
+      };
+
+      data.expenses.unshift(newExpense);
+      eventObj.actualSpending += amount;
+
+      data.transactions.unshift({
+        id: 'txn_' + Date.now(),
+        transactionRef: ref,
+        date: new Date().toISOString().split('T')[0],
+        description: `${title} (${eventObj.title})`,
+        amount: -amount,
+        type: 'OUTFLOW',
+        category: 'Event Expense',
+        recordedBy: Auth.getUser().name
+      });
+
+      data.auditLogs.unshift({
+        id: 'aud_' + Date.now(),
+        action: 'EXPENSE_APPROVED',
+        actor: Auth.getUser().name,
+        details: `Approved ${ref} (${formatPKR(amount)}) for ${title}`,
+        timestamp: new Date().toISOString()
+      });
+
+      DataStore.save(data);
+      closeModal('addExpenseModal');
+      showToast('Voucher Reconciled', `Recorded ${formatPKR(amount)} for ${title}`);
+      filterExpenses();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Analytics — PUKHTOON SOCIETY IST</title>
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sofia-pro">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-pukhtoon-grid">
+
+  <div class="app-layout">
+    <!-- Desktop Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="society-logo">
+          <div class="logo-symbol">
+            <img src="images/logo.png" alt="Pukhtoon Society" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <svg style="display:none;" viewBox="0 0 40 40" fill="none" width="20" height="20">
+              <polygon points="20,2 25,14 38,14 28,22 32,35 20,27 8,35 12,22 2,14 15,14" stroke="currentColor" stroke-width="2" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">PUKHTOON <span>SOCIETY</span></span>
+            <span class="logo-subtitle">COMMAND HUB</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-heading">Operations</div>
+        <a href="dashboard.html" class="sidebar-link"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+        <a href="students.html" class="sidebar-link"><i data-lucide="users" class="w-4 h-4"></i><span>Students Directory</span></a>
+        <a href="contributions.html" class="sidebar-link"><i data-lucide="coins" class="w-4 h-4"></i><span>Contribution Cycles</span></a>
+        <a href="events.html" class="sidebar-link"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events & Budgets</span></a>
+        <a href="expenses.html" class="sidebar-link"><i data-lucide="receipt" class="w-4 h-4"></i><span>Expense Vouchers</span></a>
+        <a href="ledger.html" class="sidebar-link"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Master Ledger</span></a>
+
+        <div class="sidebar-heading" style="margin-top: 0.5rem;">Intelligence</div>
+        <a href="analytics.html" class="sidebar-link active"><i data-lucide="bar-chart-3" class="w-4 h-4"></i><span>Financial Analytics</span></a>
+        <a href="reports.html" class="sidebar-link"><i data-lucide="printer" class="w-4 h-4"></i><span>Audit Reports</span></a>
+        <a href="organizers.html" class="sidebar-link"><i data-lucide="shield-check" class="w-4 h-4"></i><span>Council Roster</span></a>
+        <a href="audit-logs.html" class="sidebar-link"><i data-lucide="history" class="w-4 h-4"></i><span>Security Logs</span></a>
+        <a href="settings.html" class="sidebar-link"><i data-lucide="settings" class="w-4 h-4"></i><span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="userAvatar">AK</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Muhammad Ahmad</span>
+            <span class="user-role" id="userRole">Super Admin</span>
+          </div>
+        </div>
+        <button class="btn btn-icon" onclick="Auth.logout()" title="Sign Out">
+          <i data-lucide="log-out" class="w-4 h-4 text-accent-red"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+      <header class="app-header">
+        <button class="header-search-btn" onclick="openModal('cmdPaletteModal')">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <span>Search metric or command...</span>
+          <kbd style="margin-left: auto; padding: 0.125rem 0.375rem; border-radius: 0.375rem; background: var(--surface); border: 1px solid var(--border); font-size: 0.6875rem;">Ctrl+K</kbd>
+        </button>
+
+        <div class="header-actions">
+          <button class="btn btn-icon theme-toggle-btn" onclick="Theme.toggle()" title="Toggle Theme">
+            <i data-lucide="moon" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-body">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.25rem;">
+          <h1 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;">Financial Intelligence & Analytics</h1>
+          <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.25rem;">
+            Comparative analysis of student compliance, operational capital allocation, and department participation.
+          </p>
+        </div>
+
+        <!-- 4 Stat Cards -->
+        <div class="kpi-grid">
+          <div class="card card-glass kpi-card">
+            <div class="kpi-header">
+              <span>Collection Efficiency</span>
+              <div class="kpi-icon-wrap" style="background: var(--accent-emerald-subtle); color: var(--accent-emerald);">
+                <i data-lucide="percent" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="kpi-val num-tabular" style="color: var(--accent-emerald);">94.8%</div>
+            <div class="kpi-desc">Dues compliance rate</div>
+          </div>
+
+          <div class="card card-glass kpi-card">
+            <div class="kpi-header">
+              <span>Avg Dues / Member</span>
+              <div class="kpi-icon-wrap" style="background: var(--accent-blue-subtle); color: var(--accent-blue);">
+                <i data-lucide="coins" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="kpi-val num-tabular" id="avgDues">PKR 4,875</div>
+            <div class="kpi-desc">Lifetime average per student</div>
+          </div>
+
+          <div class="card card-glass kpi-card">
+            <div class="kpi-header">
+              <span>Audited Expenses</span>
+              <div class="kpi-icon-wrap" style="background: var(--accent-amber-subtle); color: var(--accent-amber);">
+                <i data-lucide="receipt" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="kpi-val num-tabular" id="anTotalSpent">PKR 0</div>
+            <div class="kpi-desc">Total vouchers reconciled</div>
+          </div>
+
+          <div class="card card-glass kpi-card" style="border-color: rgba(16, 185, 129, 0.3);">
+            <div class="kpi-header">
+              <span>Liquidity Buffer</span>
+              <div class="kpi-icon-wrap" style="background: var(--accent-emerald-subtle); color: var(--accent-emerald);">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="kpi-val num-tabular" style="color: var(--accent-emerald);" id="anBalance">PKR 0</div>
+            <div class="kpi-desc">Free unencumbered cash</div>
+          </div>
+        </div>
+
+        <!-- Cash Flow Chart (Full Width) -->
+        <div class="card card-glass" style="margin-bottom: 2rem;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Cash Flow & Liquidity Trajectory</h3>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Multi-month trend of collections against operational outlays</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="height: 300px; position: relative;">
+              <canvas id="analyticsCashFlow"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Budget Comparison & Category Donut -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+          <div class="card card-glass">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Event Budget vs Actual Realization</h3>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Planned budget ceiling vs realized vendor invoice vouchers</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div style="height: 280px; position: relative;">
+                <canvas id="analyticsBudgetComp"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-glass">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Expenditure by Operational Stream</h3>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Percentage share of catering, decor, sound, and printing</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div style="height: 280px; position: relative;">
+                <canvas id="analyticsCatDonut"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Department Participation Distribution -->
+        <div class="card card-glass">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">IST Department Contributor Distribution</h3>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Enrolled society member count across university academic faculties</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;" id="deptGrid">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Tab Bar -->
+  <nav class="mobile-bottom-nav">
+    <a href="dashboard.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+    <a href="students.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="users" class="w-4 h-4"></i><span>Students</span></a>
+    <a href="contributions.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="coins" class="w-4 h-4"></i><span>Dues</span></a>
+    <a href="events.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events</span></a>
+    <a href="ledger.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Ledger</span></a>
+  </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const stats = DataStore.getStats();
+      document.getElementById('anTotalSpent').textContent = formatPKR(stats.totalSpent);
+      document.getElementById('anBalance').textContent = formatPKR(stats.availableBalance);
+
+      ChartManager.renderCashFlow('analyticsCashFlow');
+      ChartManager.renderBudgetComparison('analyticsBudgetComp');
+      ChartManager.renderCategoryDonut('analyticsCatDonut');
+
+      // Department counts
+      const data = DataStore.load();
+      const counts = {};
+      data.departments.forEach(d => counts[d] = 0);
+      data.students.forEach(s => {
+        counts[s.department] = (counts[s.department] || 0) + 1;
+      });
+
+      const deptGrid = document.getElementById('deptGrid');
+      if (deptGrid) {
+        deptGrid.innerHTML = Object.keys(counts).map(dept => `
+          <div style="background: var(--surface-secondary); padding: 1.25rem; border-radius: 0.875rem; border: 1px solid var(--border);">
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500; margin-bottom: 0.5rem; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" title="${dept}">
+              ${dept}
+            </div>
+            <div style="font-size: 1.75rem; font-weight: 800; color: var(--accent-blue);" class="num-tabular">
+              ${counts[dept]} <span style="font-size: 0.75rem; font-weight: 400; color: var(--text-subtle);">Members</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

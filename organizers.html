@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Council Roster & RBAC — PUKHTOON SOCIETY IST</title>
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sofia-pro">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-pukhtoon-grid">
+
+  <div class="app-layout">
+    <!-- Desktop Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="society-logo">
+          <div class="logo-symbol">
+            <img src="images/logo.png" alt="Pukhtoon Society" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <svg style="display:none;" viewBox="0 0 40 40" fill="none" width="20" height="20">
+              <polygon points="20,2 25,14 38,14 28,22 32,35 20,27 8,35 12,22 2,14 15,14" stroke="currentColor" stroke-width="2" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">PUKHTOON <span>SOCIETY</span></span>
+            <span class="logo-subtitle">COMMAND HUB</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-heading">Operations</div>
+        <a href="dashboard.html" class="sidebar-link"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+        <a href="students.html" class="sidebar-link"><i data-lucide="users" class="w-4 h-4"></i><span>Students Directory</span></a>
+        <a href="contributions.html" class="sidebar-link"><i data-lucide="coins" class="w-4 h-4"></i><span>Contribution Cycles</span></a>
+        <a href="events.html" class="sidebar-link"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events & Budgets</span></a>
+        <a href="expenses.html" class="sidebar-link"><i data-lucide="receipt" class="w-4 h-4"></i><span>Expense Vouchers</span></a>
+        <a href="ledger.html" class="sidebar-link"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Master Ledger</span></a>
+
+        <div class="sidebar-heading" style="margin-top: 0.5rem;">Intelligence</div>
+        <a href="analytics.html" class="sidebar-link"><i data-lucide="bar-chart-3" class="w-4 h-4"></i><span>Financial Analytics</span></a>
+        <a href="reports.html" class="sidebar-link"><i data-lucide="printer" class="w-4 h-4"></i><span>Audit Reports</span></a>
+        <a href="organizers.html" class="sidebar-link active"><i data-lucide="shield-check" class="w-4 h-4"></i><span>Council Roster</span></a>
+        <a href="audit-logs.html" class="sidebar-link"><i data-lucide="history" class="w-4 h-4"></i><span>Security Logs</span></a>
+        <a href="settings.html" class="sidebar-link"><i data-lucide="settings" class="w-4 h-4"></i><span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="userAvatar">AK</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Muhammad Ahmad</span>
+            <span class="user-role" id="userRole">Super Admin</span>
+          </div>
+        </div>
+        <button class="btn btn-icon" onclick="Auth.logout()" title="Sign Out">
+          <i data-lucide="log-out" class="w-4 h-4 text-accent-red"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+      <header class="app-header">
+        <button class="header-search-btn" onclick="openModal('cmdPaletteModal')">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <span>Search officer or role...</span>
+          <kbd style="margin-left: auto; padding: 0.125rem 0.375rem; border-radius: 0.375rem; background: var(--surface); border: 1px solid var(--border); font-size: 0.6875rem;">Ctrl+K</kbd>
+        </button>
+
+        <div class="header-actions">
+          <button class="btn btn-icon theme-toggle-btn" onclick="Theme.toggle()" title="Toggle Theme">
+            <i data-lucide="moon" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-body">
+        <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.25rem;">
+          <h1 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;">Council Officers & Access Control</h1>
+          <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.25rem;">
+            Appointed student leadership and privilege boundaries enforced by IST Directorate of Student Affairs.
+          </p>
+        </div>
+
+        <!-- Officers Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;" id="officersGrid">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Role Permissions Matrix Card -->
+        <div class="card card-glass">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Role-Based Access Control (RBAC) Capability Matrix</h3>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Operational permissions and authorization hierarchy across the platform</p>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Privilege / Permission</th>
+                  <th>Super Admin</th>
+                  <th>Finance Secretary</th>
+                  <th>Event Organizer</th>
+                  <th>Viewer</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight: 600;">Enroll & Manage Students</td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-default">Read Only</span></td>
+                  <td><span class="badge badge-default">Read Only</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Record Dues & Reconcile Payments</td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-red">Restricted</span></td>
+                  <td><span class="badge badge-red">Restricted</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Approve Expense Vouchers</td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-blue">Submit Only</span></td>
+                  <td><span class="badge badge-red">Restricted</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Schedule & Modify Events</td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-blue">Budget Review</span></td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-default">Read Only</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Export Master Financial Ledger</td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-red">Restricted</span></td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Tab Bar -->
+  <nav class="mobile-bottom-nav">
+    <a href="dashboard.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+    <a href="students.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="users" class="w-4 h-4"></i><span>Students</span></a>
+    <a href="contributions.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="coins" class="w-4 h-4"></i><span>Dues</span></a>
+    <a href="events.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events</span></a>
+    <a href="ledger.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Ledger</span></a>
+  </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderOfficers();
+    });
+
+    function renderOfficers() {
+      const data = DataStore.load();
+      const grid = document.getElementById('officersGrid');
+      if (!grid || !data.organizers) return;
+
+      grid.innerHTML = data.organizers.map(org => {
+        const initials = org.name.split(' ').map(n => n[0]).slice(0, 2).join('');
+        return `
+          <div class="card card-glass" style="padding: 1.5rem;">
+            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+              <div style="width: 3.25rem; height: 3.25rem; border-radius: 1rem; background: var(--surface-secondary); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.125rem; font-weight: 700; color: var(--accent-blue);">
+                ${initials}
+              </div>
+              <div>
+                <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">${org.name}</h3>
+                <span class="badge ${org.role === 'SUPER_ADMIN' ? 'badge-blue' : org.role === 'FINANCE_SECRETARY' ? 'badge-emerald' : 'badge-purple'}">
+                  ${org.role.replace('_', ' ')}
+                </span>
+              </div>
+            </div>
+
+            <div style="font-size: 0.8125rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.375rem; border-top: 1px solid var(--border); padding-top: 0.75rem;">
+              <div>Portfolio: <strong style="color: var(--text-primary);">${org.societyTitle}</strong></div>
+              <div>Faculty: <span>${org.department}</span></div>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">${org.email}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+  </script>
+</body>
+</html>

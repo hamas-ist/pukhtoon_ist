@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cultural Gallery — PUKHTOON SOCIETY IST</title>
+  <meta name="description" content="Visual media and photography archive of cultural events, student traditions, and celebrations at IST Islamabad.">
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sofia-pro">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-pukhtoon-grid">
+
+  <!-- Public Navbar -->
+  <header class="public-navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="society-logo">
+        <div class="logo-symbol">
+          <svg viewBox="0 0 40 40" fill="none" width="22" height="22">
+            <polygon points="20,2 25,14 38,14 28,22 32,35 20,27 8,35 12,22 2,14 15,14" stroke="currentColor" stroke-width="2" fill="rgba(0, 113, 227, 0.1)"/>
+            <circle cx="20" cy="20" r="5" fill="currentColor" />
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">PUKHTOON <span>SOCIETY</span></span>
+          <span class="logo-subtitle">IST ISLAMABAD</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="transparency.html" class="nav-link">Transparency</a>
+        <a href="gallery.html" class="nav-link active">Gallery</a>
+        <button class="btn btn-icon theme-toggle-btn" onclick="Theme.toggle()" title="Toggle Theme">
+          <i data-lucide="moon" class="w-4 h-4"></i>
+        </button>
+        <a href="login.html" class="btn btn-primary btn-sm">Council Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 3rem; padding-bottom: 5rem;">
+    <!-- Header -->
+    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;">
+      <span class="badge badge-purple" style="align-self: flex-start;">Visual Archive</span>
+      <h1 style="font-size: 2.25rem; font-weight: 800; letter-spacing: -0.02em;">Society Cultural Gallery</h1>
+      <p style="color: var(--text-muted); font-size: 0.9375rem;">
+        Photographic memories of traditional attan, literary mushairas, student welcome galas, and community life at IST.
+      </p>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;" id="galleryGrid">
+      <div class="card card-glass" style="overflow: hidden; cursor: pointer;" onclick="openLightbox('Khyber Cultural Night 2025', 'Traditional Attan dance circle performed by IST aerospace and avionics student delegates.', 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80')">
+        <div style="height: 220px; background: url('https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;"></div>
+        <div style="padding: 1.25rem;">
+          <span class="badge badge-blue" style="margin-bottom: 0.5rem;">Cultural Gala</span>
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem;">Traditional Attan Circle</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">IST Main Auditorium • Fall 2025</p>
+        </div>
+      </div>
+
+      <div class="card card-glass" style="overflow: hidden; cursor: pointer;" onclick="openLightbox('Annual Pashto Poetry Mushaira', 'Contemporary Pashto poets sharing verses on peace, hospitality, and homeland.', 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80')">
+        <div style="height: 220px; background: url('https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;"></div>
+        <div style="padding: 1.25rem;">
+          <span class="badge badge-purple" style="margin-bottom: 0.5rem;">Literary Mushaira</span>
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem;">Poetry Recitation Symposium</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">Space Sciences Hall • Spring 2026</p>
+        </div>
+      </div>
+
+      <div class="card card-glass" style="overflow: hidden; cursor: pointer;" onclick="openLightbox('Freshers Welcome 2026', 'Welcoming Batch 2024-2028 freshmen to the university society.', 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800&q=80')">
+        <div style="height: 220px; background: url('https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;"></div>
+        <div style="padding: 1.25rem;">
+          <span class="badge badge-emerald" style="margin-bottom: 0.5rem;">Orientation</span>
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem;">Freshers Welcome Dinner</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">IST Activity Center • Sep 2026</p>
+        </div>
+      </div>
+
+      <div class="card card-glass" style="overflow: hidden; cursor: pointer;" onclick="openLightbox('Rubab & Mangay Performance', 'Live folkloric Pashto instrumentation by university musical society artists.', 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80')">
+        <div style="height: 220px; background: url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;"></div>
+        <div style="padding: 1.25rem;">
+          <span class="badge badge-blue" style="margin-bottom: 0.5rem;">Musical Night</span>
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem;">Rubab & Mangay Folk Night</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">IST Student Lawn • Spring 2026</p>
+        </div>
+      </div>
+
+      <div class="card card-glass" style="overflow: hidden; cursor: pointer;" onclick="openLightbox('Inter-University Debate Tournament', 'Parliamentary debate championship between federal university teams.', 'https://images.unsplash.com/photo-1544928147-79a2dbc1f389?auto=format&fit=crop&w=800&q=80')">
+        <div style="height: 220px; background: url('https://images.unsplash.com/photo-1544928147-79a2dbc1f389?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;"></div>
+        <div style="padding: 1.25rem;">
+          <span class="badge badge-amber" style="margin-bottom: 0.5rem;">Debate</span>
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem;">Inter-University Debate</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">IST Video Conference Hall • 2026</p>
+        </div>
+      </div>
+
+      <div class="card card-glass" style="overflow: hidden; cursor: pointer;" onclick="openLightbox('Society Leadership Council 2026', 'Executive council members appointed by Directorate of Student Affairs.', 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80')">
+        <div style="height: 220px; background: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;"></div>
+        <div style="padding: 1.25rem;">
+          <span class="badge badge-emerald" style="margin-bottom: 0.5rem;">Leadership</span>
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem;">Executive Council Session</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">Secretariat Office • Fall 2026</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div id="lightboxModal" class="modal-backdrop" onclick="closeModal('lightboxModal')">
+    <div class="modal-dialog" style="max-width: 800px; padding: 0;" onclick="event.stopPropagation()">
+      <div id="lightboxImg" style="height: 420px; background-size: cover; background-position: center;"></div>
+      <div style="padding: 1.5rem; background: var(--surface);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <h3 id="lightboxTitle" style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.375rem;"></h3>
+            <p id="lightboxDesc" style="font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.5;"></p>
+          </div>
+          <button class="btn btn-icon" onclick="closeModal('lightboxModal')">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    function openLightbox(title, desc, imgUrl) {
+      document.getElementById('lightboxTitle').textContent = title;
+      document.getElementById('lightboxDesc').textContent = desc;
+      document.getElementById('lightboxImg').style.backgroundImage = `url('${imgUrl}')`;
+      openModal('lightboxModal');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Directory — PUKHTOON SOCIETY IST</title>
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sofia-pro">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-pukhtoon-grid">
+
+  <div class="app-layout">
+    <!-- Desktop Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="society-logo">
+          <div class="logo-symbol">
+            <img src="images/logo.png" alt="Pukhtoon Society" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <svg style="display:none;" viewBox="0 0 40 40" fill="none" width="20" height="20">
+              <polygon points="20,2 25,14 38,14 28,22 32,35 20,27 8,35 12,22 2,14 15,14" stroke="currentColor" stroke-width="2" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">PUKHTOON <span>SOCIETY</span></span>
+            <span class="logo-subtitle">COMMAND HUB</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-heading">Operations</div>
+        <a href="dashboard.html" class="sidebar-link"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+        <a href="students.html" class="sidebar-link active"><i data-lucide="users" class="w-4 h-4"></i><span>Students Directory</span></a>
+        <a href="contributions.html" class="sidebar-link"><i data-lucide="coins" class="w-4 h-4"></i><span>Contribution Cycles</span></a>
+        <a href="events.html" class="sidebar-link"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events & Budgets</span></a>
+        <a href="expenses.html" class="sidebar-link"><i data-lucide="receipt" class="w-4 h-4"></i><span>Expense Vouchers</span></a>
+        <a href="ledger.html" class="sidebar-link"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Master Ledger</span></a>
+
+        <div class="sidebar-heading" style="margin-top: 0.5rem;">Intelligence</div>
+        <a href="analytics.html" class="sidebar-link"><i data-lucide="bar-chart-3" class="w-4 h-4"></i><span>Financial Analytics</span></a>
+        <a href="reports.html" class="sidebar-link"><i data-lucide="printer" class="w-4 h-4"></i><span>Audit Reports</span></a>
+        <a href="organizers.html" class="sidebar-link"><i data-lucide="shield-check" class="w-4 h-4"></i><span>Council Roster</span></a>
+        <a href="audit-logs.html" class="sidebar-link"><i data-lucide="history" class="w-4 h-4"></i><span>Security Logs</span></a>
+        <a href="settings.html" class="sidebar-link"><i data-lucide="settings" class="w-4 h-4"></i><span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="userAvatar">AK</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Muhammad Ahmad</span>
+            <span class="user-role" id="userRole">Super Admin</span>
+          </div>
+        </div>
+        <button class="btn btn-icon" onclick="Auth.logout()" title="Sign Out">
+          <i data-lucide="log-out" class="w-4 h-4 text-accent-red"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+      <header class="app-header">
+        <button class="header-search-btn" onclick="openModal('cmdPaletteModal')">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <span>Search student, reg #, or command...</span>
+          <kbd style="margin-left: auto; padding: 0.125rem 0.375rem; border-radius: 0.375rem; background: var(--surface); border: 1px solid var(--border); font-size: 0.6875rem;">Ctrl+K</kbd>
+        </button>
+
+        <div class="header-actions">
+          <button class="btn btn-icon theme-toggle-btn" onclick="Theme.toggle()" title="Toggle Theme">
+            <i data-lucide="moon" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-body">
+        <!-- Title & Action Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;">Student & Member Directory</h1>
+            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.25rem;">
+              Enrolled Pukhtoon society members across IST Islamabad engineering and space sciences faculties.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-outline btn-sm" onclick="exportStudentsCSV()">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>Export CSV</span>
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('addStudentModal')">
+              <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+              <span>Enroll Student</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="card card-glass" style="padding: 1rem; margin-bottom: 1.5rem;">
+          <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 0.75rem;">
+            <input type="text" id="searchInput" class="form-input" placeholder="Search by student name or reg #..." oninput="filterStudents()">
+            
+            <select id="deptFilter" class="form-select" onchange="filterStudents()">
+              <option value="ALL">All Departments</option>
+              <option value="Aerospace Engineering">Aerospace</option>
+              <option value="Avionics Engineering">Avionics</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Electrical Engineering">Electrical</option>
+              <option value="Space Science">Space Science</option>
+              <option value="Mechanical Engineering">Mechanical</option>
+              <option value="Materials Science & Engineering">Materials</option>
+              <option value="Mathematics">Mathematics</option>
+            </select>
+
+            <select id="batchFilter" class="form-select" onchange="filterStudents()">
+              <option value="ALL">All Batches</option>
+              <option value="2021-2025">2021-2025</option>
+              <option value="2022-2026">2022-2026</option>
+              <option value="2023-2027">2023-2027</option>
+              <option value="2024-2028">2024-2028</option>
+            </select>
+
+            <select id="freqFilter" class="form-select" onchange="filterStudents()">
+              <option value="ALL">All Frequencies</option>
+              <option value="MONTHLY">Monthly</option>
+              <option value="BIWEEKLY">Bi-Weekly</option>
+              <option value="WEEKLY">Weekly</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Students Table -->
+        <div class="card card-glass">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Student / Reg #</th>
+                  <th>Department & Batch</th>
+                  <th>Frequency</th>
+                  <th style="text-align: right;">Total Paid</th>
+                  <th style="text-align: right;">Outstanding</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="studentsTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Tab Bar -->
+  <nav class="mobile-bottom-nav">
+    <a href="dashboard.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+    <a href="students.html" class="sidebar-link active" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="users" class="w-4 h-4"></i><span>Students</span></a>
+    <a href="contributions.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="coins" class="w-4 h-4"></i><span>Dues</span></a>
+    <a href="events.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events</span></a>
+    <a href="ledger.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Ledger</span></a>
+  </nav>
+
+  <!-- Modal: Add Student -->
+  <div id="addStudentModal" class="modal-backdrop" onclick="closeModal('addStudentModal')">
+    <div class="modal-dialog" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">Enroll IST Student Member</h3>
+        <button class="btn btn-icon" onclick="closeModal('addStudentModal')"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="handleAddStudentSubmit(event)">
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="mStudentName" class="form-input" required placeholder="e.g. Asadullah Khan">
+          </div>
+          <div class="form-group">
+            <label class="form-label">IST Registration Number</label>
+            <input type="text" id="mStudentReg" class="form-input" required placeholder="e.g. 230101099">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Department</label>
+              <select id="mStudentDept" class="form-select" required>
+                <option value="Aerospace Engineering">Aerospace Engineering</option>
+                <option value="Avionics Engineering">Avionics Engineering</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Electrical Engineering">Electrical Engineering</option>
+                <option value="Materials Science & Engineering">Materials Science</option>
+                <option value="Space Science">Space Science</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Mathematics">Mathematics</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Batch</label>
+              <select id="mStudentBatch" class="form-select" required>
+                <option value="2021-2025">2021-2025</option>
+                <option value="2022-2026">2022-2026</option>
+                <option value="2023-2027">2023-2027</option>
+                <option value="2024-2028" selected>2024-2028</option>
+              </select>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Contribution Cycle</label>
+              <select id="mStudentFreq" class="form-select" required>
+                <option value="MONTHLY" selected>Monthly (PKR 1,000)</option>
+                <option value="BIWEEKLY">Bi-Weekly (PKR 500)</option>
+                <option value="WEEKLY">Weekly (PKR 250)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact Phone</label>
+              <input type="text" id="mStudentPhone" class="form-input" placeholder="+92 300 0000000">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('addStudentModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Enroll Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderStudentsTable();
+    });
+
+    function renderStudentsTable(filterList = null) {
+      const data = DataStore.load();
+      const students = filterList || data.students;
+      const tbody = document.getElementById('studentsTableBody');
+
+      if (!tbody) return;
+
+      if (students.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">No student records found matching filters.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = students.map(s => `
+        <tr>
+          <td>
+            <a href="student-detail.html?id=${s.id}" style="font-weight: 700; color: var(--text-primary); display: flex; flex-direction: column;">
+              <span class="hover-blue">${s.fullName}</span>
+              <span style="font-family: var(--font-mono); font-size: 0.6875rem; color: var(--text-subtle);">${s.regNo}</span>
+            </a>
+          </td>
+          <td>
+            <div style="font-weight: 600; font-size: 0.8125rem;">${s.department}</div>
+            <div style="font-size: 0.6875rem; color: var(--text-muted);">${s.batch}</div>
+          </td>
+          <td><span class="badge badge-blue">${s.contributionFrequency}</span></td>
+          <td style="text-align: right; font-weight: 700; color: var(--accent-emerald);" class="num-tabular">${formatPKR(s.totalContributed)}</td>
+          <td style="text-align: right; font-weight: 700; color: ${s.outstandingBalance > 0 ? 'var(--accent-amber)' : 'var(--text-subtle)'};" class="num-tabular">
+            ${formatPKR(s.outstandingBalance)}
+          </td>
+          <td><span class="badge ${s.status === 'ACTIVE' ? 'badge-emerald' : 'badge-default'}"><span class="badge-dot"></span>${s.status}</span></td>
+          <td style="text-align: right;">
+            <div style="display: inline-flex; gap: 0.25rem;">
+              <a href="student-detail.html?id=${s.id}" class="btn btn-icon btn-sm" title="View Profile">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </a>
+              <button class="btn btn-icon btn-sm" onclick="deleteStudentRecord('${s.id}')" title="Delete Student">
+                <i data-lucide="trash-2" class="w-4 h-4 text-accent-red"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function filterStudents() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      const dept = document.getElementById('deptFilter').value;
+      const batch = document.getElementById('batchFilter').value;
+      const freq = document.getElementById('freqFilter').value;
+
+      const data = DataStore.load();
+      const filtered = data.students.filter(s => {
+        const matchQ = !q || s.fullName.toLowerCase().includes(q) || s.regNo.toLowerCase().includes(q);
+        const matchDept = dept === 'ALL' || s.department === dept;
+        const matchBatch = batch === 'ALL' || s.batch === batch;
+        const matchFreq = freq === 'ALL' || s.contributionFrequency === freq;
+        return matchQ && matchDept && matchBatch && matchFreq;
+      });
+
+      renderStudentsTable(filtered);
+    }
+
+    function handleAddStudentSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('mStudentName').value;
+      const reg = document.getElementById('mStudentReg').value;
+      const dept = document.getElementById('mStudentDept').value;
+      const batch = document.getElementById('mStudentBatch').value;
+      const freq = document.getElementById('mStudentFreq').value;
+      const phone = document.getElementById('mStudentPhone').value;
+
+      const data = DataStore.load();
+      const newStudent = {
+        id: 'std_' + Date.now(),
+        fullName: name,
+        regNo: reg,
+        department: dept,
+        batch: batch,
+        contributionFrequency: freq,
+        expectedAmountPerCycle: freq === 'WEEKLY' ? 250 : freq === 'BIWEEKLY' ? 500 : 1000,
+        totalContributed: 0,
+        outstandingBalance: 1000,
+        status: 'ACTIVE',
+        email: `${reg}@ist.edu.pk`,
+        phone: phone || '+92 300 0000000',
+        joinDate: new Date().toISOString().split('T')[0],
+        notes: 'Enrolled via Web Portal'
+      };
+
+      data.students.unshift(newStudent);
+      data.auditLogs.unshift({
+        id: 'aud_' + Date.now(),
+        action: 'STUDENT_ENROLLED',
+        actor: Auth.getUser().name,
+        details: `Enrolled ${name} (${reg}) in ${dept}`,
+        timestamp: new Date().toISOString()
+      });
+
+      DataStore.save(data);
+      closeModal('addStudentModal');
+      showToast('Student Enrolled', `${name} (${reg}) added to society roster.`);
+      filterStudents();
+    }
+
+    function deleteStudentRecord(stdId) {
+      if (!confirm('Are you sure you want to remove this student record from the society directory?')) return;
+      const data = DataStore.load();
+      data.students = data.students.filter(s => s.id !== stdId);
+      DataStore.save(data);
+      showToast('Student Removed', 'Record successfully deleted.');
+      filterStudents();
+    }
+
+    function exportStudentsCSV() {
+      const data = DataStore.load();
+      const exportData = data.students.map(s => ({
+        'Full Name': s.fullName,
+        'Reg No': s.regNo,
+        'Department': s.department,
+        'Batch': s.batch,
+        'Frequency': s.contributionFrequency,
+        'Total Contributed (PKR)': s.totalContributed,
+        'Outstanding (PKR)': s.outstandingBalance,
+        'Status': s.status,
+        'Email': s.email,
+        'Phone': s.phone
+      }));
+      exportCSV('IST_Pukhtoon_Students_Directory.csv', exportData);
+      showToast('Export Ready', 'Student directory downloaded as CSV.');
+    }
+  </script>
+</body>
+</html>

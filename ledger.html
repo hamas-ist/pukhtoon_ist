@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Financial Ledger — PUKHTOON SOCIETY IST</title>
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sofia-pro">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-pukhtoon-grid">
+
+  <div class="app-layout">
+    <!-- Desktop Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="society-logo">
+          <div class="logo-symbol">
+            <img src="images/logo.png" alt="Pukhtoon Society" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <svg style="display:none;" viewBox="0 0 40 40" fill="none" width="20" height="20">
+              <polygon points="20,2 25,14 38,14 28,22 32,35 20,27 8,35 12,22 2,14 15,14" stroke="currentColor" stroke-width="2" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">PUKHTOON <span>SOCIETY</span></span>
+            <span class="logo-subtitle">COMMAND HUB</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-heading">Operations</div>
+        <a href="dashboard.html" class="sidebar-link"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+        <a href="students.html" class="sidebar-link"><i data-lucide="users" class="w-4 h-4"></i><span>Students Directory</span></a>
+        <a href="contributions.html" class="sidebar-link"><i data-lucide="coins" class="w-4 h-4"></i><span>Contribution Cycles</span></a>
+        <a href="events.html" class="sidebar-link"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events & Budgets</span></a>
+        <a href="expenses.html" class="sidebar-link"><i data-lucide="receipt" class="w-4 h-4"></i><span>Expense Vouchers</span></a>
+        <a href="ledger.html" class="sidebar-link active"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Master Ledger</span></a>
+
+        <div class="sidebar-heading" style="margin-top: 0.5rem;">Intelligence</div>
+        <a href="analytics.html" class="sidebar-link"><i data-lucide="bar-chart-3" class="w-4 h-4"></i><span>Financial Analytics</span></a>
+        <a href="reports.html" class="sidebar-link"><i data-lucide="printer" class="w-4 h-4"></i><span>Audit Reports</span></a>
+        <a href="organizers.html" class="sidebar-link"><i data-lucide="shield-check" class="w-4 h-4"></i><span>Council Roster</span></a>
+        <a href="audit-logs.html" class="sidebar-link"><i data-lucide="history" class="w-4 h-4"></i><span>Security Logs</span></a>
+        <a href="settings.html" class="sidebar-link"><i data-lucide="settings" class="w-4 h-4"></i><span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="userAvatar">AK</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Muhammad Ahmad</span>
+            <span class="user-role" id="userRole">Super Admin</span>
+          </div>
+        </div>
+        <button class="btn btn-icon" onclick="Auth.logout()" title="Sign Out">
+          <i data-lucide="log-out" class="w-4 h-4 text-accent-red"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+      <header class="app-header">
+        <button class="header-search-btn" onclick="openModal('cmdPaletteModal')">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <span>Search ledger reference or transaction...</span>
+          <kbd style="margin-left: auto; padding: 0.125rem 0.375rem; border-radius: 0.375rem; background: var(--surface); border: 1px solid var(--border); font-size: 0.6875rem;">Ctrl+K</kbd>
+        </button>
+
+        <div class="header-actions">
+          <button class="btn btn-icon theme-toggle-btn" onclick="Theme.toggle()" title="Toggle Theme">
+            <i data-lucide="moon" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-body">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;">Double-Entry Master Ledger</h1>
+            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.25rem;">
+              Complete chronological audit stream of all society inflows, collections, vouchers, and vendor payments.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-outline btn-sm" onclick="exportLedgerCSV()">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>Export Ledger CSV</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="card card-glass" style="padding: 1rem; margin-bottom: 1.5rem;">
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.75rem;">
+            <input type="text" id="ledgerSearch" class="form-input" placeholder="Search reference, description, officer..." oninput="filterLedger()">
+            <select id="ledgerTypeFilter" class="form-select" onchange="filterLedger()">
+              <option value="ALL">All Entries (Inflows & Outflows)</option>
+              <option value="INFLOW">Inflows Only (+)</option>
+              <option value="OUTFLOW">Outflows Only (-)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Ledger Table -->
+        <div class="card card-glass">
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Ref #</th>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Type</th>
+                  <th>Category</th>
+                  <th style="text-align: right;">Amount (PKR)</th>
+                  <th>Officer</th>
+                </tr>
+              </thead>
+              <tbody id="masterLedgerBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Tab Bar -->
+  <nav class="mobile-bottom-nav">
+    <a href="dashboard.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+    <a href="students.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="users" class="w-4 h-4"></i><span>Students</span></a>
+    <a href="contributions.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="coins" class="w-4 h-4"></i><span>Dues</span></a>
+    <a href="events.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events</span></a>
+    <a href="ledger.html" class="sidebar-link active" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Ledger</span></a>
+  </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderLedger();
+    });
+
+    function renderLedger(filteredList = null) {
+      const data = DataStore.load();
+      const txns = filteredList || data.transactions;
+      const tbody = document.getElementById('masterLedgerBody');
+
+      if (!tbody) return;
+
+      if (txns.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">No ledger entries matching criteria.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = txns.map(t => {
+        const isInflow = t.amount > 0;
+        return `
+          <tr>
+            <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle);">${t.transactionRef}</td>
+            <td style="font-size: 0.75rem; color: var(--text-muted);">${formatDate(t.date)}</td>
+            <td style="font-weight: 600; color: var(--text-primary);">${t.description}</td>
+            <td><span class="badge ${isInflow ? 'badge-emerald' : 'badge-red'}">${t.type}</span></td>
+            <td><span class="badge badge-default">${t.category}</span></td>
+            <td style="text-align: right; font-weight: 700; color: ${isInflow ? 'var(--accent-emerald)' : 'var(--accent-red)'};" class="num-tabular">
+              ${isInflow ? '+' : ''}${formatPKR(t.amount)}
+            </td>
+            <td style="font-size: 0.75rem; color: var(--text-muted);">${t.recordedBy}</td>
+          </tr>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function filterLedger() {
+      const q = document.getElementById('ledgerSearch').value.toLowerCase().trim();
+      const type = document.getElementById('ledgerTypeFilter').value;
+
+      const data = DataStore.load();
+      const filtered = data.transactions.filter(t => {
+        const matchQ = !q || t.description.toLowerCase().includes(q) || t.transactionRef.toLowerCase().includes(q) || t.recordedBy.toLowerCase().includes(q);
+        const matchType = type === 'ALL' || t.type === type;
+        return matchQ && matchType;
+      });
+
+      renderLedger(filtered);
+    }
+
+    function exportLedgerCSV() {
+      const data = DataStore.load();
+      const rows = data.transactions.map(t => ({
+        'Transaction Ref': t.transactionRef,
+        'Date': t.date,
+        'Description': t.description,
+        'Type': t.type,
+        'Category': t.category,
+        'Amount (PKR)': t.amount,
+        'Officer': t.recordedBy
+      }));
+      exportCSV('IST_Pukhtoon_Master_Ledger.csv', rows);
+      showToast('Export Ready', 'Master ledger downloaded as CSV.');
+    }
+  </script>
+</body>
+</html>

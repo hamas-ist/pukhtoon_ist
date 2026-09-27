@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contribution Cycles — PUKHTOON SOCIETY IST</title>
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sofia-pro">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-pukhtoon-grid">
+
+  <div class="app-layout">
+    <!-- Desktop Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="society-logo">
+          <div class="logo-symbol">
+            <img src="images/logo.png" alt="Pukhtoon Society" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <svg style="display:none;" viewBox="0 0 40 40" fill="none" width="20" height="20">
+              <polygon points="20,2 25,14 38,14 28,22 32,35 20,27 8,35 12,22 2,14 15,14" stroke="currentColor" stroke-width="2" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">PUKHTOON <span>SOCIETY</span></span>
+            <span class="logo-subtitle">COMMAND HUB</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-heading">Operations</div>
+        <a href="dashboard.html" class="sidebar-link"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+        <a href="students.html" class="sidebar-link"><i data-lucide="users" class="w-4 h-4"></i><span>Students Directory</span></a>
+        <a href="contributions.html" class="sidebar-link active"><i data-lucide="coins" class="w-4 h-4"></i><span>Contribution Cycles</span></a>
+        <a href="events.html" class="sidebar-link"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events & Budgets</span></a>
+        <a href="expenses.html" class="sidebar-link"><i data-lucide="receipt" class="w-4 h-4"></i><span>Expense Vouchers</span></a>
+        <a href="ledger.html" class="sidebar-link"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Master Ledger</span></a>
+
+        <div class="sidebar-heading" style="margin-top: 0.5rem;">Intelligence</div>
+        <a href="analytics.html" class="sidebar-link"><i data-lucide="bar-chart-3" class="w-4 h-4"></i><span>Financial Analytics</span></a>
+        <a href="reports.html" class="sidebar-link"><i data-lucide="printer" class="w-4 h-4"></i><span>Audit Reports</span></a>
+        <a href="organizers.html" class="sidebar-link"><i data-lucide="shield-check" class="w-4 h-4"></i><span>Council Roster</span></a>
+        <a href="audit-logs.html" class="sidebar-link"><i data-lucide="history" class="w-4 h-4"></i><span>Security Logs</span></a>
+        <a href="settings.html" class="sidebar-link"><i data-lucide="settings" class="w-4 h-4"></i><span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="userAvatar">AK</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Muhammad Ahmad</span>
+            <span class="user-role" id="userRole">Super Admin</span>
+          </div>
+        </div>
+        <button class="btn btn-icon" onclick="Auth.logout()" title="Sign Out">
+          <i data-lucide="log-out" class="w-4 h-4 text-accent-red"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+      <header class="app-header">
+        <button class="header-search-btn" onclick="openModal('cmdPaletteModal')">
+          <i data-lucide="search" class="w-4 h-4"></i>
+          <span>Search cycle, student, or command...</span>
+          <kbd style="margin-left: auto; padding: 0.125rem 0.375rem; border-radius: 0.375rem; background: var(--surface); border: 1px solid var(--border); font-size: 0.6875rem;">Ctrl+K</kbd>
+        </button>
+
+        <div class="header-actions">
+          <button class="btn btn-icon theme-toggle-btn" onclick="Theme.toggle()" title="Toggle Theme">
+            <i data-lucide="moon" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-body">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;">Contribution Cycles & Pools</h1>
+            <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.25rem;">
+              Manage recurring monthly student dues, event-specific collection drives, and compliance tracking.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-primary btn-sm" onclick="openModal('createCycleModal')">
+              <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+              <span>Create New Cycle</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cycles Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;" id="cyclesGrid">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Recent Member Collections Table -->
+        <div class="card card-glass">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Recent Member Dues Payments</h3>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Live stream of student dues reconciliations across all payment channels</p>
+            </div>
+            <a href="ledger.html" class="btn btn-outline btn-sm">Full Ledger →</a>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Voucher #</th>
+                  <th>Date</th>
+                  <th>Member Description</th>
+                  <th>Channel</th>
+                  <th style="text-align: right;">Amount</th>
+                  <th>Officer</th>
+                </tr>
+              </thead>
+              <tbody id="contributionsTableBody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Tab Bar -->
+  <nav class="mobile-bottom-nav">
+    <a href="dashboard.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Overview</span></a>
+    <a href="students.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="users" class="w-4 h-4"></i><span>Students</span></a>
+    <a href="contributions.html" class="sidebar-link active" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="coins" class="w-4 h-4"></i><span>Dues</span></a>
+    <a href="events.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="calendar" class="w-4 h-4"></i><span>Events</span></a>
+    <a href="ledger.html" class="sidebar-link" style="flex-direction: column; gap: 0.25rem; font-size: 0.6875rem;"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i><span>Ledger</span></a>
+  </nav>
+
+  <!-- Modal: Create Cycle -->
+  <div id="createCycleModal" class="modal-backdrop" onclick="closeModal('createCycleModal')">
+    <div class="modal-dialog" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">Initiate New Contribution Cycle</h3>
+        <button class="btn btn-icon" onclick="closeModal('createCycleModal')"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="handleCreateCycleSubmit(event)">
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Cycle Title</label>
+            <input type="text" id="cTitle" class="form-input" required placeholder="e.g. Fall 2026 Monthly Dues — October">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Type</label>
+              <select id="cType" class="form-select">
+                <option value="MONTHLY">Monthly Regular</option>
+                <option value="CUSTOM">Special Event Pool</option>
+                <option value="BIWEEKLY">Bi-Weekly</option>
+                <option value="WEEKLY">Weekly</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Target Ceiling (PKR)</label>
+              <input type="number" id="cTarget" class="form-input" required value="60000" step="5000">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Start Date</label>
+              <input type="date" id="cStart" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Due Date</label>
+              <input type="date" id="cDue" class="form-input" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('createCycleModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Launch Cycle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCycles();
+      renderDuesTransactions();
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('cStart').value = today;
+      const dueDate = new Date();
+      dueDate.setDate(dueDate.getDate() + 30);
+      document.getElementById('cDue').value = dueDate.toISOString().split('T')[0];
+    });
+
+    function renderCycles() {
+      const data = DataStore.load();
+      const grid = document.getElementById('cyclesGrid');
+      if (!grid || !data.cycles) return;
+
+      grid.innerHTML = data.cycles.map(c => {
+        const pct = c.targetAmount > 0 ? Math.min(100, Math.round((c.collectedAmount / c.targetAmount) * 100)) : 0;
+        return `
+          <div class="card card-glass" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="padding: 1.5rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span class="badge ${c.status === 'ACTIVE' ? 'badge-emerald' : 'badge-default'}">
+                  <span class="badge-dot"></span>${c.status}
+                </span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Due: ${formatDate(c.dueDate)}</span>
+              </div>
+              <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">${c.name}</h3>
+
+              <!-- Progress Bar -->
+              <div style="background: var(--surface-secondary); padding: 1rem; border-radius: 0.75rem; border: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.375rem;">
+                  <span>Collected: <strong style="color: var(--accent-emerald);">${formatPKR(c.collectedAmount)}</strong></span>
+                  <span>Target: <strong style="color: var(--text-primary);">${formatPKR(c.targetAmount)}</strong></span>
+                </div>
+                <div style="width: 100%; height: 8px; background: rgba(120, 120, 128, 0.2); border-radius: 9999px; overflow: hidden;">
+                  <div style="width: ${pct}%; height: 100%; background: var(--accent-emerald); border-radius: 9999px;"></div>
+                </div>
+                <div style="text-align: right; font-size: 0.6875rem; font-weight: 700; color: var(--accent-emerald); margin-top: 0.375rem;">
+                  ${pct}% Collected
+                </div>
+              </div>
+            </div>
+
+            <div style="padding: 1rem 1.5rem; background: var(--surface-secondary); border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Type: ${c.cycleType}</span>
+              <a href="students.html" class="btn btn-secondary btn-sm">Member Status</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function renderDuesTransactions() {
+      const data = DataStore.load();
+      const tbody = document.getElementById('contributionsTableBody');
+      if (!tbody) return;
+
+      const duesTxns = data.transactions.filter(t => t.type === 'INFLOW');
+      tbody.innerHTML = duesTxns.map(t => `
+        <tr>
+          <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle);">${t.transactionRef}</td>
+          <td style="font-size: 0.75rem; color: var(--text-muted);">${formatDate(t.date)}</td>
+          <td style="font-weight: 600;">${t.description}</td>
+          <td><span class="badge badge-blue">${t.category}</span></td>
+          <td style="text-align: right; font-weight: 700; color: var(--accent-emerald);" class="num-tabular">+${formatPKR(t.amount)}</td>
+          <td style="font-size: 0.75rem; color: var(--text-muted);">${t.recordedBy}</td>
+        </tr>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function handleCreateCycleSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('cTitle').value;
+      const type = document.getElementById('cType').value;
+      const target = Number(document.getElementById('cTarget').value);
+      const start = document.getElementById('cStart').value;
+      const due = document.getElementById('cDue').value;
+
+      const data = DataStore.load();
+      const newCycle = {
+        id: 'cyc_' + Date.now(),
+        name: title,
+        cycleType: type,
+        targetAmount: target,
+        collectedAmount: 0,
+        startDate: start,
+        dueDate: due,
+        status: 'ACTIVE'
+      };
+
+      data.cycles.unshift(newCycle);
+      data.auditLogs.unshift({
+        id: 'aud_' + Date.now(),
+        action: 'CYCLE_CREATED',
+        actor: Auth.getUser().name,
+        details: `Launched cycle "${title}" (Target: ${formatPKR(target)})`,
+        timestamp: new Date().toISOString()
+      });
+
+      DataStore.save(data);
+      closeModal('createCycleModal');
+      showToast('Cycle Launched', `"${title}" has been created.`);
+      renderCycles();
+    }
+  </script>
+</body>
+</html>
