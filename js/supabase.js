@@ -1,6 +1,6 @@
 /**
  * ==============================================================================
- * PUKHTOON SOCIETY — SUPABASE CLOUD DATABASE ADAPTER
+ * PUKHTOON COMMUNITY — SUPABASE CLOUD DATABASE ADAPTER
  * Institute of Space Technology (IST), Islamabad
  * ==============================================================================
  * 

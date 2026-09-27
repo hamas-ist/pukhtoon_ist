@@ -4,7 +4,7 @@
   <link rel="icon" type="image/png" href="images/logo.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>System Settings & Configuration — PUKHTOON SOCIETY IST</title>
+  <title>System Settings & Configuration — PUKHTOON COMMUNITY IST</title>
     <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sofia-pro">
   <link rel="stylesheet" href="css/style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -17,13 +17,13 @@
       <div class="sidebar-header">
         <a href="index.html" class="society-logo">
           <div class="logo-symbol">
-            <img src="images/logo.png" alt="Pukhtoon Society" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <img src="images/logo.png" alt="Pukhtoon Community" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <svg style="display:none;" viewBox="0 0 40 40" fill="none" width="20" height="20">
               <polygon points="20,2 25,14 38,14 28,22 32,35 20,27 8,35 12,22 2,14 15,14" stroke="currentColor" stroke-width="2" fill="currentColor"/>
             </svg>
           </div>
           <div class="logo-text">
-            <span class="logo-title">PUKHTOON <span>SOCIETY</span></span>
+            <span class="logo-title">PUKHTOON <span>COMMUNITY</span></span>
             <span class="logo-subtitle">COMMAND HUB</span>
           </div>
         </a>
@@ -48,10 +48,10 @@
 
       <div class="sidebar-footer">
         <div class="user-profile-badge">
-          <div class="user-avatar" id="userAvatar">AK</div>
+          <div class="user-avatar" id="userAvatar">HK</div>
           <div class="user-info">
-            <span class="user-name" id="userName">Muhammad Ahmad</span>
-            <span class="user-role" id="userRole">Super Admin</span>
+            <span class="user-name" id="userName">Hamas Khan</span>
+            <span class="user-role" id="userRole">Super Admin (Finance Secretary)</span>
           </div>
         </div>
         <button class="btn btn-icon" onclick="Auth.logout()" title="Sign Out">
@@ -100,8 +100,8 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
               <div class="form-group">
-                <label class="form-label">Society Name</label>
-                <input type="text" class="form-input" value="PUKHTOON SOCIETY" readonly style="background: var(--surface-muted); color: var(--text-secondary); cursor: not-allowed;">
+                <label class="form-label">Community Name</label>
+                <input type="text" class="form-input" value="PUKHTOON COMMUNITY" readonly style="background: var(--surface-muted); color: var(--text-secondary); cursor: not-allowed;">
               </div>
               <div class="form-group">
                 <label class="form-label">University / Institute</label>
@@ -174,28 +174,28 @@
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.875rem;">
-              <button onclick="switchRole('SUPER_ADMIN')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
+              <button onclick="switchRole('hamas.khan@ist.edu.pk')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
                 <div>
                   <div style="font-weight: 700; font-size: 0.8125rem; color: var(--accent-blue);">Super Admin</div>
-                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Muhammad Ahmad (President)</div>
+                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Hamas Khan (Finance Secretary)</div>
                 </div>
               </button>
-              <button onclick="switchRole('FINANCE_SECRETARY')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
+              <button onclick="switchRole('huzaifa.tariq@ist.edu.pk')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
                 <div>
-                  <div style="font-weight: 700; font-size: 0.8125rem; color: var(--accent-emerald);">Finance Secretary</div>
-                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Bilal Khattak (Treasurer)</div>
+                  <div style="font-weight: 700; font-size: 0.8125rem; color: var(--accent-emerald);">President</div>
+                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Huzaifa Tariq (Read-Only)</div>
                 </div>
               </button>
-              <button onclick="switchRole('EVENT_ORGANIZER')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
+              <button onclick="switchRole('maaz.muhammad@ist.edu.pk')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
                 <div>
-                  <div style="font-weight: 700; font-size: 0.8125rem; color: var(--accent-amber);">Event Organizer</div>
-                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Hamza Afridi (Events Lead)</div>
+                  <div style="font-weight: 700; font-size: 0.8125rem; color: var(--accent-amber);">Vice President</div>
+                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Maaz Muhammad (Read-Only)</div>
                 </div>
               </button>
-              <button onclick="switchRole('VIEWER')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
+              <button onclick="switchRole('misbah.ullah@ist.edu.pk')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
                 <div>
-                  <div style="font-weight: 700; font-size: 0.8125rem; color: var(--text-secondary);">Council Auditor / Viewer</div>
-                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Read-only DSA observer</div>
+                  <div style="font-weight: 700; font-size: 0.8125rem; color: var(--accent-purple);">General Secretary</div>
+                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Misbah Ullah (Read-Only)</div>
                 </div>
               </button>
             </div>
@@ -260,7 +260,7 @@
             <div style="display: flex; flex-direction: column; gap: 1rem;">
               <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);">
                 <div>
-                  <div style="font-weight: 600; font-size: 0.875rem;">Export Complete Society Database</div>
+                  <div style="font-weight: 600; font-size: 0.875rem;">Export Complete Community Database</div>
                   <div style="font-size: 0.75rem; color: var(--text-muted);">Download a JSON snapshot of all members, cycles, expenses, and ledger entries</div>
                 </div>
                 <button class="btn btn-outline" onclick="exportDataJson()">
@@ -302,18 +302,11 @@
   <script src="js/app.js"></script>
   <script>
     function switchRole(roleKey) {
-      const profiles = {
-        'SUPER_ADMIN': { name: 'Muhammad Ahmad', role: 'Super Admin', avatar: 'MA' },
-        'FINANCE_SECRETARY': { name: 'Bilal Khattak', role: 'Finance Secretary', avatar: 'BK' },
-        'EVENT_ORGANIZER': { name: 'Hamza Afridi', role: 'Event Organizer', avatar: 'HA' },
-        'VIEWER': { name: 'DSA Observer', role: 'Council Auditor', avatar: 'DO' }
-      };
-
-      const selected = profiles[roleKey];
+      const selected = COUNCIL_ACCOUNTS[roleKey];
       if (selected) {
         localStorage.setItem('pukhtoon_user', JSON.stringify(selected));
-        if (window.Toast) Toast.show(`Switched active profile to ${selected.role}`, 'success');
-        setTimeout(() => window.location.reload(), 600);
+        showToast(`Profile Switched`, `Switched active profile to ${selected.name} (${selected.title})`, 'success');
+        setTimeout(() => window.location.reload(), 500);
       }
     }
 
@@ -322,7 +315,7 @@
       const jsonStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
       const dlAnchor = document.createElement('a');
       dlAnchor.setAttribute("href", jsonStr);
-      dlAnchor.setAttribute("download", `pukhtoon_society_backup_${new Date().toISOString().slice(0,10)}.json`);
+      dlAnchor.setAttribute("download", `pukhtoon_community_backup_${new Date().toISOString().slice(0,10)}.json`);
       document.body.appendChild(dlAnchor);
       dlAnchor.click();
       dlAnchor.remove();
@@ -357,6 +350,7 @@
     }
 
     function saveSupabaseConfig() {
+      if (!requireSuperAdmin('modify cloud database configuration')) return;
       const url = (document.getElementById('supabaseUrlInput').value || '').trim();
       const key = (document.getElementById('supabaseKeyInput').value || '').trim();
       localStorage.setItem('pukhtoon_supabase_url', url);
@@ -366,6 +360,7 @@
     }
 
     function confirmResetData() {
+      if (!requireSuperAdmin('reset community data')) return;
       if (confirm('Are you sure you want to reset all data back to the default IST Islamabad seed data? Any new entries created during this session will be reverted.')) {
         DataStore.reset();
         if (window.Toast) Toast.show('Dataset successfully restored to IST default seed!', 'info');

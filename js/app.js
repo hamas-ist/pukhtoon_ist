@@ -1,5 +1,5 @@
 /**
- * PUKHTOON SOCIETY — IST ISLAMABAD
+ * PUKHTOON COMMUNITY — IST ISLAMABAD
  * Core Application Controller, Theme Engine & RBAC Session Manager
  */
 
@@ -58,6 +58,89 @@ const Theme = {
   }
 };
 
+// Executive Council Credentials & Profiles
+const COUNCIL_ACCOUNTS = {
+  'hamas.khan@ist.edu.pk': {
+    name: 'Hamas Khan',
+    username: 'hamaskhan',
+    email: 'hamas.khan@ist.edu.pk',
+    password: 'Hamas@IST2026',
+    role: 'SUPER_ADMIN',
+    title: 'Super Admin (Finance Secretary)',
+    avatar: 'HK'
+  },
+  'misbah.ullah@ist.edu.pk': {
+    name: 'Misbah Ullah',
+    username: 'misbahullah',
+    email: 'misbah.ullah@ist.edu.pk',
+    password: 'Misbah@IST2026',
+    role: 'GENERAL_SECRETARY',
+    title: 'General Secretary',
+    avatar: 'MU'
+  },
+  'maaz.muhammad@ist.edu.pk': {
+    name: 'Maaz Muhammad',
+    username: 'maazmuhammad',
+    email: 'maaz.muhammad@ist.edu.pk',
+    password: 'Maaz@IST2026',
+    role: 'VICE_PRESIDENT',
+    title: 'Vice President',
+    avatar: 'MM'
+  },
+  'huzaifa.tariq@ist.edu.pk': {
+    name: 'Huzaifa Tariq',
+    username: 'huzaifatariq',
+    email: 'huzaifa.tariq@ist.edu.pk',
+    password: 'Huzaifa@IST2026',
+    role: 'PRESIDENT',
+    title: 'President',
+    avatar: 'HT'
+  }
+};
+
+// Permission Checking (Only Super Admin Hamas Khan can edit/modify)
+function canEdit() {
+  const user = Auth.getUser();
+  return user && (user.role === 'SUPER_ADMIN' || user.username === 'hamaskhan');
+}
+
+function requireSuperAdmin(actionDesc = 'make changes') {
+  if (!canEdit()) {
+    showRestrictedModal(actionDesc);
+    return false;
+  }
+  return true;
+}
+
+function showRestrictedModal(actionDesc = 'make changes') {
+  let modal = document.getElementById('restrictedActionModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'restrictedActionModal';
+    modal.className = 'modal-backdrop';
+    modal.innerHTML = `
+      <div class="modal-dialog" style="max-width: 440px; text-align: center; padding: 2.25rem 2rem;">
+        <div style="width: 3.75rem; height: 3.75rem; margin: 0 auto 1.25rem; border-radius: 1.125rem; background: rgba(239, 68, 68, 0.12); color: var(--accent-red); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(239, 68, 68, 0.25);">
+          <i data-lucide="shield-alert" class="w-8 h-8"></i>
+        </div>
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: -0.02em;">
+          Access Restricted
+        </h3>
+        <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;">
+          Only <strong>Super Admin Hamas Khan</strong> can do these changes. Your current account has read-only executive audit permissions.
+        </p>
+        <button class="btn btn-primary" onclick="closeModal('restrictedActionModal')" style="width: 100%;">
+          <span>Understood</span>
+        </button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  openModal('restrictedActionModal');
+  showToast('Access Restricted', 'Only Super Admin Hamas Khan can do these changes.', 'warning');
+  if (window.lucide) lucide.createIcons();
+}
+
 // Auth / RBAC Session Simulator
 const Auth = {
   getUser() {
@@ -65,13 +148,8 @@ const Auth = {
       const stored = localStorage.getItem('pukhtoon_user');
       if (stored) return JSON.parse(stored);
     } catch {}
-    // Default to Super Admin for seamless testing
-    return {
-      name: 'Muhammad Ahmad Khan',
-      email: 'admin@ist.pukhtoon.org',
-      role: 'SUPER_ADMIN',
-      title: 'President & Cabinet Head'
-    };
+    // Default to Super Admin Hamas Khan
+    return COUNCIL_ACCOUNTS['hamas.khan@ist.edu.pk'];
   },
 
   setUser(user) {
@@ -95,7 +173,7 @@ const Auth = {
       avatarEl.textContent = initials;
     }
     if (nameEl && user) nameEl.textContent = user.name;
-    if (roleEl && user) roleEl.textContent = user.role.replace('_', ' ');
+    if (roleEl && user) roleEl.textContent = user.title || user.role.replace('_', ' ');
   }
 };
 

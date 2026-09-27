@@ -4,7 +4,7 @@
   <link rel="icon" type="image/png" href="images/logo.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Council Portal Login — PUKHTOON SOCIETY IST</title>
+  <title>Council Portal Login — PUKHTOON COMMUNITY IST</title>
   <meta name="description" content="Authorized executive access portal for Pukhtoon Society council officers and financial auditors at IST Islamabad.">
     <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sofia-pro">
   <link rel="stylesheet" href="css/style.css">
@@ -18,12 +18,13 @@
   <div style="position: absolute; top: 1.5rem; left: 1.5rem;">
     <a href="index.html" class="society-logo">
       <div class="logo-symbol" style="width: 2rem; height: 2rem;">
-        <svg viewBox="0 0 40 40" fill="none" width="18" height="18">
+        <img src="images/logo.png" alt="Pukhtoon Community" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <svg style="display:none;" viewBox="0 0 40 40" fill="none" width="18" height="18">
           <polygon points="20,2 25,14 38,14 28,22 32,35 20,27 8,35 12,22 2,14 15,14" stroke="currentColor" stroke-width="2" fill="currentColor"/>
         </svg>
       </div>
       <div class="logo-text">
-        <span class="logo-title">PUKHTOON <span>SOCIETY</span></span>
+        <span class="logo-title">PUKHTOON <span>COMMUNITY</span></span>
         <span class="logo-subtitle">IST ISLAMABAD</span>
       </div>
     </a>
@@ -38,12 +39,12 @@
   <!-- Login Card -->
   <div class="card card-glass" style="width: 100%; max-width: 440px; box-shadow: var(--shadow-lg);">
     <div style="text-align: center; padding: 2rem 2rem 1rem;">
-      <div class="kpi-icon-wrap" style="width: 3rem; height: 3rem; margin: 0 auto 1rem; background: var(--accent-blue-subtle); color: var(--accent-blue); border: 1px solid rgba(0, 113, 227, 0.2);">
-        <i data-lucide="shield-check" class="w-6 h-6"></i>
+      <div style="width: 4rem; height: 4rem; margin: 0 auto 1.25rem; border-radius: 1.125rem; background: #FFFFFF; padding: 0.375rem; border: 1px solid rgba(0, 113, 227, 0.25); box-shadow: 0 8px 24px rgba(0, 113, 227, 0.15); display: flex; align-items: center; justify-content: center;">
+        <img src="images/logo.png" alt="Pukhtoon Community" style="width: 100%; height: 100%; object-fit: contain;">
       </div>
       <h1 style="font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em;">Council Command Portal</h1>
       <p style="font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.375rem;">
-        Authorized credentials required for executive society operations
+        Authorized credentials required for executive community operations
       </p>
     </div>
 
@@ -51,10 +52,10 @@
       <!-- Form -->
       <form id="loginForm" onsubmit="handleFormSubmit(event)" autocomplete="off" style="display: flex; flex-direction: column; gap: 1.125rem;">
         <div class="form-group">
-          <label class="form-label" for="loginEmail">Council Email</label>
+          <label class="form-label" for="loginEmail">Username or IST Email</label>
           <div style="position: relative;">
-            <input type="email" id="loginEmail" class="form-input" required placeholder="council.member@ist.edu.pk" autocomplete="off" style="padding-left: 2.25rem;">
-            <i data-lucide="mail" class="w-4 h-4" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;"></i>
+            <input type="text" id="loginEmail" class="form-input" required placeholder="hamaskhan or name@ist.edu.pk" autocomplete="off" style="padding-left: 2.25rem;">
+            <i data-lucide="user" class="w-4 h-4" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;"></i>
           </div>
         </div>
 
@@ -74,7 +75,7 @@
             <input type="checkbox" style="accent-color: var(--accent-blue);">
             <span>Remember session on this device</span>
           </label>
-          <a href="#" onclick="alert('Please contact IST Directorate of Student Affairs (DSA) or Society President for credential recovery.'); return false;" style="color: var(--accent-blue);">Forgot password?</a>
+          <a href="#" onclick="alert('Please contact Super Admin Hamas Khan (Finance Secretary) for credential recovery.'); return false;" style="color: var(--accent-blue);">Forgot password?</a>
         </div>
 
         <button type="submit" class="btn btn-primary btn-lg" style="margin-top: 0.5rem; width: 100%;">
@@ -92,41 +93,14 @@
   </div>
 
   <div style="margin-top: 2rem; font-size: 0.75rem; color: var(--text-subtle); text-align: center;">
-    Protected by Pukhtoon Society RBAC Guard • IST Directorate of Student Affairs
+    Protected by Pukhtoon Community RBAC Guard • IST Directorate of Student Affairs
   </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase.js"></script>
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script>
-    const demoAccounts = {
-      SUPER_ADMIN: {
-        name: 'Muhammad Ahmad Khan',
-        email: 'admin@ist.pukhtoon.org',
-        role: 'SUPER_ADMIN',
-        title: 'President & Cabinet Head'
-      },
-      FINANCE_SECRETARY: {
-        name: 'Hamza Afridi',
-        email: 'finance@ist.pukhtoon.org',
-        role: 'FINANCE_SECRETARY',
-        title: 'Finance Secretary & Treasury Incharge'
-      },
-      EVENT_ORGANIZER: {
-        name: 'Zarghona Khattak',
-        email: 'events@ist.pukhtoon.org',
-        role: 'EVENT_ORGANIZER',
-        title: 'Director of Cultural Events'
-      },
-      VIEWER: {
-        name: 'Auditor Council Observer',
-        email: 'viewer@ist.pukhtoon.org',
-        role: 'VIEWER',
-        title: 'DSA Financial Audit Observer'
-      }
-    };
-
     function togglePasswordVisibility() {
       const input = document.getElementById('loginPassword');
       const icon = document.getElementById('eyeIcon');
@@ -142,22 +116,46 @@
 
     function handleFormSubmit(e) {
       e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      const matched = Object.values(demoAccounts).find(a => a.email.toLowerCase() === email.toLowerCase());
+      const identifier = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const password = document.getElementById('loginPassword').value;
+
+      // Find in COUNCIL_ACCOUNTS by email or username
+      const matched = Object.values(COUNCIL_ACCOUNTS).find(a => 
+        a.email.toLowerCase() === identifier || a.username.toLowerCase() === identifier
+      );
+
       if (matched) {
-        Auth.setUser(matched);
-      } else {
-        Auth.setUser({
-          name: email.split('@')[0],
-          email: email,
-          role: 'FINANCE_SECRETARY',
-          title: 'Council Officer'
-        });
+        if (matched.password === password) {
+          Auth.setUser(matched);
+          showToast('Welcome ' + matched.name, `Authenticated as ${matched.title}`, 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 350);
+          return;
+        } else {
+          showToast('Authentication Error', 'Incorrect password entered. Please try again.', 'error');
+          return;
+        }
       }
-      showToast('Authenticated', 'Access granted to Command Center');
-      setTimeout(() => {
-        window.location.href = 'dashboard.html';
-      }, 300);
+
+      // Guest / Other Member View-Only Mode
+      if (password) {
+        const guestUser = {
+          name: identifier.split('@')[0].toUpperCase(),
+          username: identifier.split('@')[0],
+          email: identifier.includes('@') ? identifier : `${identifier}@ist.edu.pk`,
+          role: 'VIEWER',
+          title: 'Community Member (Viewer)',
+          avatar: identifier.substring(0, 2).toUpperCase()
+        };
+        Auth.setUser(guestUser);
+        showToast('Authenticated', 'Logged in with View-Only permissions', 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 350);
+      } else {
+        showToast('Authentication Error', 'Please enter your password.', 'error');
+      }
     }
   </script>
 </body>

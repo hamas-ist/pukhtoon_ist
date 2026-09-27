@@ -4,7 +4,7 @@
   <link rel="icon" type="image/png" href="images/logo.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Council Roster & RBAC — PUKHTOON SOCIETY IST</title>
+  <title>Council Roster & RBAC — PUKHTOON COMMUNITY IST</title>
     <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sofia-pro">
   <link rel="stylesheet" href="css/style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -17,13 +17,13 @@
       <div class="sidebar-header">
         <a href="index.html" class="society-logo">
           <div class="logo-symbol">
-            <img src="images/logo.png" alt="Pukhtoon Society" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <img src="images/logo.png" alt="Pukhtoon Community" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <svg style="display:none;" viewBox="0 0 40 40" fill="none" width="20" height="20">
               <polygon points="20,2 25,14 38,14 28,22 32,35 20,27 8,35 12,22 2,14 15,14" stroke="currentColor" stroke-width="2" fill="currentColor"/>
             </svg>
           </div>
           <div class="logo-text">
-            <span class="logo-title">PUKHTOON <span>SOCIETY</span></span>
+            <span class="logo-title">PUKHTOON <span>COMMUNITY</span></span>
             <span class="logo-subtitle">COMMAND HUB</span>
           </div>
         </a>
@@ -48,10 +48,10 @@
 
       <div class="sidebar-footer">
         <div class="user-profile-badge">
-          <div class="user-avatar" id="userAvatar">AK</div>
+          <div class="user-avatar" id="userAvatar">HK</div>
           <div class="user-info">
-            <span class="user-name" id="userName">Muhammad Ahmad</span>
-            <span class="user-role" id="userRole">Super Admin</span>
+            <span class="user-name" id="userName">Hamas Khan</span>
+            <span class="user-role" id="userRole">Super Admin (Finance Secretary)</span>
           </div>
         </div>
         <button class="btn btn-icon" onclick="Auth.logout()" title="Sign Out">
@@ -89,12 +89,25 @@
           <!-- Rendered dynamically -->
         </div>
 
+        <!-- Executive Security Directive Banner -->
+        <div style="background: rgba(0, 113, 227, 0.08); border: 1px solid rgba(0, 113, 227, 0.25); border-radius: 0.875rem; padding: 1rem 1.25rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
+          <div style="width: 2.5rem; height: 2.5rem; border-radius: 0.625rem; background: var(--accent-blue-subtle); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h4 style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.125rem;">Executive Privilege Directive</h4>
+            <p style="font-size: 0.8125rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+              Only <strong>Super Admin Hamas Khan (Finance Secretary)</strong> possesses write, record, modify, and disbursement privileges. President Huzaifa Tariq, Vice President Maaz Muhammad, and General Secretary Misbah Ullah have full view & audit transparency access.
+            </p>
+          </div>
+        </div>
+
         <!-- Role Permissions Matrix Card -->
         <div class="card card-glass">
           <div class="card-header">
             <div>
-              <h3 class="card-title">Role-Based Access Control (RBAC) Capability Matrix</h3>
-              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Operational permissions and authorization hierarchy across the platform</p>
+              <h3 class="card-title">Role-Based Access Control (RBAC) Privilege Matrix</h3>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Enforced operational permissions across the executive leadership</p>
             </div>
           </div>
           <div class="table-container">
@@ -102,46 +115,52 @@
               <thead>
                 <tr>
                   <th>Privilege / Permission</th>
-                  <th>Super Admin</th>
-                  <th>Finance Secretary</th>
-                  <th>Event Organizer</th>
-                  <th>Viewer</th>
+                  <th>Hamas Khan<br><span style="font-size: 0.6875rem; font-weight: normal; color: var(--accent-blue);">Super Admin (Finance)</span></th>
+                  <th>Huzaifa Tariq<br><span style="font-size: 0.6875rem; font-weight: normal; color: var(--text-muted);">President</span></th>
+                  <th>Maaz Muhammad<br><span style="font-size: 0.6875rem; font-weight: normal; color: var(--text-muted);">Vice President</span></th>
+                  <th>Misbah Ullah<br><span style="font-size: 0.6875rem; font-weight: normal; color: var(--text-muted);">General Secretary</span></th>
+                  <th>Community<br><span style="font-size: 0.6875rem; font-weight: normal; color: var(--text-muted);">Viewer</span></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style="font-weight: 600;">Enroll & Manage Students</td>
+                  <td style="font-weight: 600;">Enroll, Edit & Delete Students</td>
                   <td><span class="badge badge-emerald">Full Access</span></td>
-                  <td><span class="badge badge-emerald">Full Access</span></td>
-                  <td><span class="badge badge-default">Read Only</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
                   <td><span class="badge badge-default">Read Only</span></td>
                 </tr>
                 <tr>
                   <td style="font-weight: 600;">Record Dues & Reconcile Payments</td>
                   <td><span class="badge badge-emerald">Full Access</span></td>
-                  <td><span class="badge badge-emerald">Full Access</span></td>
-                  <td><span class="badge badge-red">Restricted</span></td>
-                  <td><span class="badge badge-red">Restricted</span></td>
-                </tr>
-                <tr>
-                  <td style="font-weight: 600;">Approve Expense Vouchers</td>
-                  <td><span class="badge badge-emerald">Full Access</span></td>
-                  <td><span class="badge badge-emerald">Full Access</span></td>
-                  <td><span class="badge badge-blue">Submit Only</span></td>
-                  <td><span class="badge badge-red">Restricted</span></td>
-                </tr>
-                <tr>
-                  <td style="font-weight: 600;">Schedule & Modify Events</td>
-                  <td><span class="badge badge-emerald">Full Access</span></td>
-                  <td><span class="badge badge-blue">Budget Review</span></td>
-                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
                   <td><span class="badge badge-default">Read Only</span></td>
                 </tr>
                 <tr>
-                  <td style="font-weight: 600;">Export Master Financial Ledger</td>
+                  <td style="font-weight: 600;">Approve & Disburse Expense Vouchers</td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
+                  <td><span class="badge badge-default">Read Only</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Schedule & Modify Community Events</td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
+                  <td><span class="badge badge-default">View Only</span></td>
+                  <td><span class="badge badge-default">Read Only</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 600;">Export Master Financial Ledger & Reports</td>
                   <td><span class="badge badge-emerald">Full Access</span></td>
                   <td><span class="badge badge-emerald">Full Access</span></td>
-                  <td><span class="badge badge-red">Restricted</span></td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
+                  <td><span class="badge badge-emerald">Full Access</span></td>
                   <td><span class="badge badge-emerald">Full Access</span></td>
                 </tr>
               </tbody>
@@ -185,8 +204,8 @@
               </div>
               <div>
                 <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">${org.name}</h3>
-                <span class="badge ${org.role === 'SUPER_ADMIN' ? 'badge-blue' : org.role === 'FINANCE_SECRETARY' ? 'badge-emerald' : 'badge-purple'}">
-                  ${org.role.replace('_', ' ')}
+                <span class="badge ${org.role.includes('Admin') ? 'badge-blue' : org.role.includes('President') ? 'badge-purple' : 'badge-emerald'}">
+                  ${org.role}
                 </span>
               </div>
             </div>

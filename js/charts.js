@@ -1,5 +1,5 @@
 /**
- * PUKHTOON SOCIETY — IST ISLAMABAD
+ * PUKHTOON COMMUNITY — IST ISLAMABAD
  * Chart.js Visualizers & Dynamic Adaptive Theme Engine
  */
 

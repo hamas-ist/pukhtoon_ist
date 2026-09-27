@@ -1,10 +1,10 @@
 /**
- * PUKHTOON SOCIETY — IST ISLAMABAD
+ * PUKHTOON COMMUNITY — IST ISLAMABAD
  * Core Data Engine & LocalStorage State Synchronizer
  * Pre-seeded with realistic Institute of Space Technology (IST) student records.
  */
 
-const PUKHTOON_STORAGE_KEY = 'pukhtoon_society_data_v1';
+const PUKHTOON_STORAGE_KEY = 'pukhtoon_community_data_v3';
 
 const DEFAULT_IST_DATA = {
   departments: [
@@ -51,7 +51,7 @@ const DEFAULT_IST_DATA = {
       email: 'zarghona.k@ist.edu.pk',
       phone: '+92 312 9876543',
       joinDate: '2022-09-20',
-      notes: 'Society web council volunteer'
+      notes: 'Community web council volunteer'
     },
     {
       id: 'std_03',
@@ -193,7 +193,7 @@ const DEFAULT_IST_DATA = {
       plannedBudget: 120000,
       actualSpending: 94500,
       status: 'UPCOMING',
-      description: 'The signature annual cultural festivity of IST Pukhtoon Society featuring traditional Attan performance, Pashto literary mushaira, folkloric instrumentation, and ethnic delicacies.',
+      description: 'The signature annual cultural festivity of IST Pukhtoon Community featuring traditional Attan performance, Pashto literary mushaira, folkloric instrumentation, and ethnic delicacies.',
       leadOrganizer: 'Zarghona Khattak'
     },
     {
@@ -241,7 +241,7 @@ const DEFAULT_IST_DATA = {
       category: 'Food',
       date: '2026-09-20',
       voucherRef: 'VCH-2026-081',
-      approvedBy: 'Muhammad Ahmad Khan (President)'
+      approvedBy: 'Huzaifa Tariq (President)'
     },
     {
       id: 'exp_02',
@@ -252,7 +252,7 @@ const DEFAULT_IST_DATA = {
       category: 'Decoration',
       date: '2026-09-22',
       voucherRef: 'VCH-2026-082',
-      approvedBy: 'Hamza Afridi (Finance Secretary)'
+      approvedBy: 'Hamas Khan (Finance Secretary)'
     },
     {
       id: 'exp_03',
@@ -263,7 +263,7 @@ const DEFAULT_IST_DATA = {
       category: 'Sound & Media',
       date: '2026-09-23',
       voucherRef: 'VCH-2026-083',
-      approvedBy: 'Hamza Afridi (Finance Secretary)'
+      approvedBy: 'Hamas Khan (Finance Secretary)'
     },
     {
       id: 'exp_04',
@@ -274,18 +274,18 @@ const DEFAULT_IST_DATA = {
       category: 'Food',
       date: '2026-09-10',
       voucherRef: 'VCH-2026-074',
-      approvedBy: 'Hamza Afridi (Finance Secretary)'
+      approvedBy: 'Hamas Khan (Finance Secretary)'
     },
     {
       id: 'exp_05',
       eventId: 'evt_02',
       eventTitle: 'Freshers Welcome & Orientation Gathering',
-      title: 'Welcome Badges & IST Society Souvenirs',
+      title: 'Welcome Badges & IST Community Souvenirs',
       amount: 14700,
       category: 'Printing',
       date: '2026-09-08',
       voucherRef: 'VCH-2026-075',
-      approvedBy: 'Muhammad Ahmad Khan (President)'
+      approvedBy: 'Huzaifa Tariq (President)'
     }
   ],
 
@@ -298,7 +298,7 @@ const DEFAULT_IST_DATA = {
       amount: 1000,
       type: 'INFLOW',
       category: 'Student Dues',
-      recordedBy: 'Hamza Afridi'
+      recordedBy: 'Hamas Khan'
     },
     {
       id: 'txn_02',
@@ -308,7 +308,7 @@ const DEFAULT_IST_DATA = {
       amount: -45000,
       type: 'OUTFLOW',
       category: 'Event Expense',
-      recordedBy: 'Hamza Afridi'
+      recordedBy: 'Hamas Khan'
     },
     {
       id: 'txn_03',
@@ -318,7 +318,7 @@ const DEFAULT_IST_DATA = {
       amount: -28000,
       type: 'OUTFLOW',
       category: 'Event Expense',
-      recordedBy: 'Hamza Afridi'
+      recordedBy: 'Hamas Khan'
     },
     {
       id: 'txn_04',
@@ -328,7 +328,7 @@ const DEFAULT_IST_DATA = {
       amount: 1000,
       type: 'INFLOW',
       category: 'Student Dues',
-      recordedBy: 'Hamza Afridi'
+      recordedBy: 'Hamas Khan'
     },
     {
       id: 'txn_05',
@@ -338,7 +338,7 @@ const DEFAULT_IST_DATA = {
       amount: 500,
       type: 'INFLOW',
       category: 'Student Dues',
-      recordedBy: 'Hamza Afridi'
+      recordedBy: 'Hamas Khan'
     },
     {
       id: 'txn_06',
@@ -348,50 +348,54 @@ const DEFAULT_IST_DATA = {
       amount: 15000,
       type: 'INFLOW',
       category: 'Sponsorship',
-      recordedBy: 'Muhammad Ahmad Khan'
+      recordedBy: 'Huzaifa Tariq'
     }
   ],
 
   organizers: [
     {
       id: 'org_01',
-      name: 'Muhammad Ahmad Khan',
+      name: 'Hamas Khan',
       role: 'Super Admin',
-      societyTitle: 'President & Cabinet Head',
-      email: 'admin@ist.pukhtoon.org',
-      regNo: '210101045',
+      societyTitle: 'Super Admin (Finance Secretary)',
+      email: 'hamas.khan@ist.edu.pk',
+      username: 'hamaskhan',
+      regNo: '210101001',
       department: 'Aerospace Engineering',
-      appointedDate: '2025-10-01'
+      appointedDate: '2025-09-01'
     },
     {
       id: 'org_02',
-      name: 'Hamza Afridi',
-      role: 'Finance Secretary',
-      societyTitle: 'Finance Secretary & Treasury Incharge',
-      email: 'finance@ist.pukhtoon.org',
-      regNo: '230103092',
-      department: 'Avionics Engineering',
-      appointedDate: '2026-02-15'
+      name: 'Huzaifa Tariq',
+      role: 'President',
+      societyTitle: 'President',
+      email: 'huzaifa.tariq@ist.edu.pk',
+      username: 'huzaifatariq',
+      regNo: '210101002',
+      department: 'Electrical Engineering',
+      appointedDate: '2025-09-01'
     },
     {
       id: 'org_03',
-      name: 'Zarghona Khattak',
-      role: 'Event Organizer',
-      societyTitle: 'Director of Cultural Events',
-      email: 'events@ist.pukhtoon.org',
-      regNo: '220202018',
+      name: 'Maaz Muhammad',
+      role: 'Vice President',
+      societyTitle: 'Vice President',
+      email: 'maaz.muhammad@ist.edu.pk',
+      username: 'maazmuhammad',
+      regNo: '220101003',
       department: 'Computer Science',
-      appointedDate: '2026-03-01'
+      appointedDate: '2025-09-01'
     },
     {
       id: 'org_04',
-      name: 'Auditor Council Observer',
-      role: 'Viewer',
-      societyTitle: 'DSA Financial Audit Observer',
-      email: 'viewer@ist.pukhtoon.org',
-      regNo: 'STAFF-IST-442',
-      department: 'Directorate of Student Affairs',
-      appointedDate: '2026-01-10'
+      name: 'Misbah Ullah',
+      role: 'General Secretary',
+      societyTitle: 'General Secretary',
+      email: 'misbah.ullah@ist.edu.pk',
+      username: 'misbahullah',
+      regNo: '220101004',
+      department: 'Avionics Engineering',
+      appointedDate: '2025-09-01'
     }
   ],
 
@@ -399,21 +403,21 @@ const DEFAULT_IST_DATA = {
     {
       id: 'aud_01',
       action: 'CYCLE_CREATED',
-      actor: 'Hamza Afridi (Finance Secretary)',
+      actor: 'Hamas Khan (Finance Secretary)',
       details: 'Created Fall 2026 Monthly Dues — September (Target: PKR 60,000)',
       timestamp: '2026-09-01T09:00:00Z'
     },
     {
       id: 'aud_02',
       action: 'EXPENSE_APPROVED',
-      actor: 'Muhammad Ahmad Khan (President)',
+      actor: 'Huzaifa Tariq (President)',
       details: 'Approved VCH-2026-081 (PKR 45,000) for Khyber Gala Catering',
       timestamp: '2026-09-20T14:30:00Z'
     },
     {
       id: 'aud_03',
       action: 'DUES_RECORDED',
-      actor: 'Hamza Afridi (Finance Secretary)',
+      actor: 'Hamas Khan (Finance Secretary)',
       details: 'Recorded PKR 1,000 contribution from Zarghona Khattak',
       timestamp: '2026-09-21T11:15:00Z'
     },
