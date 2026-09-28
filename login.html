@@ -5,17 +5,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Council Portal Login — PUKHTOON COMMUNITY IST</title>
-  <meta name="description" content="Authorized executive access portal for Pukhtoon Society council officers and financial auditors at IST Islamabad.">
+  <meta name="description" content="Authorized executive access portal for Pukhtoon Community council officers and financial auditors at IST Islamabad.">
     <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sofia-pro">
   <link rel="stylesheet" href="css/style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-pukhtoon-grid" style="display: flex; flex-direction: column; min-height: 100vh; justify-content: center; align-items: center; padding: 2rem 1rem;">
+<body class="bg-pukhtoon-grid login-page">
 
   <!-- Ambient Blue Glow -->
   <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); width: 480px; height: 320px; background: rgba(0, 113, 227, 0.12); border-radius: 50%; filter: blur(140px); pointer-events: none; z-index: -1;"></div>
 
-  <div style="position: absolute; top: 1.5rem; left: 1.5rem;">
+  <!-- Login Page Top Bar -->
+  <header class="login-top-bar">
     <a href="index.html" class="society-logo">
       <div class="logo-symbol" style="width: 2rem; height: 2rem;">
         <img src="images/logo.png" alt="Pukhtoon Community" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -28,13 +29,10 @@
         <span class="logo-subtitle">IST ISLAMABAD</span>
       </div>
     </a>
-  </div>
-
-  <div style="position: absolute; top: 1.5rem; right: 1.5rem;">
     <button class="btn btn-icon theme-toggle-btn" onclick="Theme.toggle()" title="Toggle Theme">
       <i data-lucide="moon" class="w-4 h-4"></i>
     </button>
-  </div>
+  </header>
 
   <!-- Login Card -->
   <div class="card card-glass" style="width: 100%; max-width: 440px; box-shadow: var(--shadow-lg);">

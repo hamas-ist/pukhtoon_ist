@@ -351,11 +351,234 @@ function exportCSV(filename, rows) {
   document.body.removeChild(link);
 }
 
+// Apple-Style Mobile Navigation & Native iOS Human Interface Controller
+const AppleMobileNav = {
+  init() {
+    this.renderTabBar();
+    this.renderMoreSheet();
+    this.enhanceMobileHeader();
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  },
+
+  getCurrentPage() {
+    let p = window.location.pathname.split('/').pop().toLowerCase();
+    if (!p || p === '') return 'index.html';
+    p = p.split('?')[0].split('#')[0];
+    if (!p.includes('.')) p += '.html';
+    return p;
+  },
+
+  isPublicPage() {
+    const cur = this.getCurrentPage();
+    const publicPages = ['index.html', 'transparency.html', 'gallery.html', 'login.html'];
+    return publicPages.includes(cur);
+  },
+
+  renderTabBar() {
+    if (document.getElementById('appleBottomTabBar')) return;
+
+    const nav = document.createElement('nav');
+    nav.id = 'appleBottomTabBar';
+    nav.className = 'apple-bottom-tab-bar';
+    nav.setAttribute('aria-label', 'Mobile Navigation');
+
+    const cur = this.getCurrentPage();
+    const isPublic = this.isPublicPage();
+    const user = Auth.getUser();
+
+    if (isPublic) {
+      const councilHref = user ? 'dashboard.html' : 'login.html';
+      const isCouncilActive = cur.includes('login') || (user && cur.includes('dashboard'));
+
+      nav.innerHTML = `
+        <div class="apple-tab-bar-inner">
+          <a href="index.html" class="apple-tab-item ${cur === 'index.html' ? 'active' : ''}">
+            <div class="apple-tab-icon-wrap"><i data-lucide="home" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">Home</span>
+          </a>
+          <a href="transparency.html" class="apple-tab-item ${cur.includes('transparency') ? 'active' : ''}">
+            <div class="apple-tab-icon-wrap"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">Treasury</span>
+          </a>
+          <a href="gallery.html" class="apple-tab-item ${cur.includes('gallery') ? 'active' : ''}">
+            <div class="apple-tab-icon-wrap"><i data-lucide="image" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">Gallery</span>
+          </a>
+          <a href="${councilHref}" class="apple-tab-item ${isCouncilActive ? 'active' : ''}">
+            <div class="apple-tab-icon-wrap"><i data-lucide="${user ? 'layout-dashboard' : 'user'}" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">${user ? 'Portal' : 'Council'}</span>
+          </a>
+          <button type="button" class="apple-tab-item" onclick="Theme.toggle()" title="Toggle Theme">
+            <div class="apple-tab-icon-wrap"><i data-lucide="sun-moon" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">Theme</span>
+          </button>
+        </div>
+      `;
+    } else {
+      const isMoreActive = ['analytics.html', 'reports.html', 'organizers.html', 'settings.html', 'audit-logs.html', 'expenses.html'].some(p => cur.includes(p));
+
+      nav.innerHTML = `
+        <div class="apple-tab-bar-inner">
+          <a href="dashboard.html" class="apple-tab-item ${cur.includes('dashboard') ? 'active' : ''}">
+            <div class="apple-tab-icon-wrap"><i data-lucide="layout-dashboard" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">Hub</span>
+          </a>
+          <a href="students.html" class="apple-tab-item ${cur.includes('student') ? 'active' : ''}">
+            <div class="apple-tab-icon-wrap"><i data-lucide="users" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">Students</span>
+          </a>
+          <a href="contributions.html" class="apple-tab-item ${cur.includes('contribution') ? 'active' : ''}">
+            <div class="apple-tab-icon-wrap"><i data-lucide="coins" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">Dues</span>
+          </a>
+          <a href="events.html" class="apple-tab-item ${cur.includes('event') ? 'active' : ''}">
+            <div class="apple-tab-icon-wrap"><i data-lucide="calendar" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">Events</span>
+          </a>
+          <a href="ledger.html" class="apple-tab-item ${cur.includes('ledger') ? 'active' : ''}">
+            <div class="apple-tab-icon-wrap"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">Ledger</span>
+          </a>
+          <button type="button" class="apple-tab-item ${isMoreActive ? 'active' : ''}" onclick="openModal('mobileMoreSheetModal')" title="More Menus">
+            <div class="apple-tab-icon-wrap"><i data-lucide="grid" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">More</span>
+          </button>
+        </div>
+      `;
+    }
+
+    document.body.appendChild(nav);
+  },
+
+  renderMoreSheet() {
+    if (document.getElementById('mobileMoreSheetModal')) return;
+
+    const user = Auth.getUser();
+    const sheet = document.createElement('div');
+    sheet.id = 'mobileMoreSheetModal';
+    sheet.className = 'apple-sheet-backdrop';
+    sheet.onclick = (e) => {
+      if (e.target === sheet) closeModal('mobileMoreSheetModal');
+    };
+
+    sheet.innerHTML = `
+      <div class="apple-sheet-dialog" onclick="event.stopPropagation()">
+        <div class="apple-sheet-handle"></div>
+        
+        <div class="apple-sheet-header">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div class="user-avatar" style="width: 2.25rem; height: 2.25rem; font-size: 0.8125rem;">
+              ${user ? user.avatar || user.name.substring(0, 2).toUpperCase() : 'HK'}
+            </div>
+            <div>
+              <div style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary);">${user ? user.name : 'Hamas Khan'}</div>
+              <div style="font-size: 0.6875rem; color: var(--accent-blue); font-weight: 600;">${user ? user.title || user.role : 'Super Admin'}</div>
+            </div>
+          </div>
+          <button class="btn btn-icon btn-sm" onclick="closeModal('mobileMoreSheetModal')">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <div class="apple-sheet-grid">
+          <a href="analytics.html" class="apple-sheet-tile">
+            <div class="apple-sheet-icon" style="background: rgba(0, 113, 227, 0.12); color: var(--accent-blue);">
+              <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+            </div>
+            <span>Analytics</span>
+          </a>
+
+          <a href="reports.html" class="apple-sheet-tile">
+            <div class="apple-sheet-icon" style="background: rgba(16, 185, 129, 0.12); color: var(--accent-emerald);">
+              <i data-lucide="printer" class="w-6 h-6"></i>
+            </div>
+            <span>Reports</span>
+          </a>
+
+          <a href="organizers.html" class="apple-sheet-tile">
+            <div class="apple-sheet-icon" style="background: rgba(139, 92, 246, 0.12); color: #8B5CF6;">
+              <i data-lucide="shield-check" class="w-6 h-6"></i>
+            </div>
+            <span>Council</span>
+          </a>
+
+          <a href="expenses.html" class="apple-sheet-tile">
+            <div class="apple-sheet-icon" style="background: rgba(239, 68, 68, 0.12); color: var(--accent-red);">
+              <i data-lucide="receipt" class="w-6 h-6"></i>
+            </div>
+            <span>Expenses</span>
+          </a>
+
+          <a href="audit-logs.html" class="apple-sheet-tile">
+            <div class="apple-sheet-icon" style="background: rgba(245, 158, 11, 0.12); color: var(--accent-amber);">
+              <i data-lucide="history" class="w-6 h-6"></i>
+            </div>
+            <span>Audit Logs</span>
+          </a>
+
+          <a href="settings.html" class="apple-sheet-tile">
+            <div class="apple-sheet-icon" style="background: rgba(120, 120, 128, 0.15); color: var(--text-primary);">
+              <i data-lucide="settings" class="w-6 h-6"></i>
+            </div>
+            <span>Settings</span>
+          </a>
+
+          <a href="gallery.html" class="apple-sheet-tile">
+            <div class="apple-sheet-icon" style="background: rgba(236, 72, 153, 0.12); color: #EC4899;">
+              <i data-lucide="image" class="w-6 h-6"></i>
+            </div>
+            <span>Gallery</span>
+          </a>
+
+          <a href="transparency.html" class="apple-sheet-tile">
+            <div class="apple-sheet-icon" style="background: rgba(6, 182, 212, 0.12); color: #06B6D4;">
+              <i data-lucide="eye" class="w-6 h-6"></i>
+            </div>
+            <span>Treasury</span>
+          </a>
+        </div>
+
+        <div style="padding: 0.5rem 1rem 0; display: flex; gap: 0.75rem;">
+          <button class="btn btn-outline" onclick="Theme.toggle(); closeModal('mobileMoreSheetModal');" style="flex: 1; font-size: 0.75rem; justify-content: center;">
+            <i data-lucide="sun-moon" class="w-4 h-4"></i>
+            <span>Switch Theme</span>
+          </button>
+          <button class="btn btn-outline" onclick="Auth.logout()" style="flex: 1; font-size: 0.75rem; justify-content: center; color: var(--accent-red); border-color: rgba(239, 68, 68, 0.3);">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(sheet);
+  },
+
+  enhanceMobileHeader() {
+    const header = document.querySelector('.app-header');
+    if (header && !header.querySelector('.mobile-header-brand')) {
+      const brand = document.createElement('a');
+      brand.href = 'dashboard.html';
+      brand.className = 'mobile-header-brand';
+      brand.innerHTML = `
+        <div class="logo-symbol" style="width: 2rem; height: 2rem; padding: 2px;">
+          <img src="images/logo.png" alt="Pukhtoon Community">
+        </div>
+        <div class="mobile-brand-title">PUKHTOON <span>IST</span></div>
+      `;
+      header.insertBefore(brand, header.firstChild);
+    }
+  }
+};
+
 // Global Initialization
 document.addEventListener('DOMContentLoaded', () => {
   Theme.init();
   Auth.renderHeaderUser();
   CommandPalette.init();
+  AppleMobileNav.init();
   if (window.lucide) {
     lucide.createIcons();
   }
