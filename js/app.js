@@ -141,15 +141,14 @@ function showRestrictedModal(actionDesc = 'make changes') {
   if (window.lucide) lucide.createIcons();
 }
 
-// Auth / RBAC Session Simulator
+// Auth / RBAC Session Security Guard
 const Auth = {
   getUser() {
     try {
       const stored = localStorage.getItem('pukhtoon_user');
       if (stored) return JSON.parse(stored);
     } catch {}
-    // Default to Super Admin Hamas Khan
-    return COUNCIL_ACCOUNTS['hamas.khan@ist.edu.pk'];
+    return null;
   },
 
   setUser(user) {
@@ -168,12 +167,27 @@ const Auth = {
     const nameEl = document.getElementById('userName');
     const roleEl = document.getElementById('userRole');
 
-    if (avatarEl && user) {
-      const initials = user.name.split(' ').map(n => n[0]).slice(0, 2).join('');
-      avatarEl.textContent = initials;
+    if (!user) {
+      if (avatarEl) avatarEl.textContent = '—';
+      if (nameEl) nameEl.textContent = 'Not Authenticated';
+      if (roleEl) roleEl.textContent = 'Guest';
+      return;
     }
-    if (nameEl && user) nameEl.textContent = user.name;
-    if (roleEl && user) roleEl.textContent = user.title || user.role.replace('_', ' ');
+
+    const initials = user.avatar || user.name.split(' ').map(n => n[0]).slice(0, 2).join('');
+    if (avatarEl) avatarEl.textContent = initials;
+    if (nameEl) nameEl.textContent = user.name;
+    if (roleEl) roleEl.textContent = user.title || user.role.replace('_', ' ');
+  },
+
+  requireAuth() {
+    const path = window.location.pathname.split('/').pop().toLowerCase();
+    const cur = (path || 'index.html').split('?')[0].split('#')[0];
+    const publicPages = ['index.html', '', 'transparency.html', 'gallery.html', 'login.html'];
+    const isPublic = publicPages.some(pub => cur === pub || cur === pub.replace('.html', ''));
+    if (!isPublic && !this.getUser()) {
+      window.location.replace('login.html');
+    }
   }
 };
 
@@ -391,6 +405,8 @@ const AppleMobileNav = {
     if (isPublic) {
       const councilHref = user ? 'dashboard.html' : 'login.html';
       const isCouncilActive = cur.includes('login') || (user && cur.includes('dashboard'));
+      const councilLabel = user ? 'Hub' : 'Portal';
+      const councilIcon = user ? 'layout-dashboard' : 'lock';
 
       nav.innerHTML = `
         <div class="apple-tab-bar-inner">
@@ -407,8 +423,8 @@ const AppleMobileNav = {
             <span class="apple-tab-label">Gallery</span>
           </a>
           <a href="${councilHref}" class="apple-tab-item ${isCouncilActive ? 'active' : ''}">
-            <div class="apple-tab-icon-wrap"><i data-lucide="${user ? 'layout-dashboard' : 'user'}" class="w-5 h-5"></i></div>
-            <span class="apple-tab-label">${user ? 'Portal' : 'Council'}</span>
+            <div class="apple-tab-icon-wrap"><i data-lucide="${councilIcon}" class="w-5 h-5"></i></div>
+            <span class="apple-tab-label">${councilLabel}</span>
           </a>
           <button type="button" class="apple-tab-item" onclick="Theme.toggle()" title="Toggle Theme">
             <div class="apple-tab-icon-wrap"><i data-lucide="sun-moon" class="w-5 h-5"></i></div>
@@ -417,7 +433,7 @@ const AppleMobileNav = {
         </div>
       `;
     } else {
-      const isMoreActive = ['analytics.html', 'reports.html', 'organizers.html', 'settings.html', 'audit-logs.html', 'expenses.html'].some(p => cur.includes(p));
+      const isMoreActive = ['analytics.html', 'reports.html', 'organizers.html', 'settings.html', 'audit-logs.html', 'expenses.html', 'ledger.html'].some(p => cur.includes(p));
 
       nav.innerHTML = `
         <div class="apple-tab-bar-inner">
@@ -436,10 +452,6 @@ const AppleMobileNav = {
           <a href="events.html" class="apple-tab-item ${cur.includes('event') ? 'active' : ''}">
             <div class="apple-tab-icon-wrap"><i data-lucide="calendar" class="w-5 h-5"></i></div>
             <span class="apple-tab-label">Events</span>
-          </a>
-          <a href="ledger.html" class="apple-tab-item ${cur.includes('ledger') ? 'active' : ''}">
-            <div class="apple-tab-icon-wrap"><i data-lucide="file-spreadsheet" class="w-5 h-5"></i></div>
-            <span class="apple-tab-label">Ledger</span>
           </a>
           <button type="button" class="apple-tab-item ${isMoreActive ? 'active' : ''}" onclick="openModal('mobileMoreSheetModal')" title="More Menus">
             <div class="apple-tab-icon-wrap"><i data-lucide="grid" class="w-5 h-5"></i></div>
@@ -470,11 +482,11 @@ const AppleMobileNav = {
         <div class="apple-sheet-header">
           <div style="display: flex; align-items: center; gap: 0.75rem;">
             <div class="user-avatar" style="width: 2.25rem; height: 2.25rem; font-size: 0.8125rem;">
-              ${user ? user.avatar || user.name.substring(0, 2).toUpperCase() : 'HK'}
+              ${user ? user.avatar || user.name.substring(0, 2).toUpperCase() : 'G'}
             </div>
             <div>
-              <div style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary);">${user ? user.name : 'Hamas Khan'}</div>
-              <div style="font-size: 0.6875rem; color: var(--accent-blue); font-weight: 600;">${user ? user.title || user.role : 'Super Admin'}</div>
+              <div style="font-size: 0.875rem; font-weight: 700; color: var(--text-primary);">${user ? user.name : 'Guest'}</div>
+              <div style="font-size: 0.6875rem; color: var(--accent-blue); font-weight: 600;">${user ? user.title || user.role : 'Read Only'}</div>
             </div>
           </div>
           <button class="btn btn-icon btn-sm" onclick="closeModal('mobileMoreSheetModal')">
@@ -483,6 +495,13 @@ const AppleMobileNav = {
         </div>
 
         <div class="apple-sheet-grid">
+          <a href="ledger.html" class="apple-sheet-tile">
+            <div class="apple-sheet-icon" style="background: rgba(0, 113, 227, 0.12); color: var(--accent-blue);">
+              <i data-lucide="file-spreadsheet" class="w-6 h-6"></i>
+            </div>
+            <span>Ledger</span>
+          </a>
+
           <a href="analytics.html" class="apple-sheet-tile">
             <div class="apple-sheet-icon" style="background: rgba(0, 113, 227, 0.12); color: var(--accent-blue);">
               <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
@@ -523,13 +542,6 @@ const AppleMobileNav = {
               <i data-lucide="settings" class="w-6 h-6"></i>
             </div>
             <span>Settings</span>
-          </a>
-
-          <a href="gallery.html" class="apple-sheet-tile">
-            <div class="apple-sheet-icon" style="background: rgba(236, 72, 153, 0.12); color: #EC4899;">
-              <i data-lucide="image" class="w-6 h-6"></i>
-            </div>
-            <span>Gallery</span>
           </a>
 
           <a href="transparency.html" class="apple-sheet-tile">
@@ -576,6 +588,7 @@ const AppleMobileNav = {
 // Global Initialization
 document.addEventListener('DOMContentLoaded', () => {
   Theme.init();
+  Auth.requireAuth();
   Auth.renderHeaderUser();
   CommandPalette.init();
   AppleMobileNav.init();
