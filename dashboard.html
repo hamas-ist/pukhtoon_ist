@@ -120,18 +120,18 @@
             </div>
           </div>
 
-          <div class="card card-glass kpi-card">
+          <a href="contributions.html" class="card card-glass kpi-card" style="text-decoration: none; cursor: pointer; transition: transform 0.2s ease, border-color 0.2s ease;">
             <div class="kpi-header">
-              <span>Collected This Month</span>
+              <span>Collected This Month (Oct)</span>
               <div class="kpi-icon-wrap" style="background: var(--accent-blue-subtle); color: var(--accent-blue);">
-                <i data-lucide="trending-up" class="w-4 h-4"></i>
+                <i data-lucide="coins" class="w-4 h-4"></i>
               </div>
             </div>
-            <div class="kpi-val num-tabular" id="dashCollected">PKR 47,500</div>
-            <div class="kpi-desc" style="color: var(--accent-emerald);">
-              <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> +14.2% vs previous cycle
+            <div class="kpi-val num-tabular" id="dashCollected">PKR 37,500</div>
+            <div class="kpi-desc" id="dashCollectedDesc" style="color: var(--accent-emerald);">
+              <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Target: PKR 50,000 (75%)
             </div>
-          </div>
+          </a>
 
           <div class="card card-glass kpi-card">
             <div class="kpi-header">
@@ -373,6 +373,17 @@
       const stats = DataStore.getStats();
       document.getElementById('dashBalance').textContent = formatPKR(stats.availableBalance);
       document.getElementById('dashPending').textContent = formatPKR(stats.pendingDues);
+      
+      const dashCollected = document.getElementById('dashCollected');
+      if (dashCollected) {
+        dashCollected.textContent = formatPKR(stats.monthlyCollections);
+      }
+      const dashCollectedDesc = document.getElementById('dashCollectedDesc');
+      if (dashCollectedDesc) {
+        const target = stats.monthlyTarget || 50000;
+        const pct = Math.round((stats.monthlyCollections / target) * 100);
+        dashCollectedDesc.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Target: ${formatPKR(target)} (${pct}%)`;
+      }
 
       ChartManager.renderCashFlow('dashCashFlowChart');
 

@@ -128,48 +128,97 @@
           </div>
         </div>
 
-        <!-- 3 Financial Metric Cards -->
+        <!-- 4 Financial Metric Cards -->
         <div class="kpi-grid">
-          <div class="card card-glass kpi-card" style="border-color: rgba(16, 185, 129, 0.3);">
+          <div class="card card-glass kpi-card" style="border-color: rgba(16, 185, 129, 0.35);">
             <div class="kpi-header">
-              <span>Total Paid</span>
+              <span>Total Given (All Months)</span>
               <div class="kpi-icon-wrap" style="background: var(--accent-emerald-subtle); color: var(--accent-emerald);">
                 <i data-lucide="check-circle-2" class="w-4 h-4"></i>
               </div>
             </div>
             <div class="kpi-val num-tabular" style="color: var(--accent-emerald);" id="stdTotalPaid">PKR 0</div>
-            <div class="kpi-desc">Reconciled in community treasury</div>
+            <div class="kpi-desc" id="stdMonthsSummary">Total dues given across all specific months</div>
           </div>
 
           <div class="card card-glass kpi-card">
             <div class="kpi-header">
-              <span>Expected Dues Quota</span>
+              <span>Billing Compliance</span>
               <div class="kpi-icon-wrap" style="background: var(--accent-blue-subtle); color: var(--accent-blue);">
-                <i data-lucide="coins" class="w-4 h-4"></i>
+                <i data-lucide="calendar-check" class="w-4 h-4"></i>
               </div>
             </div>
-            <div class="kpi-val num-tabular" id="stdExpected">PKR 0</div>
-            <div class="kpi-desc">Aggregated semester cycles</div>
+            <div class="kpi-val num-tabular" id="stdComplianceRate">100%</div>
+            <div class="kpi-desc" id="stdComplianceDetail">0 of 0 billing cycles cleared</div>
+          </div>
+
+          <div class="card card-glass kpi-card">
+            <div class="kpi-header">
+              <span>Current Month (Oct 2026)</span>
+              <div class="kpi-icon-wrap" id="stdOctIconWrap" style="background: var(--accent-emerald-subtle); color: var(--accent-emerald);">
+                <i data-lucide="clock" class="w-4 h-4"></i>
+              </div>
+            </div>
+            <div class="kpi-val num-tabular" id="stdOctStatus">PAID</div>
+            <div class="kpi-desc" id="stdOctDesc">Current billing cycle</div>
           </div>
 
           <div class="card card-glass kpi-card" id="outstandingCard">
             <div class="kpi-header">
               <span>Outstanding Balance</span>
               <div class="kpi-icon-wrap" style="background: var(--accent-amber-subtle); color: var(--accent-amber);">
-                <i data-lucide="clock" class="w-4 h-4"></i>
+                <i data-lucide="alert-circle" class="w-4 h-4"></i>
               </div>
             </div>
             <div class="kpi-val num-tabular" id="stdOutstanding">PKR 0</div>
-            <div class="kpi-desc">Current dues pending handover</div>
+            <div class="kpi-desc">Dues pending handover</div>
           </div>
         </div>
 
-        <!-- Payment History Timeline -->
+        <!-- Monthly Contributions Breakdown (In Specific Months) -->
+        <div class="card card-glass" style="margin-bottom: 2rem;">
+          <div class="card-header" style="flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h3 class="card-title">Monthly Contributions Breakdown</h3>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                Itemized view of total amount given by this member in specific months
+              </p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+              <span class="badge badge-emerald" id="badgeLifetimeGiven">Total Given: PKR 0</span>
+              <button class="btn btn-primary btn-sm" onclick="openPaymentModalForThisStudent()">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                <span>Record Dues</span>
+              </button>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Billing Month</th>
+                  <th>Monthly Quota</th>
+                  <th style="text-align: right;">Amount Given</th>
+                  <th>Payment Status</th>
+                  <th>Payment Date & Mode</th>
+                  <th>Voucher Ref</th>
+                  <th>Reconciled By</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="stdMonthlyDuesTable">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Chronological Payment History -->
         <div class="card card-glass">
           <div class="card-header">
             <div>
               <h3 class="card-title">Chronological Payment History</h3>
-              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Receipt logs and recorded transactions for this student</p>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Receipt logs and recorded treasury inflow transactions for this student</p>
             </div>
           </div>
           <div class="table-container">
@@ -198,44 +247,55 @@
   <div id="recordPaymentModal" class="modal-backdrop" onclick="closeModal('recordPaymentModal')">
     <div class="modal-dialog" onclick="event.stopPropagation()">
       <div class="modal-header">
-        <h3 class="modal-title">Record Dues Payment</h3>
+        <h3 class="modal-title">Record Student Monthly Dues</h3>
         <button class="btn btn-icon" onclick="closeModal('recordPaymentModal')"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="handleRecordPaymentSubmit(event)">
         <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
           <div class="form-group">
-            <label class="form-label">Student</label>
+            <label class="form-label">Student Member</label>
             <input type="text" id="pStaticStudent" class="form-input" readonly>
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="form-group">
-              <label class="form-label">Amount (PKR)</label>
-              <input type="number" id="pAmount" class="form-input" required value="1000" min="100" step="50">
+              <label class="form-label">Billing Month</label>
+              <select id="pMonthKey" class="form-select" required>
+                <option value="2026-10">October 2026 (Active)</option>
+                <option value="2026-09">September 2026</option>
+                <option value="2026-08">August 2026</option>
+                <option value="2026-07">July 2026</option>
+                <option value="2026-06">June 2026</option>
+                <option value="2026-05">May 2026</option>
+              </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Channel</label>
-              <select id="pChannel" class="form-select">
-                <option value="EasyPaisa">EasyPaisa</option>
-                <option value="JazzCash">JazzCash</option>
-                <option value="Bank Transfer">Bank Transfer</option>
-                <option value="Cash">Cash Handover</option>
-              </select>
+              <label class="form-label">Amount Given (PKR)</label>
+              <input type="number" id="pAmount" class="form-input" required value="1000" min="100" step="50">
             </div>
           </div>
           <div class="form-group">
+            <label class="form-label">Payment Channel</label>
+            <select id="pChannel" class="form-select">
+              <option value="EasyPaisa">EasyPaisa</option>
+              <option value="JazzCash">JazzCash</option>
+              <option value="Cash">Cash Handover</option>
+              <option value="Bank Transfer">Bank Transfer (1Link)</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label class="form-label">Notes / Remarks</label>
-            <input type="text" id="pNotes" class="form-input" placeholder="e.g. Cleared pending Fall 2026 dues">
+            <input type="text" id="pNotes" class="form-input" placeholder="e.g. October monthly installment cleared">
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('recordPaymentModal')">Cancel</button>
-          <button type="submit" class="btn btn-primary btn-sm">Reconcile Payment</button>
+          <button type="submit" class="btn btn-primary btn-sm">Confirm & Reconcile Payment</button>
         </div>
       </form>
     </div>
   </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase.js"></script>
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
@@ -266,10 +326,46 @@
       document.getElementById('stdJoinDate').textContent = formatDate(currentStudent.joinDate);
       document.getElementById('stdNotes').textContent = currentStudent.notes || 'Enrolled member';
 
-      const expected = (currentStudent.totalContributed || 0) + (currentStudent.outstandingBalance || 0);
-      document.getElementById('stdTotalPaid').textContent = formatPKR(currentStudent.totalContributed);
-      document.getElementById('stdExpected').textContent = formatPKR(expected);
+      // Load specific monthly dues breakdown for this student
+      const duesInfo = DataStore.getStudentMonthlyDues(currentStudent.id);
+      const records = duesInfo.records;
+
+      // Calculate total given dynamically from monthly dues records (fallback to student total if no records)
+      const dynamicTotalPaid = records.length > 0 ? duesInfo.totalPaid : (currentStudent.totalContributed || 0);
+
+      document.getElementById('stdTotalPaid').textContent = formatPKR(dynamicTotalPaid);
+      document.getElementById('badgeLifetimeGiven').textContent = `Total Given: ${formatPKR(dynamicTotalPaid)}`;
       document.getElementById('stdOutstanding').textContent = formatPKR(currentStudent.outstandingBalance);
+
+      // Compliance rate
+      const totalMonthsAssessed = records.length || 1;
+      const rate = Math.round((duesInfo.paidMonthsCount / totalMonthsAssessed) * 100);
+      document.getElementById('stdComplianceRate').textContent = `${rate}%`;
+      document.getElementById('stdComplianceDetail').textContent = `${duesInfo.paidMonthsCount} of ${totalMonthsAssessed} months cleared`;
+
+      // October 2026 status card
+      const octRecord = records.find(r => r.monthKey === '2026-10');
+      const stdOctStatus = document.getElementById('stdOctStatus');
+      const stdOctDesc = document.getElementById('stdOctDesc');
+      const stdOctIconWrap = document.getElementById('stdOctIconWrap');
+
+      if (octRecord && octRecord.status === 'PAID') {
+        stdOctStatus.textContent = 'PAID';
+        stdOctStatus.style.color = 'var(--accent-emerald)';
+        stdOctDesc.textContent = `${formatPKR(octRecord.paidAmount)} cleared (${octRecord.channel || 'Direct'})`;
+        if (stdOctIconWrap) {
+          stdOctIconWrap.style.background = 'var(--accent-emerald-subtle)';
+          stdOctIconWrap.style.color = 'var(--accent-emerald)';
+        }
+      } else {
+        stdOctStatus.textContent = 'PENDING';
+        stdOctStatus.style.color = 'var(--accent-amber)';
+        stdOctDesc.textContent = `${formatPKR(octRecord ? octRecord.expectedAmount : 1000)} quota due`;
+        if (stdOctIconWrap) {
+          stdOctIconWrap.style.background = 'var(--accent-amber-subtle)';
+          stdOctIconWrap.style.color = 'var(--accent-amber)';
+        }
+      }
 
       const outCard = document.getElementById('outstandingCard');
       if (currentStudent.outstandingBalance > 0) {
@@ -278,6 +374,68 @@
       } else {
         outCard.style.borderColor = 'var(--border)';
         document.getElementById('stdOutstanding').style.color = 'var(--text-primary)';
+      }
+
+      // Render Monthly Contributions Ledger (in specific months)
+      const monthlyTable = document.getElementById('stdMonthlyDuesTable');
+      if (monthlyTable) {
+        if (records.length === 0) {
+          monthlyTable.innerHTML = `
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                No monthly dues records found for this student.
+              </td>
+            </tr>
+          `;
+        } else {
+          monthlyTable.innerHTML = records.map(r => {
+            const isPaid = r.status === 'PAID';
+            return `
+              <tr>
+                <td>
+                  <span style="font-weight: 700; color: var(--text-primary);">${r.monthLabel || r.monthKey}</span>
+                  ${r.monthKey === '2026-10' ? '<span class="badge badge-emerald" style="margin-left: 0.5rem; font-size: 0.625rem;">CURRENT</span>' : ''}
+                </td>
+                <td style="font-weight: 600; color: var(--text-secondary);" class="num-tabular">
+                  ${formatPKR(r.expectedAmount)}
+                </td>
+                <td style="text-align: right; font-weight: 800; font-size: 0.9375rem;" class="num-tabular">
+                  <span style="color: ${isPaid ? 'var(--accent-emerald)' : 'var(--accent-amber)'};">
+                    ${isPaid ? '+' + formatPKR(r.paidAmount) : 'PKR 0'}
+                  </span>
+                </td>
+                <td>
+                  <span class="student-month-badge ${isPaid ? 'paid' : 'pending'}">
+                    <i data-lucide="${isPaid ? 'check-circle-2' : 'clock'}" class="w-3.5 h-3.5"></i>
+                    ${isPaid ? 'PAID' : 'PENDING'}
+                  </span>
+                </td>
+                <td>
+                  <div style="font-size: 0.75rem; font-weight: 600;">${r.date ? formatDate(r.date) : '<span style="color: var(--text-muted); font-style: italic;">Awaiting Payment</span>'}</div>
+                  <div style="font-size: 0.6875rem; color: var(--text-muted);">${r.channel || 'Pending Handover'}</div>
+                </td>
+                <td style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle);">
+                  ${r.voucherRef || '—'}
+                </td>
+                <td style="font-size: 0.75rem; color: var(--text-muted);">
+                  ${r.recordedBy || '—'}
+                </td>
+                <td style="text-align: right;">
+                  ${!isPaid ? `
+                    <button class="btn btn-primary btn-sm" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;" onclick="openPaymentModalForThisStudent('${r.monthKey}', ${r.expectedAmount})" title="Record Payment">
+                      <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                      <span>Pay Month</span>
+                    </button>
+                  ` : `
+                    <span style="font-size: 0.75rem; color: var(--accent-emerald); font-weight: 700; display: inline-flex; align-items: center; gap: 0.25rem;">
+                      <i data-lucide="check" class="w-3.5 h-3.5"></i> Cleared
+                    </span>
+                  `}
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
       }
 
       // Filter transactions for this student
@@ -313,10 +471,22 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    function openPaymentModalForThisStudent() {
+    function openPaymentModalForThisStudent(monthKey, amount) {
       if (!currentStudent) return;
       document.getElementById('pStaticStudent').value = `${currentStudent.fullName} (${currentStudent.regNo}) • ${currentStudent.department}`;
-      document.getElementById('pAmount').value = currentStudent.outstandingBalance > 0 ? currentStudent.outstandingBalance : 1000;
+      
+      if (monthKey) {
+        document.getElementById('pMonthKey').value = monthKey;
+      } else {
+        document.getElementById('pMonthKey').value = '2026-10';
+      }
+
+      if (amount) {
+        document.getElementById('pAmount').value = amount;
+      } else {
+        document.getElementById('pAmount').value = currentStudent.outstandingBalance > 0 ? currentStudent.outstandingBalance : (currentStudent.expectedAmountPerCycle || 1000);
+      }
+
       openModal('recordPaymentModal');
     }
 
@@ -324,39 +494,23 @@
       e.preventDefault();
       if (!requireSuperAdmin('reconcile dues payment')) return;
       if (!currentStudent) return;
+      const monthKey = document.getElementById('pMonthKey').value;
       const amount = Number(document.getElementById('pAmount').value);
       const channel = document.getElementById('pChannel').value;
+      const notes = document.getElementById('pNotes').value;
 
-      const data = DataStore.load();
-      const std = data.students.find(s => s.id === currentStudent.id);
-      if (std) {
-        std.totalContributed += amount;
-        std.outstandingBalance = Math.max(0, std.outstandingBalance - amount);
+      DataStore.recordMonthlyPayment({
+        studentId: currentStudent.id,
+        monthKey: monthKey,
+        amount: amount,
+        channel: channel,
+        notes: notes,
+        officer: Auth.getUser().name
+      });
 
-        data.transactions.unshift({
-          id: 'txn_' + Date.now(),
-          transactionRef: 'TXN-2026-' + Math.floor(100 + Math.random() * 900),
-          date: new Date().toISOString().split('T')[0],
-          description: `Dues Payment (${channel}) — ${std.fullName} (${std.regNo})`,
-          amount: amount,
-          type: 'INFLOW',
-          category: 'Student Dues',
-          recordedBy: Auth.getUser().name
-        });
-
-        data.auditLogs.unshift({
-          id: 'aud_' + Date.now(),
-          action: 'DUES_RECORDED',
-          actor: Auth.getUser().name,
-          details: `Reconciled ${formatPKR(amount)} for ${std.fullName} (${std.regNo})`,
-          timestamp: new Date().toISOString()
-        });
-
-        DataStore.save(data);
-        closeModal('recordPaymentModal');
-        showToast('Payment Reconciled', `Recorded ${formatPKR(amount)} from ${std.fullName}`);
-        renderStudentProfile(currentStudent.id);
-      }
+      closeModal('recordPaymentModal');
+      showToast('Payment Reconciled', `Recorded ${formatPKR(amount)} for ${currentStudent.fullName}`);
+      renderStudentProfile(currentStudent.id);
     }
   </script>
 </body>
