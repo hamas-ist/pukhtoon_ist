@@ -1967,3 +1967,27 @@ body:not(.dark) .hero-logo-card {
     font-size: 0.8125rem !important;
   }
 }
+
+/* Shake Animation for Invalid Password */
+@keyframes shakeError {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.shake-error {
+  animation: shakeError 0.35s ease-in-out !important;
+  border-color: var(--accent-red) !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important;
+}
+
+/* RBAC Simulator Card Styles */
+.rbac-card {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.rbac-card:hover {
+  transform: translateY(-2px);
+}
+.rbac-card:active {
+  transform: scale(0.98);
+}

@@ -161,6 +161,29 @@ const Auth = {
     window.location.href = 'login.html';
   },
 
+  switchRole(roleKey) {
+    const cur = this.getUser() || {};
+    const target = COUNCIL_ACCOUNTS[roleKey];
+    if (!target) return;
+
+    const isCurrentSuper = (cur.role === 'SUPER_ADMIN' || cur.username === 'hamaskhan');
+    const isTargetSuper = (target.role === 'SUPER_ADMIN' || target.username === 'hamaskhan');
+
+    // If target is Super Admin and caller is not Super Admin, direct access is denied!
+    if (isTargetSuper && !isCurrentSuper) {
+      if (typeof openSuperAdminAuthModal === 'function') {
+        openSuperAdminAuthModal();
+      } else {
+        showToast('Access Denied', 'Only Super Admin Hamas Khan can access this account.', 'error');
+      }
+      return;
+    }
+
+    this.setUser(target);
+    showToast('Profile Switched', `Active profile switched to ${target.name}`, 'success');
+    setTimeout(() => window.location.reload(), 400);
+  },
+
   renderHeaderUser() {
     const user = this.getUser();
     const avatarEl = document.getElementById('userAvatar');

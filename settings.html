@@ -109,7 +109,7 @@
               </div>
               <div class="form-group">
                 <label class="form-label">Supervising Authority</label>
-                <input type="text" class="form-input" value="Directorate of Student Affairs " readonly style="background: var(--surface-muted); color: var(--text-secondary); cursor: not-allowed;">
+                <input type="text" class="form-input" value="Student Affairs Community Board, IST" readonly style="background: var(--surface-muted); color: var(--text-secondary); cursor: not-allowed;">
               </div>
               <div class="form-group">
                 <label class="form-label">Official Campus Location</label>
@@ -173,31 +173,8 @@
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.875rem;">
-              <button onclick="switchRole('hamas.khan@ist.edu.pk')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
-                <div>
-                  <div style="font-weight: 700; font-size: 0.8125rem; color: var(--accent-blue);">Super Admin</div>
-                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Hamas Khan (Finance Secretary)</div>
-                </div>
-              </button>
-              <button onclick="switchRole('huzaifa.tariq@ist.edu.pk')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
-                <div>
-                  <div style="font-weight: 700; font-size: 0.8125rem; color: var(--accent-emerald);">President</div>
-                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Huzaifa Tariq (Read-Only)</div>
-                </div>
-              </button>
-              <button onclick="switchRole('maaz.muhammad@ist.edu.pk')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
-                <div>
-                  <div style="font-weight: 700; font-size: 0.8125rem; color: var(--accent-amber);">Vice President</div>
-                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Maaz Muhammad (Read-Only)</div>
-                </div>
-              </button>
-              <button onclick="switchRole('misbah.ullah@ist.edu.pk')" class="btn btn-outline" style="justify-content: flex-start; text-align: left; padding: 0.75rem; height: auto;">
-                <div>
-                  <div style="font-weight: 700; font-size: 0.8125rem; color: var(--accent-purple);">General Secretary</div>
-                  <div style="font-size: 0.6875rem; color: var(--text-muted);">Misbah Ullah (Read-Only)</div>
-                </div>
-              </button>
+            <div id="rbacProfilesGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.875rem;">
+              <!-- Rendered dynamically by renderRbacSimulator() -->
             </div>
           </div>
 
@@ -287,18 +264,228 @@
     </div>
   </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Modal: Super Admin Authentication Guard -->
+  <div id="superAdminAuthModal" class="modal-backdrop" onclick="closeModal('superAdminAuthModal')">
+    <div class="modal-dialog" onclick="event.stopPropagation()" style="max-width: 440px; border-radius: 1.5rem; padding: 2rem;">
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div style="width: 4rem; height: 4rem; margin: 0 auto 1rem; border-radius: 1.25rem; background: rgba(0, 113, 227, 0.12); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(0, 113, 227, 0.25); box-shadow: 0 8px 24px rgba(0, 113, 227, 0.18);">
+          <i data-lucide="shield-check" class="w-8 h-8"></i>
+        </div>
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.35rem; letter-spacing: -0.02em;">
+          Super Admin Verification
+        </h3>
+        <p style="font-size: 0.8125rem; color: var(--text-muted); line-height: 1.55; margin: 0;">
+          Direct 1-click access to the Super Admin account is restricted. Enter <strong>Hamas Khan's</strong> password to authenticate.
+        </p>
+      </div>
+
+      <form id="superAdminAuthForm" onsubmit="handleSuperAdminAuthSubmit(event)" autocomplete="off">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="superAdminPasswordInput" style="font-size: 0.75rem; font-weight: 700;">Hamas Khan Password</label>
+          <div style="position: relative;">
+            <input type="password" id="superAdminPasswordInput" class="form-input" required placeholder="Enter confidential password" autocomplete="new-password" style="padding-left: 2.25rem; padding-right: 2.5rem; border-radius: 0.75rem;">
+            <i data-lucide="lock" class="w-4 h-4" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;"></i>
+            <button type="button" onclick="toggleSuperAdminPwdVisibility()" title="Toggle password visibility" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); padding: 0.25rem; display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="eye" id="superAdminEyeIcon" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <div id="superAdminAuthError" style="display: none; font-size: 0.75rem; color: var(--accent-red); margin-top: 0.5rem; font-weight: 600; line-height: 1.4;">
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5 inline"></i>
+            <span>Access Denied: Incorrect password. Only Super Admin Hamas Khan can access this account.</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.625rem; margin-top: 1.25rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('superAdminAuthModal')" style="flex: 1; border-radius: 0.75rem;">
+            <span>Cancel</span>
+          </button>
+          <button type="submit" class="btn btn-primary" style="flex: 1.4; border-radius: 0.75rem;">
+            <i data-lucide="key" class="w-4 h-4"></i>
+            <span>Authenticate</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase.js"></script>
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script>
-    function switchRole(roleKey) {
-      const selected = COUNCIL_ACCOUNTS[roleKey];
-      if (selected) {
-        localStorage.setItem('pukhtoon_user', JSON.stringify(selected));
-        showToast(`Profile Switched`, `Switched active profile to ${selected.name} (${selected.title})`, 'success');
-        setTimeout(() => window.location.reload(), 500);
+    function renderRbacSimulator() {
+      const container = document.getElementById('rbacProfilesGrid');
+      if (!container) return;
+
+      const currentUser = Auth.getUser() || {};
+      const isCurrentSuperAdmin = (currentUser.role === 'SUPER_ADMIN' || currentUser.username === 'hamaskhan');
+
+      const accounts = [
+        {
+          key: 'hamas.khan@ist.edu.pk',
+          roleName: 'Super Admin',
+          color: 'var(--accent-blue)',
+          holder: 'Hamas Khan (Finance Secretary)',
+          isSuper: true
+        },
+        {
+          key: 'huzaifa.tariq@ist.edu.pk',
+          roleName: 'President',
+          color: 'var(--accent-emerald)',
+          holder: 'Huzaifa Tariq (Read-Only)',
+          isSuper: false
+        },
+        {
+          key: 'maaz.muhammad@ist.edu.pk',
+          roleName: 'Vice President',
+          color: 'var(--accent-amber)',
+          holder: 'Maaz Muhammad (Read-Only)',
+          isSuper: false
+        },
+        {
+          key: 'misbah.ullah@ist.edu.pk',
+          roleName: 'General Secretary',
+          color: 'var(--accent-purple)',
+          holder: 'Misbah Ullah (Read-Only)',
+          isSuper: false
+        }
+      ];
+
+      container.innerHTML = accounts.map(acc => {
+        const isActive = (currentUser.email === acc.key || currentUser.username === acc.key.split('@')[0]);
+        let badgeHtml = '';
+        let lockIcon = '';
+        let cardStyle = 'justify-content: flex-start; text-align: left; padding: 0.875rem 1rem; height: auto; position: relative; border-radius: 0.875rem;';
+
+        if (isActive) {
+          cardStyle += ' border: 1.5px solid ' + acc.color + '; background: rgba(0, 113, 227, 0.06); box-shadow: 0 0 14px rgba(0, 113, 227, 0.15);';
+          badgeHtml = `<span style="font-size: 0.625rem; font-weight: 700; color: ${acc.color}; display: flex; align-items: center; gap: 0.25rem; margin-top: 0.35rem;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: ${acc.color}; display: inline-block;"></span>
+            Active Profile (You)
+          </span>`;
+        } else if (acc.isSuper && !isCurrentSuperAdmin) {
+          cardStyle += ' border: 1.5px dashed rgba(245, 158, 11, 0.5); background: rgba(245, 158, 11, 0.04);';
+          lockIcon = `<i data-lucide="lock" style="width: 13px; height: 13px; color: var(--accent-amber); margin-left: auto;"></i>`;
+          badgeHtml = `<span style="font-size: 0.625rem; font-weight: 600; color: var(--accent-amber); display: flex; align-items: center; gap: 0.25rem; margin-top: 0.35rem;">
+            🔒 Password Protected
+          </span>`;
+        } else {
+          badgeHtml = `<span style="font-size: 0.625rem; color: var(--text-muted); display: block; margin-top: 0.35rem;">
+            ${isCurrentSuperAdmin ? 'Switch Profile →' : 'View-Only Profile →'}
+          </span>`;
+        }
+
+        return `
+          <button onclick="handleRoleSelect('${acc.key}')" class="btn btn-outline rbac-card" style="${cardStyle}">
+            <div style="width: 100%;">
+              <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <div style="font-weight: 700; font-size: 0.8125rem; color: ${acc.color};">${acc.roleName}</div>
+                ${lockIcon}
+              </div>
+              <div style="font-size: 0.6875rem; color: var(--text-muted); margin-top: 0.125rem;">${acc.holder}</div>
+              ${badgeHtml}
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function handleRoleSelect(roleKey) {
+      const currentUser = Auth.getUser() || {};
+      const target = COUNCIL_ACCOUNTS[roleKey];
+      if (!target) return;
+
+      const isCurrentSuperAdmin = (currentUser.role === 'SUPER_ADMIN' || currentUser.username === 'hamaskhan');
+      const isTargetSuperAdmin = (target.role === 'SUPER_ADMIN' || target.username === 'hamaskhan');
+      const isCurrentSelf = (currentUser.email === target.email || currentUser.username === target.username);
+
+      if (isCurrentSelf) {
+        showToast('Active Profile', `You are already operating as ${target.name} (${target.title}).`, 'info');
+        return;
       }
+
+      // If target is Super Admin AND current user is NOT Super Admin:
+      // Direct click access is strictly disallowed!
+      if (isTargetSuperAdmin && !isCurrentSuperAdmin) {
+        openSuperAdminAuthModal();
+        return;
+      }
+
+      // If current user is Super Admin:
+      // Super admin can access other accounts instantaneously!
+      if (isCurrentSuperAdmin) {
+        localStorage.setItem('pukhtoon_user', JSON.stringify(target));
+        showToast('Simulation Active', `Super Admin switched to ${target.name} (${target.title})`, 'success');
+        setTimeout(() => window.location.reload(), 400);
+        return;
+      }
+
+      // Non-super-admin account switching to another non-super-admin account:
+      localStorage.setItem('pukhtoon_user', JSON.stringify(target));
+      showToast('Profile Switched', `Switched active profile to ${target.name} (${target.title})`, 'success');
+      setTimeout(() => window.location.reload(), 400);
+    }
+
+    function switchRole(roleKey) {
+      handleRoleSelect(roleKey);
+    }
+
+    function openSuperAdminAuthModal() {
+      const pwdInput = document.getElementById('superAdminPasswordInput');
+      const errEl = document.getElementById('superAdminAuthError');
+      if (pwdInput) pwdInput.value = '';
+      if (errEl) errEl.style.display = 'none';
+      openModal('superAdminAuthModal');
+      setTimeout(() => {
+        if (pwdInput) pwdInput.focus();
+      }, 150);
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function handleSuperAdminAuthSubmit(e) {
+      e.preventDefault();
+      const pwdInput = document.getElementById('superAdminPasswordInput');
+      const errEl = document.getElementById('superAdminAuthError');
+      const pwd = pwdInput ? pwdInput.value : '';
+      const superAdminAccount = COUNCIL_ACCOUNTS['hamas.khan@ist.edu.pk'];
+
+      if (pwd === superAdminAccount.password) {
+        if (errEl) errEl.style.display = 'none';
+        localStorage.setItem('pukhtoon_user', JSON.stringify(superAdminAccount));
+        showToast('Super Admin Authenticated', 'Welcome back, Hamas Khan (Finance Secretary)!', 'success');
+        closeModal('superAdminAuthModal');
+        setTimeout(() => window.location.reload(), 400);
+      } else {
+        if (pwdInput) {
+          pwdInput.classList.add('shake-error');
+          setTimeout(() => pwdInput.classList.remove('shake-error'), 450);
+          pwdInput.value = '';
+          pwdInput.focus();
+        }
+        if (errEl) {
+          errEl.style.display = 'flex';
+          errEl.style.alignItems = 'center';
+          errEl.style.gap = '0.35rem';
+        }
+        showToast('Access Denied', 'Only Super Admin Hamas Khan can access this account.', 'error');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function toggleSuperAdminPwdVisibility() {
+      const input = document.getElementById('superAdminPasswordInput');
+      const icon = document.getElementById('superAdminEyeIcon');
+      if (!input || !icon) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      if (window.lucide) lucide.createIcons();
     }
 
     function exportDataJson() {
@@ -314,6 +501,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      renderRbacSimulator();
       loadSupabaseConfig();
     });
 
