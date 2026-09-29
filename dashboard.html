@@ -429,39 +429,36 @@
       const freq = document.getElementById('mStudentFreq').value;
       const phone = document.getElementById('mStudentPhone').value;
 
-      const data = DataStore.load();
-      const newStudent = {
-        id: 'std_' + Date.now(),
+      const res = DataStore.addStudent({
         fullName: name,
         regNo: reg,
         department: dept,
         batch: batch,
         contributionFrequency: freq,
-        expectedAmountPerCycle: freq === 'WEEKLY' ? 250 : freq === 'BIWEEKLY' ? 500 : 1000,
-        totalContributed: 0,
-        outstandingBalance: 1000,
-        status: 'ACTIVE',
-        email: `${reg}@ist.edu.pk`,
-        phone: phone || '+92 300 0000000',
-        joinDate: new Date().toISOString().split('T')[0],
+        phone: phone,
         notes: 'Enrolled via Command Hub'
-      };
-
-      data.students.unshift(newStudent);
-      data.auditLogs.unshift({
-        id: 'aud_' + Date.now(),
-        action: 'STUDENT_ENROLLED',
-        actor: Auth.getUser().name,
-        details: `Enrolled student ${name} (${reg}) in ${dept}`,
-        timestamp: new Date().toISOString()
       });
 
-      DataStore.save(data);
       closeModal('addStudentModal');
-      showToast('Student Enrolled', `${name} (${reg}) added to community register.`);
+      document.getElementById('mStudentName').value = '';
+      document.getElementById('mStudentReg').value = '';
+      if (document.getElementById('mStudentPhone')) document.getElementById('mStudentPhone').value = '';
+
+      if (res.isNew) {
+        showToast('Student Enrolled', `${name} (${reg}) permanently enrolled.`);
+      } else {
+        showToast('Already Enrolled', `${name} (${reg}) is already in the student roster.`);
+      }
+
       renderDashboard();
       populateStudentDropdown();
     }
+
+    // Refresh dashboard if background cloud sync updates
+    window.addEventListener('pukhtoon:datasync', () => {
+      renderDashboard();
+      populateStudentDropdown();
+    });
 
     function handleRecordPaymentSubmit(e) {
       e.preventDefault();

@@ -39,7 +39,7 @@ const SupabaseDB = {
     return false;
   },
 
-  // Synchronize live Supabase PostgreSQL tables into DataStore
+  // Synchronize live Supabase PostgreSQL tables into DataStore (Two-Way Non-Destructive Sync)
   async syncToDataStore() {
     if (!this.init()) return false;
     try {
@@ -53,66 +53,126 @@ const SupabaseDB = {
 
       if (typeof DataStore !== 'undefined') {
         const localData = DataStore.load();
-        
+        let stateChanged = false;
+
+        // 1. Non-destructive Two-Way Student Sync
         if (studentsRes.data && studentsRes.data.length > 0) {
-          localData.students = studentsRes.data.map(s => ({
-            id: s.id,
-            fullName: s.full_name,
-            regNo: s.reg_no,
-            department: s.department,
-            batch: s.cohort,
-            phone: s.phone || '',
-            status: s.enrollment_status,
-            totalContributed: Number(s.total_contributed || 0),
-            outstandingBalance: Number(s.outstanding_balance || 0),
-            email: s.email,
-            contributionFrequency: 'MONTHLY',
-            expectedAmountPerCycle: 1000
-          }));
+          if (!localData.students) localData.students = [];
+          const cloudStudents = studentsRes.data;
+
+          // Merge cloud students into local array without deleting any local students
+          cloudStudents.forEach(cs => {
+            const existing = localData.students.find(ls => 
+              ls.regNo === cs.reg_no || 
+              ls.id === cs.id || 
+              ls.supabase_id === cs.id ||
+              (ls.fullName && cs.full_name && ls.fullName.toLowerCase().trim() === cs.full_name.toLowerCase().trim())
+            );
+
+            if (existing) {
+              existing.supabase_id = cs.id;
+              if (cs.phone && !existing.phone) existing.phone = cs.phone;
+              if (cs.email && !existing.email) existing.email = cs.email;
+              if (cs.enrollment_status) existing.status = cs.enrollment_status;
+            } else {
+              // Add student from cloud to local
+              const newLocalStd = {
+                id: 'std_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+                supabase_id: cs.id,
+                fullName: cs.full_name,
+                regNo: cs.reg_no,
+                department: cs.department || 'General',
+                batch: cs.cohort || '2024-2028',
+                contributionFrequency: 'MONTHLY',
+                expectedAmountPerCycle: 1000,
+                totalContributed: Number(cs.total_contributed || 0),
+                outstandingBalance: Number(cs.outstanding_balance || 1000),
+                status: cs.enrollment_status || 'ACTIVE',
+                email: cs.email || `${cs.reg_no}@ist.edu.pk`,
+                phone: cs.phone || '+92 300 0000000',
+                joinDate: cs.created_at ? cs.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
+                notes: 'Synced from Supabase Cloud'
+              };
+              localData.students.push(newLocalStd);
+              stateChanged = true;
+            }
+          });
+
+          // Upload any locally added students that are not yet in Supabase cloud!
+          for (const ls of localData.students) {
+            const inCloud = cloudStudents.some(cs => 
+              cs.reg_no === ls.regNo || 
+              cs.id === ls.id || 
+              cs.id === ls.supabase_id
+            );
+            if (!inCloud) {
+              try {
+                const inserted = await this.addStudent(ls);
+                if (inserted && inserted.id) {
+                  ls.supabase_id = inserted.id;
+                  stateChanged = true;
+                }
+              } catch (err) {
+                console.warn('Notice: Local student preserved, cloud sync queued:', err);
+              }
+            }
+          }
         }
 
-        if (eventsRes.data && eventsRes.data.length > 0) {
-          localData.events = eventsRes.data.map(e => ({
-            id: e.id,
-            title: e.title,
-            date: e.event_date,
-            location: e.location,
-            plannedBudget: Number(e.planned_budget || 0),
-            actualSpending: Number(e.actual_spending || 0),
-            status: e.status,
-            description: e.description || '',
-            leadOrganizer: e.lead_organizer
-          }));
-        }
-
+        // 2. Non-destructive Cycles Sync
         if (cyclesRes.data && cyclesRes.data.length > 0) {
-          localData.cycles = cyclesRes.data.map(c => ({
-            id: c.id,
-            title: c.title,
-            academicTerm: c.academic_term,
-            targetAmount: Number(c.target_amount || 0),
-            collectedAmount: Number(c.collected_amount || 0),
-            deadline: c.deadline,
-            status: c.status
-          }));
+          if (!localData.cycles) localData.cycles = [];
+          cyclesRes.data.forEach(cc => {
+            const exists = localData.cycles.find(lc => lc.id === cc.id || lc.name === cc.title);
+            if (!exists) {
+              localData.cycles.push({
+                id: cc.id,
+                name: cc.title,
+                cycleType: 'MONTHLY',
+                targetAmount: Number(cc.target_amount || 0),
+                collectedAmount: Number(cc.collected_amount || 0),
+                dueDate: cc.deadline,
+                status: cc.status
+              });
+              stateChanged = true;
+            }
+          });
         }
 
-        if (auditRes.data && auditRes.data.length > 0) {
-          localData.auditLogs = auditRes.data.map(a => ({
-            id: a.id,
-            action: a.action,
-            actor: a.actor,
-            details: a.details,
-            timestamp: a.created_at
-          }));
+        // 3. Non-destructive Events Sync
+        if (eventsRes.data && eventsRes.data.length > 0) {
+          if (!localData.events) localData.events = [];
+          eventsRes.data.forEach(ce => {
+            const exists = localData.events.find(le => le.id === ce.id || le.title === ce.title);
+            if (!exists) {
+              localData.events.push({
+                id: ce.id,
+                title: ce.title,
+                date: ce.event_date,
+                location: ce.location,
+                plannedBudget: Number(ce.planned_budget || 0),
+                actualSpending: Number(ce.actual_spending || 0),
+                status: ce.status,
+                description: ce.description || '',
+                leadOrganizer: ce.lead_organizer
+              });
+              stateChanged = true;
+            }
+          });
         }
 
         DataStore.save(localData);
-        console.log('✅ Supabase live cloud database successfully synced to local state.');
+        console.log('✅ Supabase live cloud database successfully merged with local state.');
+        
+        // Dispatch data sync notification for live views
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('pukhtoon:datasync', { detail: localData }));
+        }
+
         return true;
       }
     } catch (e) {
-      console.warn('⚠️ Supabase background sync notice:', e);
+      console.warn('⚠️ Supabase background sync notice (local data unaffected):', e);
     }
     return false;
   },
@@ -130,24 +190,53 @@ const SupabaseDB = {
   // Add new student
   async addStudent(student) {
     if (!this.init()) return null;
-    const { data, error } = await this.client
-      .from('students')
-      .insert([{
-        reg_no: student.regNo,
-        full_name: student.fullName || student.name,
-        email: student.email,
-        department: student.department,
-        cohort: student.batch || student.cohort,
-        phone: student.phone || '',
-        enrollment_status: student.status || 'ACTIVE',
-        total_contributed: student.totalContributed || 0,
-        outstanding_balance: student.outstandingBalance || 0
-      }])
-      .select();
+    try {
+      const { data, error } = await this.client
+        .from('students')
+        .insert([{
+          reg_no: student.regNo,
+          full_name: student.fullName || student.name,
+          email: student.email || `${student.regNo}@ist.edu.pk`,
+          department: student.department,
+          cohort: student.batch || student.cohort,
+          phone: student.phone || '',
+          enrollment_status: student.status || 'ACTIVE',
+          total_contributed: Number(student.totalContributed || 0),
+          outstanding_balance: Number(student.outstandingBalance || 0)
+        }])
+        .select();
 
-    if (error) throw error;
-    await this.logAudit('STUDENT_ENROLLED', 'Council Officer', `Enrolled ${student.fullName} (${student.regNo})`);
-    return data[0];
+      if (error) {
+        console.warn('Supabase addStudent error:', error);
+        return null;
+      }
+      return data && data[0] ? data[0] : null;
+    } catch (err) {
+      console.warn('Supabase addStudent exception:', err);
+      return null;
+    }
+  },
+
+  // Delete student
+  async deleteStudent(studentId, regNo) {
+    if (!this.init()) return false;
+    try {
+      let query = this.client.from('students').delete();
+      if (regNo) {
+        query = query.eq('reg_no', regNo);
+      } else if (studentId) {
+        query = query.eq('id', studentId);
+      }
+      const { error } = await query;
+      if (error) {
+        console.warn('Supabase deleteStudent error:', error);
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.warn('Supabase deleteStudent exception:', e);
+      return false;
+    }
   },
 
   // Add expense voucher
@@ -184,9 +273,11 @@ const SupabaseDB = {
 // Initialize globally and perform background sync
 if (typeof window !== 'undefined') {
   window.SupabaseDB = SupabaseDB;
-  document.addEventListener('DOMContentLoaded', () => {
-    if (window.supabase) {
-      SupabaseDB.syncToDataStore();
-    }
-  });
+  if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.supabase) {
+        SupabaseDB.syncToDataStore();
+      }
+    });
+  }
 }

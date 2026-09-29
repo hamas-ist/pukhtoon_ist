@@ -704,6 +704,14 @@
       showToast('Cycle Launched', `"${title}" has been created.`);
       renderCycles();
     }
+
+    // Refresh views if cloud sync finishes
+    window.addEventListener('pukhtoon:datasync', () => {
+      renderMonthlyHeroBox();
+      renderMonthlyRoster();
+      renderCycles();
+      renderDuesTransactions();
+    });
   </script>
 </body>
 </html>

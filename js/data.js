@@ -699,6 +699,129 @@ const DataStore = {
     return { record, student, txnRef };
   },
 
+  addStudent(studentData) {
+    const data = this.load();
+    if (!data.students) data.students = [];
+
+    // Check for existing student by regNo
+    const existing = data.students.find(s => s.regNo === studentData.regNo);
+    if (existing) {
+      return { student: existing, isNew: false };
+    }
+
+    const freq = studentData.contributionFrequency || 'MONTHLY';
+    const quota = freq === 'WEEKLY' ? 250 : freq === 'BIWEEKLY' ? 500 : 1000;
+
+    const newStudent = {
+      id: 'std_' + Date.now(),
+      fullName: studentData.fullName,
+      regNo: studentData.regNo,
+      department: studentData.department,
+      batch: studentData.batch,
+      contributionFrequency: freq,
+      expectedAmountPerCycle: studentData.expectedAmountPerCycle || quota,
+      totalContributed: 0,
+      outstandingBalance: studentData.expectedAmountPerCycle || quota,
+      status: studentData.status || 'ACTIVE',
+      email: studentData.email || `${studentData.regNo}@ist.edu.pk`,
+      phone: studentData.phone || '+92 300 0000000',
+      joinDate: studentData.joinDate || new Date().toISOString().split('T')[0],
+      notes: studentData.notes || 'Enrolled member'
+    };
+
+    data.students.unshift(newStudent);
+
+    // Initialize October 2026 dues record for the new student
+    if (!data.monthlyDues) data.monthlyDues = [];
+    const hasOctRecord = data.monthlyDues.some(d => (d.studentId === newStudent.id || d.regNo === newStudent.regNo) && d.monthKey === '2026-10');
+    if (!hasOctRecord) {
+      data.monthlyDues.unshift({
+        id: 'md_10_' + Date.now(),
+        studentId: newStudent.id,
+        studentName: newStudent.fullName,
+        regNo: newStudent.regNo,
+        department: newStudent.department,
+        batch: newStudent.batch,
+        monthKey: '2026-10',
+        monthLabel: 'October 2026',
+        expectedAmount: newStudent.expectedAmountPerCycle,
+        paidAmount: 0,
+        status: 'PENDING',
+        date: null,
+        channel: null,
+        voucherRef: null,
+        recordedBy: null,
+        notes: 'Enrolled member October dues quota'
+      });
+    }
+
+    // Add audit log
+    const actor = (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Hamas Khan (Finance Secretary)';
+    data.auditLogs.unshift({
+      id: 'aud_' + Date.now(),
+      action: 'STUDENT_ENROLLED',
+      actor: actor,
+      details: `Enrolled student ${newStudent.fullName} (${newStudent.regNo}) in ${newStudent.department}`,
+      timestamp: new Date().toISOString()
+    });
+
+    this.save(data);
+
+    // Asynchronously push to Supabase Cloud if available
+    if (typeof window !== 'undefined' && window.SupabaseDB && typeof window.SupabaseDB.addStudent === 'function') {
+      window.SupabaseDB.addStudent(newStudent).then(created => {
+        if (created && created.id) {
+          const current = this.load();
+          const target = current.students.find(s => s.id === newStudent.id || s.regNo === newStudent.regNo);
+          if (target) {
+            target.supabase_id = created.id;
+            this.save(current);
+          }
+        }
+      }).catch(err => {
+        console.warn('Supabase background add notice (local student preserved):', err);
+      });
+    }
+
+    return { student: newStudent, isNew: true };
+  },
+
+  deleteStudent(studentId) {
+    const data = this.load();
+    if (!data.students) return false;
+
+    const index = data.students.findIndex(s => s.id === studentId || s.regNo === studentId);
+    if (index === -1) return false;
+
+    const removed = data.students.splice(index, 1)[0];
+
+    // Remove monthly dues records for this student
+    if (data.monthlyDues) {
+      data.monthlyDues = data.monthlyDues.filter(d => d.studentId !== studentId && d.regNo !== removed.regNo);
+    }
+
+    // Add audit log
+    const actor = (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Hamas Khan (Finance Secretary)';
+    data.auditLogs.unshift({
+      id: 'aud_' + Date.now(),
+      action: 'STUDENT_REMOVED',
+      actor: actor,
+      details: `Removed student record ${removed.fullName} (${removed.regNo})`,
+      timestamp: new Date().toISOString()
+    });
+
+    this.save(data);
+
+    // Asynchronously delete from Supabase Cloud if available
+    if (typeof window !== 'undefined' && window.SupabaseDB && typeof window.SupabaseDB.deleteStudent === 'function') {
+      window.SupabaseDB.deleteStudent(removed.supabase_id || removed.id, removed.regNo).catch(err => {
+        console.warn('Supabase background delete notice:', err);
+      });
+    }
+
+    return true;
+  },
+
   getStats() {
     const data = this.load();
     const totalCollected = data.students.reduce((acc, s) => acc + (s.totalContributed || 0), 0);

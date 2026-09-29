@@ -331,48 +331,46 @@
       const freq = document.getElementById('mStudentFreq').value;
       const phone = document.getElementById('mStudentPhone').value;
 
-      const data = DataStore.load();
-      const newStudent = {
-        id: 'std_' + Date.now(),
+      const res = DataStore.addStudent({
         fullName: name,
         regNo: reg,
         department: dept,
         batch: batch,
         contributionFrequency: freq,
-        expectedAmountPerCycle: freq === 'WEEKLY' ? 250 : freq === 'BIWEEKLY' ? 500 : 1000,
-        totalContributed: 0,
-        outstandingBalance: 1000,
-        status: 'ACTIVE',
-        email: `${reg}@ist.edu.pk`,
-        phone: phone || '+92 300 0000000',
-        joinDate: new Date().toISOString().split('T')[0],
+        phone: phone,
         notes: 'Enrolled via Web Portal'
-      };
-
-      data.students.unshift(newStudent);
-      data.auditLogs.unshift({
-        id: 'aud_' + Date.now(),
-        action: 'STUDENT_ENROLLED',
-        actor: Auth.getUser().name,
-        details: `Enrolled ${name} (${reg}) in ${dept}`,
-        timestamp: new Date().toISOString()
       });
 
-      DataStore.save(data);
       closeModal('addStudentModal');
-      showToast('Student Enrolled', `${name} (${reg}) added to community roster.`);
+      // Reset form fields
+      document.getElementById('mStudentName').value = '';
+      document.getElementById('mStudentReg').value = '';
+      if (document.getElementById('mStudentPhone')) document.getElementById('mStudentPhone').value = '';
+
+      if (res.isNew) {
+        showToast('Student Enrolled', `${name} (${reg}) permanently enrolled.`);
+      } else {
+        showToast('Already Enrolled', `${name} (${reg}) is already in the student roster.`);
+      }
+
       filterStudents();
     }
 
     function deleteStudentRecord(stdId) {
       if (!requireSuperAdmin('delete student record')) return;
       if (!confirm('Are you sure you want to remove this student record from the community directory?')) return;
-      const data = DataStore.load();
-      data.students = data.students.filter(s => s.id !== stdId);
-      DataStore.save(data);
-      showToast('Student Removed', 'Record successfully deleted.');
-      filterStudents();
+      
+      const success = DataStore.deleteStudent(stdId);
+      if (success) {
+        showToast('Student Removed', 'Record successfully removed.');
+        filterStudents();
+      }
     }
+
+    // Refresh directory when background cloud sync merges
+    window.addEventListener('pukhtoon:datasync', () => {
+      filterStudents();
+    });
 
     function exportStudentsCSV() {
       const data = DataStore.load();

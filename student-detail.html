@@ -512,6 +512,11 @@
       showToast('Payment Reconciled', `Recorded ${formatPKR(amount)} for ${currentStudent.fullName}`);
       renderStudentProfile(currentStudent.id);
     }
+
+    // Refresh profile if background cloud sync delivers updates
+    window.addEventListener('pukhtoon:datasync', () => {
+      if (currentStudent) renderStudentProfile(currentStudent.id);
+    });
   </script>
 </body>
 </html>
