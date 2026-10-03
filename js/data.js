@@ -236,6 +236,37 @@ const DataStore = {
     return cycle;
   },
 
+  getMonthlyTarget(monthKey = '2026-10') {
+    const data = this.load();
+    const cycle = (data.cycles || []).find(c => c.monthKey === monthKey || (monthKey === '2026-10' && c.id === 'cyc_oct_2026'));
+    if (cycle && cycle.targetAmount !== undefined && cycle.targetAmount !== null) {
+      return Number(cycle.targetAmount);
+    }
+    return 1000;
+  },
+
+  getAvailableBillingMonths() {
+    const data = this.load();
+    const monthMap = new Map();
+    monthMap.set('2026-10', 'October 2026');
+    monthMap.set('2026-11', 'November 2026');
+    monthMap.set('2026-12', 'December 2026');
+    monthMap.set('2026-09', 'September 2026');
+    monthMap.set('2026-08', 'August 2026');
+    (data.cycles || []).forEach(c => {
+      if (c.monthKey && !monthMap.has(c.monthKey)) {
+        const parts = (c.name || '').split('—');
+        monthMap.set(c.monthKey, parts[1] ? parts[1].trim() : c.monthKey);
+      }
+    });
+    (data.monthlyDues || []).forEach(d => {
+      if (d.monthKey && !monthMap.has(d.monthKey)) {
+        monthMap.set(d.monthKey, d.monthLabel || d.monthKey);
+      }
+    });
+    return Array.from(monthMap.entries()).map(([key, label]) => ({ key, label }));
+  },
+
   getMonthlyDuesSummary(monthKey) {
     const data = this.load();
     const dues = data.monthlyDues || [];
@@ -246,7 +277,7 @@ const DataStore = {
     const targetAmount = matchingCycle ? Number(matchingCycle.targetAmount) : 50000;
     
     const collectedAmount = monthRecords.reduce((sum, r) => sum + (r.paidAmount || 0), 0);
-    const pendingAmount = monthRecords.reduce((sum, r) => sum + (r.status === 'PENDING' ? ((r.expectedAmount || 1000) - (r.paidAmount || 0)) : 0), 0);
+    const pendingAmount = monthRecords.reduce((sum, r) => sum + (r.status === 'PENDING' ? ((r.expectedAmount || targetAmount || 1000) - (r.paidAmount || 0)) : 0), 0);
     const paidCount = monthRecords.filter(r => r.status === 'PAID').length;
     const pendingCount = monthRecords.filter(r => r.status === 'PENDING').length;
     const totalAssessed = monthRecords.length;
@@ -442,8 +473,28 @@ const DataStore = {
       return { student: existing, isNew: false, cloudSaved: true };
     }
 
-    const freq = studentData.contributionFrequency || 'MONTHLY';
-    const quota = freq === 'WEEKLY' ? 250 : freq === 'BIWEEKLY' ? 500 : 1000;
+    const monthKey = studentData.monthKey || '2026-10';
+    const monthNames = {
+      '2026-10': 'October 2026',
+      '2026-11': 'November 2026',
+      '2026-12': 'December 2026',
+      '2026-09': 'September 2026',
+      '2026-08': 'August 2026'
+    };
+    const monthLabel = monthNames[monthKey] || monthKey;
+
+    // Dynamically resolve target amount for this month if not explicitly specified
+    const monthlyTarget = this.getMonthlyTarget(monthKey);
+    const quota = (studentData.expectedAmountPerCycle !== undefined && studentData.expectedAmountPerCycle !== null && !isNaN(studentData.expectedAmountPerCycle) && Number(studentData.expectedAmountPerCycle) > 0)
+      ? Number(studentData.expectedAmountPerCycle)
+      : monthlyTarget;
+
+    const isPaidNow = (studentData.paymentStatus === 'PAID');
+    const paymentAmount = isPaidNow ? (Number(studentData.paidAmount) || quota) : 0;
+    const paymentChannel = studentData.paymentChannel || 'Cash Handover';
+    const txnRef = isPaidNow ? ('TXN-2026-' + Math.floor(200 + Math.random() * 800)) : null;
+    const today = new Date().toISOString().split('T')[0];
+    const actor = (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Hamas Khan (Finance Secretary)';
 
     const newStudent = {
       id: 'std_' + Date.now(),
@@ -451,14 +502,14 @@ const DataStore = {
       regNo: studentData.regNo,
       department: studentData.department,
       batch: studentData.batch,
-      contributionFrequency: freq,
-      expectedAmountPerCycle: studentData.expectedAmountPerCycle || quota,
-      totalContributed: 0,
-      outstandingBalance: studentData.expectedAmountPerCycle || quota,
+      contributionFrequency: 'MONTHLY',
+      expectedAmountPerCycle: quota,
+      totalContributed: isPaidNow ? paymentAmount : 0,
+      outstandingBalance: isPaidNow ? Math.max(0, quota - paymentAmount) : quota,
       status: studentData.status || 'ACTIVE',
       email: studentData.email || `${studentData.regNo}@ist.edu.pk`,
       phone: studentData.phone || '+92 300 0000000',
-      joinDate: studentData.joinDate || new Date().toISOString().split('T')[0],
+      joinDate: studentData.joinDate || today,
       notes: studentData.notes || 'Enrolled member'
     };
 
@@ -482,49 +533,84 @@ const DataStore = {
     // 2. Commit to local storage
     data.students.unshift(newStudent);
 
-    // Initialize October 2026 dues record for the new student
+    // Initialize monthly dues record for the selected specific month
     if (!data.monthlyDues) data.monthlyDues = [];
-    const hasOctRecord = data.monthlyDues.some(d => (d.studentId === newStudent.id || d.regNo === newStudent.regNo) && d.monthKey === '2026-10');
-    if (!hasOctRecord) {
+    const hasMonthRecord = data.monthlyDues.some(d => (d.studentId === newStudent.id || d.regNo === newStudent.regNo) && d.monthKey === monthKey);
+    if (!hasMonthRecord) {
       data.monthlyDues.unshift({
-        id: 'md_10_' + Date.now(),
+        id: 'md_' + Date.now(),
         studentId: newStudent.id,
         studentName: newStudent.fullName,
         regNo: newStudent.regNo,
         department: newStudent.department,
         batch: newStudent.batch,
-        monthKey: '2026-10',
-        monthLabel: 'October 2026',
-        expectedAmount: newStudent.expectedAmountPerCycle,
-        paidAmount: 0,
-        status: 'PENDING',
-        date: null,
-        channel: null,
-        voucherRef: null,
-        recordedBy: null,
-        notes: 'Enrolled member October dues quota'
+        monthKey: monthKey,
+        monthLabel: monthLabel,
+        expectedAmount: quota,
+        paidAmount: isPaidNow ? paymentAmount : 0,
+        status: isPaidNow ? 'PAID' : 'PENDING',
+        date: isPaidNow ? today : null,
+        channel: isPaidNow ? paymentChannel : null,
+        voucherRef: txnRef,
+        recordedBy: isPaidNow ? actor : null,
+        notes: isPaidNow ? (studentData.paymentNotes || `${monthLabel} dues paid on enrollment`) : `Enrolled member ${monthLabel} dues quota`
+      });
+    }
+
+    // If paid immediately on enrollment:
+    if (isPaidNow) {
+      // Update cycle collected amount
+      const cycle = (data.cycles || []).find(c => c.monthKey === monthKey);
+      if (cycle) {
+        cycle.collectedAmount = (cycle.collectedAmount || 0) + paymentAmount;
+      }
+
+      // Record inflow transaction
+      if (!data.transactions) data.transactions = [];
+      data.transactions.unshift({
+        id: 'txn_' + Date.now(),
+        transactionRef: txnRef,
+        date: today,
+        description: `Monthly Pool Dues (${paymentChannel}) — ${newStudent.fullName} (${monthLabel})`,
+        amount: paymentAmount,
+        type: 'INFLOW',
+        category: 'Student Dues',
+        recordedBy: actor
       });
     }
 
     // Add audit log
-    const actor = (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Hamas Khan (Finance Secretary)';
+    const fmt = (v) => (typeof formatPKR === 'function') ? formatPKR(v) : 'PKR ' + (Number(v) || 0).toLocaleString();
+    const auditDetails = isPaidNow
+      ? `Enrolled student ${newStudent.fullName} (${newStudent.regNo}) and collected ${fmt(paymentAmount)} for ${monthLabel} (${paymentChannel})`
+      : `Enrolled student ${newStudent.fullName} (${newStudent.regNo}) in ${newStudent.department} with ${monthLabel} quota of ${fmt(quota)}`;
+
     if (!data.auditLogs) data.auditLogs = [];
     data.auditLogs.unshift({
       id: 'aud_' + Date.now(),
-      action: 'STUDENT_ENROLLED',
+      action: isPaidNow ? 'STUDENT_ENROLLED_AND_PAID' : 'STUDENT_ENROLLED',
       actor: actor,
-      details: `Enrolled student ${newStudent.fullName} (${newStudent.regNo}) in ${newStudent.department} (Supabase Cloud Synced)`,
+      details: auditDetails,
       timestamp: new Date().toISOString()
     });
 
     this.save(data);
 
-    // Also log audit in Supabase Cloud
-    if (typeof window !== 'undefined' && window.SupabaseDB && typeof window.SupabaseDB.logAudit === 'function') {
-      window.SupabaseDB.logAudit('STUDENT_ENROLLED', actor, `Enrolled student ${newStudent.fullName} (${newStudent.regNo})`).catch(() => {});
+    // Also log audit and update balance in Supabase Cloud
+    if (typeof window !== 'undefined' && window.SupabaseDB) {
+      if (typeof window.SupabaseDB.logAudit === 'function') {
+        window.SupabaseDB.logAudit(isPaidNow ? 'STUDENT_ENROLLED_AND_PAID' : 'STUDENT_ENROLLED', actor, auditDetails).catch(() => {});
+      }
+      if (isPaidNow && typeof window.SupabaseDB.updateStudentBalance === 'function') {
+        window.SupabaseDB.updateStudentBalance(
+          newStudent.supabase_id || newStudent.id,
+          newStudent.totalContributed,
+          newStudent.outstandingBalance
+        ).catch(() => {});
+      }
     }
 
-    return { student: newStudent, isNew: true, cloudSaved };
+    return { student: newStudent, isNew: true, cloudSaved, isPaidNow, paymentAmount };
   },
 
   addStudent(studentData) {
@@ -537,8 +623,27 @@ const DataStore = {
       return { student: existing, isNew: false };
     }
 
-    const freq = studentData.contributionFrequency || 'MONTHLY';
-    const quota = freq === 'WEEKLY' ? 250 : freq === 'BIWEEKLY' ? 500 : 1000;
+    const monthKey = studentData.monthKey || '2026-10';
+    const monthNames = {
+      '2026-10': 'October 2026',
+      '2026-11': 'November 2026',
+      '2026-12': 'December 2026',
+      '2026-09': 'September 2026',
+      '2026-08': 'August 2026'
+    };
+    const monthLabel = monthNames[monthKey] || monthKey;
+
+    const monthlyTarget = this.getMonthlyTarget(monthKey);
+    const quota = (studentData.expectedAmountPerCycle !== undefined && studentData.expectedAmountPerCycle !== null && !isNaN(studentData.expectedAmountPerCycle) && Number(studentData.expectedAmountPerCycle) > 0)
+      ? Number(studentData.expectedAmountPerCycle)
+      : monthlyTarget;
+
+    const isPaidNow = (studentData.paymentStatus === 'PAID');
+    const paymentAmount = isPaidNow ? (Number(studentData.paidAmount) || quota) : 0;
+    const paymentChannel = studentData.paymentChannel || 'Cash Handover';
+    const txnRef = isPaidNow ? ('TXN-2026-' + Math.floor(200 + Math.random() * 800)) : null;
+    const today = new Date().toISOString().split('T')[0];
+    const actor = (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Hamas Khan (Finance Secretary)';
 
     const newStudent = {
       id: 'std_' + Date.now(),
@@ -546,51 +651,73 @@ const DataStore = {
       regNo: studentData.regNo,
       department: studentData.department,
       batch: studentData.batch,
-      contributionFrequency: freq,
-      expectedAmountPerCycle: studentData.expectedAmountPerCycle || quota,
-      totalContributed: 0,
-      outstandingBalance: studentData.expectedAmountPerCycle || quota,
+      contributionFrequency: 'MONTHLY',
+      expectedAmountPerCycle: quota,
+      totalContributed: isPaidNow ? paymentAmount : 0,
+      outstandingBalance: isPaidNow ? Math.max(0, quota - paymentAmount) : quota,
       status: studentData.status || 'ACTIVE',
       email: studentData.email || `${studentData.regNo}@ist.edu.pk`,
       phone: studentData.phone || '+92 300 0000000',
-      joinDate: studentData.joinDate || new Date().toISOString().split('T')[0],
+      joinDate: studentData.joinDate || today,
       notes: studentData.notes || 'Enrolled member'
     };
 
     data.students.unshift(newStudent);
 
-    // Initialize October 2026 dues record for the new student
+    // Initialize monthly dues record for this specific month
     if (!data.monthlyDues) data.monthlyDues = [];
-    const hasOctRecord = data.monthlyDues.some(d => (d.studentId === newStudent.id || d.regNo === newStudent.regNo) && d.monthKey === '2026-10');
-    if (!hasOctRecord) {
+    const hasMonthRecord = data.monthlyDues.some(d => (d.studentId === newStudent.id || d.regNo === newStudent.regNo) && d.monthKey === monthKey);
+    if (!hasMonthRecord) {
       data.monthlyDues.unshift({
-        id: 'md_10_' + Date.now(),
+        id: 'md_' + Date.now(),
         studentId: newStudent.id,
         studentName: newStudent.fullName,
         regNo: newStudent.regNo,
         department: newStudent.department,
         batch: newStudent.batch,
-        monthKey: '2026-10',
-        monthLabel: 'October 2026',
-        expectedAmount: newStudent.expectedAmountPerCycle,
-        paidAmount: 0,
-        status: 'PENDING',
-        date: null,
-        channel: null,
-        voucherRef: null,
-        recordedBy: null,
-        notes: 'Enrolled member October dues quota'
+        monthKey: monthKey,
+        monthLabel: monthLabel,
+        expectedAmount: quota,
+        paidAmount: isPaidNow ? paymentAmount : 0,
+        status: isPaidNow ? 'PAID' : 'PENDING',
+        date: isPaidNow ? today : null,
+        channel: isPaidNow ? paymentChannel : null,
+        voucherRef: txnRef,
+        recordedBy: isPaidNow ? actor : null,
+        notes: isPaidNow ? (studentData.paymentNotes || `${monthLabel} dues paid on enrollment`) : `Enrolled member ${monthLabel} dues quota`
       });
     }
 
-    // Add audit log
-    const actor = (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Hamas Khan (Finance Secretary)';
+    if (isPaidNow) {
+      const cycle = (data.cycles || []).find(c => c.monthKey === monthKey);
+      if (cycle) {
+        cycle.collectedAmount = (cycle.collectedAmount || 0) + paymentAmount;
+      }
+
+      if (!data.transactions) data.transactions = [];
+      data.transactions.unshift({
+        id: 'txn_' + Date.now(),
+        transactionRef: txnRef,
+        date: today,
+        description: `Monthly Pool Dues (${paymentChannel}) — ${newStudent.fullName} (${monthLabel})`,
+        amount: paymentAmount,
+        type: 'INFLOW',
+        category: 'Student Dues',
+        recordedBy: actor
+      });
+    }
+
+    const fmt = (v) => (typeof formatPKR === 'function') ? formatPKR(v) : 'PKR ' + (Number(v) || 0).toLocaleString();
+    const auditDetails = isPaidNow
+      ? `Enrolled student ${newStudent.fullName} (${newStudent.regNo}) and collected ${fmt(paymentAmount)} for ${monthLabel} (${paymentChannel})`
+      : `Enrolled student ${newStudent.fullName} (${newStudent.regNo}) in ${newStudent.department} with ${monthLabel} quota of ${fmt(quota)}`;
+
     if (!data.auditLogs) data.auditLogs = [];
     data.auditLogs.unshift({
       id: 'aud_' + Date.now(),
-      action: 'STUDENT_ENROLLED',
+      action: isPaidNow ? 'STUDENT_ENROLLED_AND_PAID' : 'STUDENT_ENROLLED',
       actor: actor,
-      details: `Enrolled student ${newStudent.fullName} (${newStudent.regNo}) in ${newStudent.department}`,
+      details: auditDetails,
       timestamp: new Date().toISOString()
     });
 
@@ -613,7 +740,7 @@ const DataStore = {
       });
     }
 
-    return { student: newStudent, isNew: true };
+    return { student: newStudent, isNew: true, isPaidNow, paymentAmount };
   },
 
   deleteStudent(studentId) {

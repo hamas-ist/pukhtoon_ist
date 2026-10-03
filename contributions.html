@@ -283,7 +283,7 @@
             </div>
             <div class="form-group">
               <label class="form-label">Amount Collected (PKR)</label>
-              <input type="number" id="rdAmount" class="form-input" required value="1000" min="100" step="50">
+              <input type="number" id="rdAmount" class="form-input num-tabular" required min="100" step="any">
             </div>
           </div>
           <div class="form-group">
@@ -657,7 +657,7 @@
       if (defaultAmount) {
         document.getElementById('rdAmount').value = defaultAmount;
       } else {
-        document.getElementById('rdAmount').value = 1000;
+        document.getElementById('rdAmount').value = DataStore.getMonthlyTarget(currentSelectedMonth);
       }
 
       openModal('recordDuesModal');
@@ -669,11 +669,18 @@
       const studentId = document.getElementById('rdStudent').value;
       const student = data.students.find(s => s.id === studentId);
       if (student) {
-        document.getElementById('rdAmount').value = student.expectedAmountPerCycle || 1000;
+        document.getElementById('rdAmount').value = student.expectedAmountPerCycle || DataStore.getMonthlyTarget(currentSelectedMonth);
       }
     }
 
-    function handleMonthSelectChange() {}
+    function handleMonthSelectChange() {
+      const monthKey = document.getElementById('rdMonth').value;
+      const target = DataStore.getMonthlyTarget(monthKey);
+      const studentId = document.getElementById('rdStudent').value;
+      const data = DataStore.load();
+      const student = data.students.find(s => s.id === studentId);
+      document.getElementById('rdAmount').value = (student && student.expectedAmountPerCycle) ? student.expectedAmountPerCycle : target;
+    }
 
     function handleRecordDuesSubmit(e) {
       e.preventDefault();

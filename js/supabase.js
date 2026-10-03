@@ -173,6 +173,7 @@ const SupabaseDB = {
             existing.outstandingBalance = Number(cs.outstanding_balance !== undefined ? cs.outstanding_balance : 0);
           } else {
             // New student from cloud -> add to local device
+            const defaultTarget = (localData.cycles && localData.cycles[0] && localData.cycles[0].targetAmount) ? Number(localData.cycles[0].targetAmount) : 1000;
             const newLocalStd = {
               id: cs.id,
               supabase_id: cs.id,
@@ -181,9 +182,9 @@ const SupabaseDB = {
               department: cs.department || 'General',
               batch: cs.cohort || '2024-2028',
               contributionFrequency: 'MONTHLY',
-              expectedAmountPerCycle: 1000,
+              expectedAmountPerCycle: defaultTarget,
               totalContributed: Number(cs.total_contributed || 0),
-              outstandingBalance: Number(cs.outstanding_balance !== undefined ? cs.outstanding_balance : 1000),
+              outstandingBalance: Number(cs.outstanding_balance !== undefined ? cs.outstanding_balance : defaultTarget),
               status: cs.enrollment_status || 'ACTIVE',
               email: cs.email || `${cs.reg_no}@ist.edu.pk`,
               phone: cs.phone || '+92 300 0000000',
@@ -198,6 +199,7 @@ const SupabaseDB = {
           if (!localData.monthlyDues) localData.monthlyDues = [];
           const hasOctDues = localData.monthlyDues.some(d => (d.studentId === cs.id || d.regNo === cs.reg_no) && d.monthKey === '2026-10');
           if (!hasOctDues) {
+            const defaultTarget = (localData.cycles && localData.cycles[0] && localData.cycles[0].targetAmount) ? Number(localData.cycles[0].targetAmount) : 1000;
             localData.monthlyDues.unshift({
               id: 'md_10_' + (cs.id || cs.reg_no),
               studentId: cs.id,
@@ -207,7 +209,7 @@ const SupabaseDB = {
               batch: cs.cohort || '2024-2028',
               monthKey: '2026-10',
               monthLabel: 'October 2026',
-              expectedAmount: 1000,
+              expectedAmount: defaultTarget,
               paidAmount: 0,
               status: 'PENDING',
               date: null,

@@ -270,7 +270,7 @@
             </div>
             <div class="form-group">
               <label class="form-label">Amount Given (PKR)</label>
-              <input type="number" id="pAmount" class="form-input" required value="1000" min="100" step="50">
+              <input type="number" id="pAmount" class="form-input num-tabular" required min="100" step="any">
             </div>
           </div>
           <div class="form-group">
@@ -379,7 +379,7 @@
       } else {
         stdOctStatus.textContent = 'PENDING';
         stdOctStatus.style.color = 'var(--accent-amber)';
-        stdOctDesc.textContent = `${formatPKR(octRecord ? octRecord.expectedAmount : 1000)} quota due`;
+        stdOctDesc.textContent = `${formatPKR(octRecord ? octRecord.expectedAmount : DataStore.getMonthlyTarget('2026-10'))} quota due`;
         if (stdOctIconWrap) {
           stdOctIconWrap.style.background = 'var(--accent-amber-subtle)';
           stdOctIconWrap.style.color = 'var(--accent-amber)';
@@ -503,7 +503,7 @@
       if (amount) {
         document.getElementById('pAmount').value = amount;
       } else {
-        document.getElementById('pAmount').value = currentStudent.outstandingBalance > 0 ? currentStudent.outstandingBalance : (currentStudent.expectedAmountPerCycle || 1000);
+        document.getElementById('pAmount').value = currentStudent.outstandingBalance > 0 ? currentStudent.outstandingBalance : (currentStudent.expectedAmountPerCycle || DataStore.getMonthlyTarget('2026-10'));
       }
 
       openModal('recordPaymentModal');

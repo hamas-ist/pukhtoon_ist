@@ -202,18 +202,75 @@
               </select>
             </div>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <div class="form-group">
-              <label class="form-label">Contribution Cycle</label>
-              <select id="mStudentFreq" class="form-select" required>
-                <option value="MONTHLY" selected>Monthly (PKR 1,000)</option>
-                <option value="BIWEEKLY">Bi-Weekly (PKR 500)</option>
-                <option value="WEEKLY">Weekly (PKR 250)</option>
-              </select>
+          <div class="form-group">
+            <label class="form-label">Contact Phone</label>
+            <input type="text" id="mStudentPhone" class="form-input" placeholder="+92 300 0000000">
+          </div>
+
+          <!-- Section: Monthly Contribution & Billing (Targeted Amount & Specific Month Payment) -->
+          <div style="background: var(--surface-secondary); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1rem; display: flex; flex-direction: column; gap: 0.875rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i data-lucide="calendar" class="w-4 h-4 text-accent-emerald"></i>
+                <span style="font-size: 0.8125rem; font-weight: 700; color: var(--text-primary);">Monthly Contribution & Billing</span>
+              </div>
+              <span class="badge badge-emerald" id="mTargetBadge" style="font-size: 0.6875rem;">
+                Target: <span id="mTargetDisplay">PKR 50,000</span>
+              </span>
             </div>
-            <div class="form-group">
-              <label class="form-label">Contact Phone</label>
-              <input type="text" id="mStudentPhone" class="form-input" placeholder="+92 300 0000000">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.875rem;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="mStudentMonth" style="font-size: 0.75rem; font-weight: 600;">Billing Month</label>
+                <select id="mStudentMonth" class="form-select" onchange="onEnrollMonthChange(this.value)">
+                  <!-- Dynamically populated, current month '2026-10' selected by default -->
+                </select>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="mStudentAmount" style="font-size: 0.75rem; font-weight: 600;">Monthly Contribution (PKR)</label>
+                <input type="number" id="mStudentAmount" class="form-input num-tabular" required min="100" step="any" placeholder="Target Amount">
+              </div>
+            </div>
+
+            <!-- Specific Month Payment Status Section -->
+            <div style="border-top: 1px solid var(--border); padding-top: 0.75rem;">
+              <label class="form-label" style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem; display: block;">
+                Payment for Specific Month (<span id="mSelectedMonthLabel">October 2026</span>)
+              </label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: var(--surface-primary); cursor: pointer;">
+                  <input type="radio" name="mPaymentStatus" value="PENDING" checked onchange="toggleEnrollPaymentFields()">
+                  <div>
+                    <div style="font-size: 0.8125rem; font-weight: 600; color: var(--accent-amber);">Pending (Pay Later)</div>
+                    <div style="font-size: 0.6875rem; color: var(--text-muted);">Record dues as unpaid</div>
+                  </div>
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: var(--surface-primary); cursor: pointer;">
+                  <input type="radio" name="mPaymentStatus" value="PAID" onchange="toggleEnrollPaymentFields()">
+                  <div>
+                    <div style="font-size: 0.8125rem; font-weight: 600; color: var(--accent-emerald);">Paid Now</div>
+                    <div style="font-size: 0.6875rem; color: var(--text-muted);">Collect & reconcile dues</div>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Extra fields if Paid Now is selected -->
+              <div id="mEnrollPaidFields" style="display: none; margin-top: 0.75rem; grid-template-columns: 1fr 1fr; gap: 0.875rem;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" style="font-size: 0.75rem; font-weight: 600;">Payment Channel</label>
+                  <select id="mEnrollChannel" class="form-select">
+                    <option value="Cash Handover" selected>Cash Handover</option>
+                    <option value="EasyPaisa">EasyPaisa</option>
+                    <option value="JazzCash">JazzCash</option>
+                    <option value="Bank Transfer">Bank Transfer (1Link)</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" style="font-size: 0.75rem; font-weight: 600;">Receipt / Voucher Note</label>
+                  <input type="text" id="mEnrollNotes" class="form-input" placeholder="e.g. October monthly installment cleared">
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -352,8 +409,13 @@
       const reg = document.getElementById('mStudentReg').value;
       const dept = document.getElementById('mStudentDept').value;
       const batch = document.getElementById('mStudentBatch').value;
-      const freq = document.getElementById('mStudentFreq').value;
-      const phone = document.getElementById('mStudentPhone').value;
+      const phone = document.getElementById('mStudentPhone') ? document.getElementById('mStudentPhone').value : '';
+      const monthKey = document.getElementById('mStudentMonth') ? document.getElementById('mStudentMonth').value : '2026-10';
+      const amountVal = document.getElementById('mStudentAmount') ? parseFloat(document.getElementById('mStudentAmount').value) : null;
+      const payStatusElem = document.querySelector('input[name="mPaymentStatus"]:checked');
+      const payStatus = payStatusElem ? payStatusElem.value : 'PENDING';
+      const payChannel = document.getElementById('mEnrollChannel') ? document.getElementById('mEnrollChannel').value : 'Cash Handover';
+      const payNotes = document.getElementById('mEnrollNotes') ? document.getElementById('mEnrollNotes').value : '';
 
       try {
         const res = await DataStore.addStudentAsync({
@@ -361,8 +423,12 @@
           regNo: reg,
           department: dept,
           batch: batch,
-          contributionFrequency: freq,
           phone: phone,
+          monthKey: monthKey,
+          expectedAmountPerCycle: amountVal,
+          paymentStatus: payStatus,
+          paymentChannel: payChannel,
+          paymentNotes: payNotes,
           notes: 'Enrolled via Web Portal'
         });
 
@@ -371,12 +437,16 @@
         document.getElementById('mStudentName').value = '';
         document.getElementById('mStudentReg').value = '';
         if (document.getElementById('mStudentPhone')) document.getElementById('mStudentPhone').value = '';
+        if (document.getElementById('mEnrollNotes')) document.getElementById('mEnrollNotes').value = '';
 
         if (res.isNew) {
+          const statusDesc = res.isPaidNow
+            ? `Dues of ${formatPKR(res.paymentAmount)} collected & reconciled`
+            : `Enrolled with ${formatPKR(amountVal || 1000)} quota pending`;
           if (res.cloudSaved) {
-            showToast('Student Enrolled & Synced', `${name} (${reg}) directly stored in Supabase PostgreSQL.`);
+            showToast('Student Enrolled & Synced', `${name} (${reg}) directly stored in Supabase PostgreSQL (${statusDesc}).`);
           } else {
-            showToast('Student Enrolled (Queued)', `${name} (${reg}) enrolled locally; cloud sync pending.`);
+            showToast('Student Enrolled (Queued)', `${name} (${reg}) enrolled locally (${statusDesc}); cloud sync pending.`);
           }
         } else {
           showToast('Already Enrolled', `${name} (${reg}) is already in the student roster.`);

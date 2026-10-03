@@ -253,6 +253,9 @@ function showToast(title, message, type = 'success') {
 function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
+    if (modalId === 'addStudentModal' && typeof initAddStudentModalFields === 'function') {
+      initAddStudentModalFields();
+    }
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
@@ -263,6 +266,54 @@ function closeModal(modalId) {
   if (modal) {
     modal.classList.remove('active');
     document.body.style.overflow = '';
+  }
+}
+
+// Student Enrollment Modal Dynamic Target & Month Initializer
+function initAddStudentModalFields() {
+  const monthSelect = document.getElementById('mStudentMonth');
+  if (monthSelect && typeof DataStore !== 'undefined') {
+    const months = DataStore.getAvailableBillingMonths();
+    monthSelect.innerHTML = months.map(m => `
+      <option value="${m.key}" ${m.key === '2026-10' ? 'selected' : ''}>
+        ${m.label}${m.key === '2026-10' ? ' (Current Month)' : ''}
+      </option>
+    `).join('');
+  }
+
+  const activeMonth = monthSelect ? monthSelect.value : '2026-10';
+  onEnrollMonthChange(activeMonth);
+
+  const pendingRadio = document.querySelector('input[name="mPaymentStatus"][value="PENDING"]');
+  if (pendingRadio) pendingRadio.checked = true;
+  toggleEnrollPaymentFields();
+  if (window.lucide) lucide.createIcons();
+}
+
+function onEnrollMonthChange(monthKey) {
+  const activeKey = monthKey || '2026-10';
+  if (typeof DataStore === 'undefined') return;
+
+  const target = DataStore.getMonthlyTarget(activeKey);
+  const targetDisplay = document.getElementById('mTargetDisplay');
+  if (targetDisplay) targetDisplay.textContent = formatPKR(target);
+
+  const amountInput = document.getElementById('mStudentAmount');
+  if (amountInput) amountInput.value = target;
+
+  const months = DataStore.getAvailableBillingMonths();
+  const match = months.find(m => m.key === activeKey);
+  const label = match ? match.label : activeKey;
+
+  const labelElem = document.getElementById('mSelectedMonthLabel');
+  if (labelElem) labelElem.textContent = label;
+}
+
+function toggleEnrollPaymentFields() {
+  const paidRadio = document.querySelector('input[name="mPaymentStatus"][value="PAID"]');
+  const paidFields = document.getElementById('mEnrollPaidFields');
+  if (paidFields) {
+    paidFields.style.display = (paidRadio && paidRadio.checked) ? 'grid' : 'none';
   }
 }
 
