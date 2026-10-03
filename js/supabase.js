@@ -139,119 +139,141 @@ const SupabaseDB = {
     try {
       this.init();
 
-      // Fetch active students and other collections in parallel
-      const [cloudStudents, cloudCycles, cloudEvents] = await Promise.all([
-        this.fetchActiveStudents().catch(() => null),
-        this.restRequest('contribution_cycles?select=*').catch(() => null),
-        this.restRequest('events?select=*').catch(() => null)
+      // Fetch active students and contribution cycles in parallel
+      const [cloudStudents, cloudCycles] = await Promise.all([
+        this.fetchActiveStudents().catch(err => {
+          console.warn('Supabase fetchActiveStudents failed:', err);
+          return null;
+        }),
+        this.restRequest('contribution_cycles?select=*').catch(() => null)
       ]);
 
-      if (typeof DataStore !== 'undefined' && cloudStudents && Array.isArray(cloudStudents)) {
+      if (typeof DataStore !== 'undefined') {
         const localData = DataStore.load();
         let stateChanged = false;
         if (!localData.students) localData.students = [];
 
-        // 1. Two-Way Student Sync
-        cloudStudents.forEach(cs => {
-          const existing = localData.students.find(ls => 
-            ls.regNo === cs.reg_no || 
-            ls.id === cs.id || 
-            ls.supabase_id === cs.id ||
-            (ls.fullName && cs.full_name && ls.fullName.toLowerCase().trim() === cs.full_name.toLowerCase().trim())
-          );
-
-          if (existing) {
-            existing.supabase_id = cs.id;
-            existing.fullName = cs.full_name;
-            existing.regNo = cs.reg_no;
-            if (cs.department) existing.department = cs.department;
-            if (cs.cohort) existing.batch = cs.cohort;
-            if (cs.phone) existing.phone = cs.phone;
-            if (cs.email) existing.email = cs.email;
-            if (cs.enrollment_status) existing.status = cs.enrollment_status;
-            existing.totalContributed = Number(cs.total_contributed || 0);
-            existing.outstandingBalance = Number(cs.outstanding_balance !== undefined ? cs.outstanding_balance : 0);
-          } else {
-            // New student from cloud -> add to local device
-            const defaultTarget = (localData.cycles && localData.cycles[0] && localData.cycles[0].targetAmount) ? Number(localData.cycles[0].targetAmount) : 1000;
-            const newLocalStd = {
-              id: cs.id,
-              supabase_id: cs.id,
-              fullName: cs.full_name,
-              regNo: cs.reg_no,
-              department: cs.department || 'General',
-              batch: cs.cohort || '2024-2028',
-              contributionFrequency: 'MONTHLY',
-              expectedAmountPerCycle: defaultTarget,
-              totalContributed: Number(cs.total_contributed || 0),
-              outstandingBalance: Number(cs.outstanding_balance !== undefined ? cs.outstanding_balance : defaultTarget),
-              status: cs.enrollment_status || 'ACTIVE',
-              email: cs.email || `${cs.reg_no}@ist.edu.pk`,
-              phone: cs.phone || '+92 300 0000000',
-              joinDate: cs.created_at ? cs.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
-              notes: 'Synced from Supabase Cloud'
-            };
-            localData.students.push(newLocalStd);
-            stateChanged = true;
-          }
-
-          // Ensure October 2026 dues record exists for this student
-          if (!localData.monthlyDues) localData.monthlyDues = [];
-          const hasOctDues = localData.monthlyDues.some(d => (d.studentId === cs.id || d.regNo === cs.reg_no) && d.monthKey === '2026-10');
-          if (!hasOctDues) {
-            const defaultTarget = (localData.cycles && localData.cycles[0] && localData.cycles[0].targetAmount) ? Number(localData.cycles[0].targetAmount) : 1000;
-            localData.monthlyDues.unshift({
-              id: 'md_10_' + (cs.id || cs.reg_no),
-              studentId: cs.id,
-              studentName: cs.full_name,
-              regNo: cs.reg_no,
-              department: cs.department || 'General',
-              batch: cs.cohort || '2024-2028',
-              monthKey: '2026-10',
-              monthLabel: 'October 2026',
-              expectedAmount: defaultTarget,
-              paidAmount: 0,
-              status: 'PENDING',
-              date: null,
-              channel: null,
-              voucherRef: null,
-              recordedBy: null,
-              notes: 'Monthly dues quota'
-            });
-            stateChanged = true;
-          }
-        });
-
-        // 2. Upload any local students that were queued while offline
-        for (const ls of localData.students) {
-          if (ls.status === 'ARCHIVED') continue;
-          if (ls.sync_status !== 'PENDING_UPLOAD') continue;
-          const inCloud = cloudStudents.some(cs => 
-            cs.reg_no === ls.regNo || 
-            cs.id === ls.id || 
-            cs.id === ls.supabase_id
-          );
-          if (!inCloud) {
-            try {
-              const inserted = await this.addStudent(ls);
-              if (inserted && inserted.id) {
-                ls.supabase_id = inserted.id;
-                ls.id = inserted.id;
-                delete ls.sync_status;
-                stateChanged = true;
-              }
-            } catch (uploadErr) {
-              console.warn('Notice: Local student preserved, cloud sync will retry:', uploadErr);
+        // 1. Sync cycles / targets from cloud
+        if (cloudCycles && Array.isArray(cloudCycles) && cloudCycles.length > 0) {
+          if (!localData.cycles) localData.cycles = [];
+          cloudCycles.forEach(cc => {
+            const match = localData.cycles.find(lc => 
+              lc.id === cc.id || 
+              (lc.monthKey === '2026-10' && (cc.academic_term === 'Fall 2026' || (cc.title && cc.title.includes('Fall 2026'))))
+            );
+            if (match) {
+              if (cc.target_amount) match.targetAmount = Number(cc.target_amount);
+              if (cc.collected_amount !== undefined) match.collectedAmount = Number(cc.collected_amount);
+              stateChanged = true;
             }
-          } else {
-            delete ls.sync_status;
-            stateChanged = true;
+          });
+        }
+
+        // 2. Two-Way Student Sync from Supabase
+        if (cloudStudents && Array.isArray(cloudStudents)) {
+          cloudStudents.forEach(cs => {
+            const existing = localData.students.find(ls => 
+              (ls.regNo && cs.reg_no && ls.regNo.toLowerCase() === cs.reg_no.toLowerCase()) || 
+              ls.id === cs.id || 
+              ls.supabase_id === cs.id ||
+              (ls.fullName && cs.full_name && ls.fullName.toLowerCase().trim() === cs.full_name.toLowerCase().trim())
+            );
+
+            const isPaid = Number(cs.total_contributed || 0) > 0 && Number(cs.outstanding_balance || 0) === 0;
+
+            if (existing) {
+              existing.supabase_id = cs.id;
+              existing.fullName = cs.full_name;
+              existing.regNo = cs.reg_no;
+              if (cs.department) existing.department = cs.department;
+              if (cs.cohort) existing.batch = cs.cohort;
+              if (cs.phone) existing.phone = cs.phone;
+              if (cs.email) existing.email = cs.email;
+              existing.status = 'ACTIVE';
+              existing.totalContributed = Number(cs.total_contributed || 0);
+              existing.outstandingBalance = Number(cs.outstanding_balance !== undefined ? cs.outstanding_balance : 0);
+              delete existing.sync_status;
+              stateChanged = true;
+            } else {
+              // New student from cloud -> add to local device
+              const defaultTarget = (localData.cycles && localData.cycles[0] && localData.cycles[0].targetAmount) ? Number(localData.cycles[0].targetAmount) : 1000;
+              const newLocalStd = {
+                id: cs.id,
+                supabase_id: cs.id,
+                fullName: cs.full_name,
+                regNo: cs.reg_no,
+                department: cs.department || 'General',
+                batch: cs.cohort || '2024-2028',
+                contributionFrequency: 'MONTHLY',
+                expectedAmountPerCycle: defaultTarget,
+                totalContributed: Number(cs.total_contributed || 0),
+                outstandingBalance: Number(cs.outstanding_balance !== undefined ? cs.outstanding_balance : defaultTarget),
+                status: 'ACTIVE',
+                email: cs.email || `${cs.reg_no}@ist.edu.pk`,
+                phone: cs.phone || '+92 300 0000000',
+                joinDate: cs.created_at ? cs.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
+                notes: 'Synced from Supabase Cloud'
+              };
+              localData.students.push(newLocalStd);
+              stateChanged = true;
+            }
+
+            // Ensure October 2026 dues record exists for this student
+            if (!localData.monthlyDues) localData.monthlyDues = [];
+            let octDues = localData.monthlyDues.find(d => (d.studentId === cs.id || d.regNo === cs.reg_no) && d.monthKey === '2026-10');
+            const defaultTarget = (localData.cycles && localData.cycles[0] && localData.cycles[0].targetAmount) ? Number(localData.cycles[0].targetAmount) : 1000;
+
+            if (!octDues) {
+              localData.monthlyDues.unshift({
+                id: 'md_10_' + (cs.id || cs.reg_no),
+                studentId: cs.id,
+                studentName: cs.full_name,
+                regNo: cs.reg_no,
+                department: cs.department || 'General',
+                batch: cs.cohort || '2024-2028',
+                monthKey: '2026-10',
+                monthLabel: 'October 2026',
+                expectedAmount: defaultTarget,
+                paidAmount: isPaid ? Number(cs.total_contributed) : 0,
+                status: isPaid ? 'PAID' : 'PENDING',
+                date: isPaid ? (cs.created_at ? cs.created_at.split('T')[0] : new Date().toISOString().split('T')[0]) : null,
+                channel: isPaid ? 'Cloud Reconciled' : null,
+                voucherRef: null,
+                recordedBy: null,
+                notes: isPaid ? 'Dues reconciled in Supabase Cloud' : 'Monthly dues quota'
+              });
+              stateChanged = true;
+            } else if (isPaid && octDues.status !== 'PAID') {
+              octDues.status = 'PAID';
+              octDues.paidAmount = Number(cs.total_contributed);
+              octDues.date = octDues.date || new Date().toISOString().split('T')[0];
+              stateChanged = true;
+            }
+          });
+
+          // 3. Upload any local students that were queued while offline
+          for (const ls of localData.students) {
+            if (ls.status === 'ARCHIVED') continue;
+            if (ls.sync_status === 'PENDING_UPLOAD') {
+              try {
+                const inserted = await this.addStudent(ls);
+                if (inserted && inserted.id) {
+                  ls.supabase_id = inserted.id;
+                  ls.id = inserted.id;
+                  delete ls.sync_status;
+                  stateChanged = true;
+                }
+              } catch (uploadErr) {
+                console.warn('Notice: Local student upload retry:', uploadErr);
+              }
+            }
           }
         }
 
-        // 3. Remove archived students from active local roster
+        // 4. Remove archived students from active local roster
         localData.students = localData.students.filter(s => s.status !== 'ARCHIVED');
 
+        // Always save to ensure local state has latest cloud records
         DataStore.save(localData);
         this.lastSyncTime = new Date();
         this.isOnline = true;
@@ -279,7 +301,7 @@ const SupabaseDB = {
     return await this.restRequest('students?enrollment_status=neq.ARCHIVED&order=full_name.asc');
   },
 
-  // Add new student directly to Supabase PostgreSQL
+  // Add or Upsert student directly to Supabase PostgreSQL (Prevents 409 unique constraint blocks)
   async addStudent(student) {
     const payload = {
       reg_no: (student.regNo || '').trim(),
@@ -288,19 +310,22 @@ const SupabaseDB = {
       department: student.department || 'General',
       cohort: student.batch || student.cohort || '2024-2028',
       phone: student.phone || '',
-      enrollment_status: student.status || 'ACTIVE',
+      enrollment_status: 'ACTIVE',
       total_contributed: Number(student.totalContributed || 0),
       outstanding_balance: Number(student.outstandingBalance !== undefined ? student.outstandingBalance : (student.expectedAmountPerCycle || 1000))
     };
 
     try {
-      const res = await this.restRequest('students', {
+      const res = await this.restRequest('students?on_conflict=reg_no', {
         method: 'POST',
+        headers: {
+          'Prefer': 'resolution=merge-duplicates,return=representation'
+        },
         body: JSON.stringify([payload])
       });
 
       if (res && res[0]) {
-        console.log('✅ Student directly stored in Supabase PostgreSQL:', res[0].full_name, res[0].reg_no);
+        console.log('✅ Student directly stored/upserted in Supabase PostgreSQL:', res[0].full_name, res[0].reg_no);
         return res[0];
       }
       return null;
@@ -310,11 +335,34 @@ const SupabaseDB = {
     }
   },
 
+  // Record payment contribution in Supabase contributions table
+  async recordContribution(student, amount, channel, txnRef) {
+    try {
+      const payload = {
+        amount: Number(amount),
+        transaction_ref: txnRef || ('TXN-2026-' + Math.floor(200 + Math.random() * 800)),
+        payment_method: channel || 'Cash',
+        status: 'VERIFIED',
+        collected_by: (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Finance Secretary'
+      };
+      if (student && student.supabase_id && String(student.supabase_id).includes('-')) {
+        payload.student_id = student.supabase_id;
+      }
+      return await this.restRequest('contributions', {
+        method: 'POST',
+        body: JSON.stringify([payload])
+      });
+    } catch (err) {
+      console.warn('Supabase recordContribution notice:', err);
+      return null;
+    }
+  },
+
   // Update student balances directly in Supabase
   async updateStudentBalance(regOrId, totalContributed, outstandingBalance) {
     if (!regOrId) return false;
     try {
-      const query = regOrId.includes('-') ? `id=eq.${regOrId}` : `reg_no=eq.${encodeURIComponent(regOrId)}`;
+      const query = String(regOrId).includes('-') ? `id=eq.${regOrId}` : `reg_no=eq.${encodeURIComponent(regOrId)}`;
       const res = await this.restRequest(`students?${query}`, {
         method: 'PATCH',
         body: JSON.stringify({
@@ -334,7 +382,7 @@ const SupabaseDB = {
   async archiveStudent(regOrId) {
     if (!regOrId) return false;
     try {
-      const query = regOrId.includes('-') ? `id=eq.${regOrId}` : `reg_no=eq.${encodeURIComponent(regOrId)}`;
+      const query = String(regOrId).includes('-') ? `id=eq.${regOrId}` : `reg_no=eq.${encodeURIComponent(regOrId)}`;
       const res = await this.restRequest(`students?${query}`, {
         method: 'PATCH',
         body: JSON.stringify({ enrollment_status: 'ARCHIVED' })
@@ -419,5 +467,17 @@ if (typeof window !== 'undefined') {
     } else {
       handleInit();
     }
+
+    // Auto-sync whenever user focuses the browser tab
+    window.addEventListener('focus', () => {
+      SupabaseDB.syncToDataStore();
+    });
+
+    // Auto-poll in background every 15 seconds
+    setInterval(() => {
+      if (!SupabaseDB.syncing) {
+        SupabaseDB.syncToDataStore();
+      }
+    }, 15000);
   }
 }
