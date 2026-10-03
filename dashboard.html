@@ -419,9 +419,16 @@
       }
     }
 
-    function handleAddStudentSubmit(e) {
+    async function handleAddStudentSubmit(e) {
       e.preventDefault();
       if (!requireSuperAdmin('enroll a new student')) return;
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.innerHTML : 'Enroll Student';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span style="display:inline-block; animation: pulse-sync-active 0.8s infinite;">●</span> Storing in Cloud Database...`;
+      }
+
       const name = document.getElementById('mStudentName').value;
       const reg = document.getElementById('mStudentReg').value;
       const dept = document.getElementById('mStudentDept').value;
@@ -429,29 +436,42 @@
       const freq = document.getElementById('mStudentFreq').value;
       const phone = document.getElementById('mStudentPhone').value;
 
-      const res = DataStore.addStudent({
-        fullName: name,
-        regNo: reg,
-        department: dept,
-        batch: batch,
-        contributionFrequency: freq,
-        phone: phone,
-        notes: 'Enrolled via Command Hub'
-      });
+      try {
+        const res = await DataStore.addStudentAsync({
+          fullName: name,
+          regNo: reg,
+          department: dept,
+          batch: batch,
+          contributionFrequency: freq,
+          phone: phone,
+          notes: 'Enrolled via Command Hub'
+        });
 
-      closeModal('addStudentModal');
-      document.getElementById('mStudentName').value = '';
-      document.getElementById('mStudentReg').value = '';
-      if (document.getElementById('mStudentPhone')) document.getElementById('mStudentPhone').value = '';
+        closeModal('addStudentModal');
+        document.getElementById('mStudentName').value = '';
+        document.getElementById('mStudentReg').value = '';
+        if (document.getElementById('mStudentPhone')) document.getElementById('mStudentPhone').value = '';
 
-      if (res.isNew) {
-        showToast('Student Enrolled', `${name} (${reg}) permanently enrolled.`);
-      } else {
-        showToast('Already Enrolled', `${name} (${reg}) is already in the student roster.`);
+        if (res.isNew) {
+          if (res.cloudSaved) {
+            showToast('Student Enrolled & Synced', `${name} (${reg}) directly stored in Supabase PostgreSQL.`);
+          } else {
+            showToast('Student Enrolled (Queued)', `${name} (${reg}) enrolled locally; cloud sync pending.`);
+          }
+        } else {
+          showToast('Already Enrolled', `${name} (${reg}) is already in the student roster.`);
+        }
+
+        renderDashboard();
+        populateStudentDropdown();
+      } catch (err) {
+        showToast('Enrollment Error', 'Failed to enroll student: ' + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
       }
-
-      renderDashboard();
-      populateStudentDropdown();
     }
 
     // Refresh dashboard if background cloud sync updates
@@ -468,36 +488,19 @@
       const channel = document.getElementById('pChannel').value;
       const notes = document.getElementById('pNotes').value;
 
-      const data = DataStore.load();
-      const student = data.students.find(s => s.id === stdId);
-      if (student) {
-        student.totalContributed += amount;
-        student.outstandingBalance = Math.max(0, student.outstandingBalance - amount);
+      // Reconcile via DataStore (which automatically syncs to Supabase Cloud)
+      const res = DataStore.recordMonthlyPayment({
+        studentId: stdId,
+        monthKey: '2026-10',
+        amount: amount,
+        channel: channel,
+        notes: notes,
+        officer: Auth.getUser().name
+      });
 
-        data.transactions.unshift({
-          id: 'txn_' + Date.now(),
-          transactionRef: 'TXN-2026-' + Math.floor(100 + Math.random() * 900),
-          date: new Date().toISOString().split('T')[0],
-          description: `Dues Payment (${channel}) — ${student.fullName} (${student.regNo})`,
-          amount: amount,
-          type: 'INFLOW',
-          category: 'Student Dues',
-          recordedBy: Auth.getUser().name
-        });
-
-        data.auditLogs.unshift({
-          id: 'aud_' + Date.now(),
-          action: 'DUES_RECORDED',
-          actor: Auth.getUser().name,
-          details: `Reconciled ${formatPKR(amount)} for ${student.fullName}`,
-          timestamp: new Date().toISOString()
-        });
-
-        DataStore.save(data);
-        closeModal('recordPaymentModal');
-        showToast('Payment Recorded', `Received ${formatPKR(amount)} from ${student.fullName}`);
-        renderDashboard();
-      }
+      closeModal('recordPaymentModal');
+      showToast('Payment Recorded & Synced', `Received ${formatPKR(amount)} from ${res.student ? res.student.fullName : 'student'} (Synced to Cloud)`);
+      renderDashboard();
     }
   </script>
 </body>

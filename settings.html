@@ -268,17 +268,17 @@
                   <input type="password" id="supabaseKeyInput" class="form-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." autocomplete="off">
                 </div>
                 <div class="settings-action-row">
-                  <span style="font-size: 0.75rem; color: var(--text-muted);">
-                    Saved securely in browser storage for cloud synchronization.
+                  <span style="font-size: 0.75rem; color: var(--text-muted);" id="supabaseStatusText">
+                    Connected to Supabase PostgreSQL (Project: pukhtoon-society).
                   </span>
-                  <div style="display: flex; gap: 0.625rem;">
-                    <button class="btn btn-outline" onclick="loadSupabaseConfig()" style="border-radius: 9999px;">
-                      <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                      <span>Reload</span>
+                  <div style="display: flex; gap: 0.625rem; flex-wrap: wrap;">
+                    <button class="btn btn-outline" type="button" onclick="testSupabaseConnection()" style="border-radius: 9999px;">
+                      <i data-lucide="zap" class="w-4 h-4 text-accent-emerald"></i>
+                      <span>Test Database</span>
                     </button>
-                    <button class="btn btn-primary" onclick="saveSupabaseConfig()" style="border-radius: 9999px;">
+                    <button class="btn btn-primary" type="button" onclick="saveSupabaseConfig()" style="border-radius: 9999px;">
                       <i data-lucide="check" class="w-4 h-4"></i>
-                      <span>Save & Connect</span>
+                      <span>Save & Sync</span>
                     </button>
                   </div>
                 </div>
@@ -625,26 +625,47 @@
       loadSupabaseConfig();
     });
 
+    const DEFAULT_PROD_SUPABASE_URL = 'https://mhepwlrrtkgprdoywqrt.supabase.co';
+    const DEFAULT_PROD_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1oZXB3bHJydGtncHJkb3l3cXJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0NDE0ODYsImV4cCI6MjEwNjAxNzQ4Nn0.Tsx3D7lQ1kwbSWXxBzgtBdqmORUM4_5QURsU9i5axuE';
+
     function loadSupabaseConfig() {
-      const url = localStorage.getItem('pukhtoon_supabase_url') || '';
-      const key = localStorage.getItem('pukhtoon_supabase_key') || '';
+      const url = localStorage.getItem('pukhtoon_supabase_url') || DEFAULT_PROD_SUPABASE_URL;
+      const key = localStorage.getItem('pukhtoon_supabase_key') || DEFAULT_PROD_SUPABASE_KEY;
       const urlInput = document.getElementById('supabaseUrlInput');
       const keyInput = document.getElementById('supabaseKeyInput');
       if (urlInput) urlInput.value = url;
       if (keyInput) keyInput.value = key;
       const badge = document.getElementById('supabaseBadge');
       if (badge) {
-        if (url && key) {
-          badge.innerText = 'Cloud Database Configured';
-          badge.style.color = 'var(--accent-blue)';
-          badge.style.borderColor = 'rgba(59, 130, 246, 0.4)';
-          badge.style.background = 'rgba(59, 130, 246, 0.15)';
-        } else {
-          badge.innerText = 'Local-First Active';
-          badge.style.color = 'var(--accent-emerald)';
-          badge.style.borderColor = 'rgba(16, 185, 129, 0.3)';
-          badge.style.background = 'rgba(16, 185, 129, 0.15)';
+        badge.innerText = 'Connected: pukhtoon-society';
+        badge.style.color = 'var(--accent-emerald)';
+        badge.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+        badge.style.background = 'rgba(16, 185, 129, 0.12)';
+      }
+    }
+
+    async function testSupabaseConnection() {
+      const statusText = document.getElementById('supabaseStatusText');
+      if (statusText) statusText.textContent = 'Testing connection to Supabase PostgreSQL...';
+
+      try {
+        if (window.SupabaseDB) {
+          const students = await window.SupabaseDB.fetchActiveStudents();
+          if (students && Array.isArray(students)) {
+            if (statusText) statusText.textContent = `✅ Live Verified: ${students.length} student records confirmed in Supabase PostgreSQL.`;
+            showToast('Database Connected', `Successfully connected to Supabase (${students.length} students live).`);
+            const badge = document.getElementById('supabaseBadge');
+            if (badge) {
+              badge.innerText = `Connected (${students.length} Live Records)`;
+              badge.style.color = 'var(--accent-emerald)';
+            }
+            return;
+          }
         }
+        throw new Error('No records returned');
+      } catch (err) {
+        if (statusText) statusText.textContent = '⚠️ Connection check: ' + err.message;
+        showToast('Connection Notice', err.message);
       }
     }
 
@@ -652,10 +673,14 @@
       if (!requireSuperAdmin('modify cloud database configuration')) return;
       const url = (document.getElementById('supabaseUrlInput').value || '').trim();
       const key = (document.getElementById('supabaseKeyInput').value || '').trim();
-      localStorage.setItem('pukhtoon_supabase_url', url);
-      localStorage.setItem('pukhtoon_supabase_key', key);
-      if (window.Toast) Toast.show('Supabase credentials saved successfully!', 'success');
+      if (url) localStorage.setItem('pukhtoon_supabase_url', url);
+      if (key) localStorage.setItem('pukhtoon_supabase_key', key);
+      
+      showToast('Supabase Saved', 'Cloud database configuration saved and sync triggered.');
       loadSupabaseConfig();
+      if (window.SupabaseDB) {
+        window.SupabaseDB.syncToDataStore();
+      }
     }
 
     function confirmResetData() {

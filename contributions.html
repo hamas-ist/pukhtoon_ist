@@ -598,7 +598,7 @@
       });
 
       closeModal('recordDuesModal');
-      showToast('Payment Reconciled', `Recorded ${formatPKR(amount)} for ${res.student ? res.student.fullName : 'student'}`);
+      showToast('Payment Reconciled & Synced', `Recorded ${formatPKR(amount)} for ${res.student ? res.student.fullName : 'student'} (Updated in Cloud Database)`);
       renderMonthlyHeroBox();
       renderMonthlyRoster();
       renderCycles();

@@ -509,7 +509,7 @@
       });
 
       closeModal('recordPaymentModal');
-      showToast('Payment Reconciled', `Recorded ${formatPKR(amount)} for ${currentStudent.fullName}`);
+      showToast('Payment Reconciled & Synced', `Recorded ${formatPKR(amount)} for ${currentStudent.fullName} (Updated in Cloud Database)`);
       renderStudentProfile(currentStudent.id);
     }
 

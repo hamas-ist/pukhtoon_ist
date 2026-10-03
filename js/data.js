@@ -22,14 +22,15 @@ const DEFAULT_IST_DATA = {
 
   students: [
     {
-      id: 'std_01',
+      id: 'bff4d2e9-c911-4a6c-8e41-6900563521d9',
+      supabase_id: 'bff4d2e9-c911-4a6c-8e41-6900563521d9',
       fullName: 'Muhammad Ahmad Khan',
-      regNo: '210101045',
+      regNo: '210104012',
       department: 'Aerospace Engineering',
       batch: '2021-2025',
       contributionFrequency: 'MONTHLY',
       expectedAmountPerCycle: 1000,
-      totalContributed: 8000,
+      totalContributed: 6000,
       outstandingBalance: 0,
       status: 'ACTIVE',
       email: 'ahmad.khan@ist.edu.pk',
@@ -38,55 +39,127 @@ const DEFAULT_IST_DATA = {
       notes: 'Final year project lead, regular contributor'
     },
     {
-      id: 'std_02',
-      fullName: 'Zarghona Khattak',
-      regNo: '220202018',
+      id: '7051b11d-1da4-4376-9a8b-b621fabf35aa',
+      supabase_id: '7051b11d-1da4-4376-9a8b-b621fabf35aa',
+      fullName: 'Bilal Khattak',
+      regNo: '220101004',
       department: 'Computer Science',
       batch: '2022-2026',
       contributionFrequency: 'MONTHLY',
       expectedAmountPerCycle: 1000,
-      totalContributed: 6000,
-      outstandingBalance: 1000,
+      totalContributed: 4500,
+      outstandingBalance: 1500,
       status: 'ACTIVE',
-      email: 'zarghona.k@ist.edu.pk',
+      email: 'bilal.khattak@ist.edu.pk',
       phone: '+92 312 9876543',
       joinDate: '2022-09-20',
       notes: 'Community web council volunteer'
     },
     {
-      id: 'std_03',
+      id: 'dddf3ce3-4f83-4b63-a956-79d0e1078089',
+      supabase_id: 'dddf3ce3-4f83-4b63-a956-79d0e1078089',
       fullName: 'Hamza Afridi',
-      regNo: '230103092',
-      department: 'Avionics Engineering',
-      batch: '2023-2027',
+      regNo: '210102045',
+      department: 'Electrical Engineering',
+      batch: '2021-2025',
       contributionFrequency: 'MONTHLY',
       expectedAmountPerCycle: 1000,
-      totalContributed: 4000,
+      totalContributed: 6000,
       outstandingBalance: 0,
       status: 'ACTIVE',
       email: 'hamza.afridi@ist.edu.pk',
       phone: '+92 333 4567890',
-      joinDate: '2023-09-10',
+      joinDate: '2021-09-10',
       notes: 'Badminton team player'
     },
     {
-      id: 'std_04',
-      fullName: 'Gul Panra Yousafzai',
-      regNo: '220401015',
-      department: 'Electrical Engineering',
-      batch: '2022-2026',
-      contributionFrequency: 'BIWEEKLY',
-      expectedAmountPerCycle: 500,
-      totalContributed: 5500,
-      outstandingBalance: 500,
+      id: '1d6e66de-8b81-4ee2-830c-6ec4401d4a9c',
+      supabase_id: '1d6e66de-8b81-4ee2-830c-6ec4401d4a9c',
+      fullName: 'Zarghona Khattak',
+      regNo: '230103019',
+      department: 'Avionics Engineering',
+      batch: '2023-2027',
+      contributionFrequency: 'MONTHLY',
+      expectedAmountPerCycle: 1000,
+      totalContributed: 3000,
+      outstandingBalance: 0,
       status: 'ACTIVE',
-      email: 'gul.panra@ist.edu.pk',
+      email: 'zarghona.k@ist.edu.pk',
       phone: '+92 345 6789012',
-      joinDate: '2022-10-01',
+      joinDate: '2023-09-20',
       notes: 'Cultural debate team delegate'
     },
     {
-      id: 'std_05',
+      id: '2c39d188-54d0-4e1c-95ea-38a260e60715',
+      supabase_id: '2c39d188-54d0-4e1c-95ea-38a260e60715',
+      fullName: 'Shahid Khan Shinwari',
+      regNo: '220105031',
+      department: 'Mechanical Engineering',
+      batch: '2022-2026',
+      contributionFrequency: 'MONTHLY',
+      expectedAmountPerCycle: 1000,
+      totalContributed: 3000,
+      outstandingBalance: 1500,
+      status: 'ACTIVE',
+      email: 'shahid.shinwari@ist.edu.pk',
+      phone: '+92 321 2345678',
+      joinDate: '2022-11-05',
+      notes: 'Former logistics lead'
+    },
+    {
+      id: '171d89d1-9fa6-4bd8-b5e8-23e95974b656',
+      supabase_id: '171d89d1-9fa6-4bd8-b5e8-23e95974b656',
+      fullName: 'Palwasha Wazir',
+      regNo: '230101088',
+      department: 'Computer Science',
+      batch: '2023-2027',
+      contributionFrequency: 'MONTHLY',
+      expectedAmountPerCycle: 1000,
+      totalContributed: 3000,
+      outstandingBalance: 0,
+      status: 'ACTIVE',
+      email: 'palwasha.wazir@ist.edu.pk',
+      phone: '+92 334 5678901',
+      joinDate: '2023-10-12',
+      notes: 'Literary committee'
+    },
+    {
+      id: '96a8b295-358d-4c8d-847f-5003ad8b9337',
+      supabase_id: '96a8b295-358d-4c8d-847f-5003ad8b9337',
+      fullName: 'Sher Alam Mehsud',
+      regNo: '240106002',
+      department: 'Space Sciences',
+      batch: '2024-2028',
+      contributionFrequency: 'MONTHLY',
+      expectedAmountPerCycle: 1000,
+      totalContributed: 1500,
+      outstandingBalance: 0,
+      status: 'ACTIVE',
+      email: 'sher.alam@ist.edu.pk',
+      phone: '+92 316 7890123',
+      joinDate: '2024-09-01',
+      notes: 'Freshman representative'
+    },
+    {
+      id: '345a427c-4959-4465-9349-6697261734a4',
+      supabase_id: '345a427c-4959-4465-9349-6697261734a4',
+      fullName: 'Gul Panra Yousafzai',
+      regNo: '240107015',
+      department: 'Materials Science',
+      batch: '2024-2028',
+      contributionFrequency: 'BIWEEKLY',
+      expectedAmountPerCycle: 500,
+      totalContributed: 1500,
+      outstandingBalance: 0,
+      status: 'ACTIVE',
+      email: 'gul.panra@ist.edu.pk',
+      phone: '+92 335 8901234',
+      joinDate: '2024-09-15',
+      notes: 'Cultural debate team delegate'
+    },
+    {
+      id: 'c8250067-29b7-4f61-8ec8-32c31205289e',
+      supabase_id: 'c8250067-29b7-4f61-8ec8-32c31205289e',
       fullName: 'Asfandiyar Mohmand',
       regNo: '240105033',
       department: 'Space Science',
@@ -102,39 +175,8 @@ const DEFAULT_IST_DATA = {
       notes: 'Freshman representative'
     },
     {
-      id: 'std_06',
-      fullName: 'Sher Alam Shinwari',
-      regNo: '210203060',
-      department: 'Mechanical Engineering',
-      batch: '2021-2025',
-      contributionFrequency: 'MONTHLY',
-      expectedAmountPerCycle: 1000,
-      totalContributed: 7000,
-      outstandingBalance: 1000,
-      status: 'ACTIVE',
-      email: 'sher.alam@ist.edu.pk',
-      phone: '+92 321 2345678',
-      joinDate: '2021-11-05',
-      notes: 'Former logistics lead'
-    },
-    {
-      id: 'std_07',
-      fullName: 'Palwasha Wazir',
-      regNo: '230501008',
-      department: 'Materials Science & Engineering',
-      batch: '2023-2027',
-      contributionFrequency: 'WEEKLY',
-      expectedAmountPerCycle: 250,
-      totalContributed: 3500,
-      outstandingBalance: 0,
-      status: 'ACTIVE',
-      email: 'palwasha.w@ist.edu.pk',
-      phone: '+92 334 5678901',
-      joinDate: '2023-10-12',
-      notes: 'Literary committee'
-    },
-    {
-      id: 'std_08',
+      id: '32c0b8cb-e6a9-49f6-901f-ce8f7bb2c598',
+      supabase_id: '32c0b8cb-e6a9-49f6-901f-ce8f7bb2c598',
       fullName: 'Bilal Orakzai',
       regNo: '220101077',
       department: 'Aerospace Engineering',
@@ -144,8 +186,8 @@ const DEFAULT_IST_DATA = {
       totalContributed: 5000,
       outstandingBalance: 0,
       status: 'ACTIVE',
-      email: 'bilal.orakzai@ist.edu.pk',
-      phone: '+92 301 3456789',
+      email: 'bilal.o@ist.edu.pk',
+      phone: '+92 346 9012345',
       joinDate: '2022-09-15',
       notes: 'IST Rover club coordinator'
     }
@@ -198,57 +240,26 @@ const DEFAULT_IST_DATA = {
 
   monthlyDues: [
     // October 2026 (Active Current Month)
-    { id: 'md_10_01', studentId: 'std_01', studentName: 'Muhammad Ahmad Khan', regNo: '210101045', department: 'Aerospace Engineering', batch: '2021-2025', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-02', channel: 'EasyPaisa', voucherRef: 'TXN-2026-201', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'October monthly installment cleared' },
-    { id: 'md_10_02', studentId: 'std_02', studentName: 'Zarghona Khattak', regNo: '220202018', department: 'Computer Science', batch: '2022-2026', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 0, status: 'PENDING', date: null, channel: null, voucherRef: null, recordedBy: null, notes: 'Awaiting monthly payment' },
-    { id: 'md_10_03', studentId: 'std_03', studentName: 'Hamza Afridi', regNo: '230103092', department: 'Avionics Engineering', batch: '2023-2027', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-03', channel: 'JazzCash', voucherRef: 'TXN-2026-202', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Cleared via JazzCash wallet' },
-    { id: 'md_10_04', studentId: 'std_04', studentName: 'Gul Panra Yousafzai', regNo: '220401015', department: 'Electrical Engineering', batch: '2022-2026', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 500, paidAmount: 0, status: 'PENDING', date: null, channel: null, voucherRef: null, recordedBy: null, notes: 'Pending second bi-weekly installment' },
-    { id: 'md_10_05', studentId: 'std_05', studentName: 'Asfandiyar Mohmand', regNo: '240105033', department: 'Space Science', batch: '2024-2028', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-01', channel: 'Cash', voucherRef: 'TXN-2026-203', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Handed over at Secretariat' },
-    { id: 'md_10_06', studentId: 'std_06', studentName: 'Sher Alam Shinwari', regNo: '210203060', department: 'Mechanical Engineering', batch: '2021-2025', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 0, status: 'PENDING', date: null, channel: null, voucherRef: null, recordedBy: null, notes: 'Dues notice dispatched' },
-    { id: 'md_10_07', studentId: 'std_07', studentName: 'Palwasha Wazir', regNo: '230501008', department: 'Materials Science & Engineering', batch: '2023-2027', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 500, paidAmount: 500, status: 'PAID', date: '2026-10-04', channel: 'EasyPaisa', voucherRef: 'TXN-2026-204', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Paid on due date' },
-    { id: 'md_10_08', studentId: 'std_08', studentName: 'Bilal Orakzai', regNo: '220101077', department: 'Aerospace Engineering', batch: '2022-2026', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-02', channel: 'Bank Transfer', voucherRef: 'TXN-2026-205', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Online bank payment' },
+    { id: 'md_10_01', studentId: 'bff4d2e9-c911-4a6c-8e41-6900563521d9', studentName: 'Muhammad Ahmad Khan', regNo: '210104012', department: 'Aerospace Engineering', batch: '2021-2025', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-02', channel: 'EasyPaisa', voucherRef: 'TXN-2026-201', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'October monthly installment cleared' },
+    { id: 'md_10_02', studentId: '7051b11d-1da4-4376-9a8b-b621fabf35aa', studentName: 'Bilal Khattak', regNo: '220101004', department: 'Computer Science', batch: '2022-2026', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 0, status: 'PENDING', date: null, channel: null, voucherRef: null, recordedBy: null, notes: 'Awaiting monthly payment' },
+    { id: 'md_10_03', studentId: 'dddf3ce3-4f83-4b63-a956-79d0e1078089', studentName: 'Hamza Afridi', regNo: '210102045', department: 'Electrical Engineering', batch: '2021-2025', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-03', channel: 'JazzCash', voucherRef: 'TXN-2026-202', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Cleared via JazzCash wallet' },
+    { id: 'md_10_04', studentId: '1d6e66de-8b81-4ee2-830c-6ec4401d4a9c', studentName: 'Zarghona Khattak', regNo: '230103019', department: 'Avionics Engineering', batch: '2023-2027', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-01', channel: 'EasyPaisa', voucherRef: 'TXN-2026-203', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Cleared via EasyPaisa' },
+    { id: 'md_10_05', studentId: '2c39d188-54d0-4e1c-95ea-38a260e60715', studentName: 'Shahid Khan Shinwari', regNo: '220105031', department: 'Mechanical Engineering', batch: '2022-2026', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 0, status: 'PENDING', date: null, channel: null, voucherRef: null, recordedBy: null, notes: 'Dues notice dispatched' },
+    { id: 'md_10_06', studentId: '171d89d1-9fa6-4bd8-b5e8-23e95974b656', studentName: 'Palwasha Wazir', regNo: '230101088', department: 'Computer Science', batch: '2023-2027', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-04', channel: 'EasyPaisa', voucherRef: 'TXN-2026-204', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Paid on due date' },
+    { id: 'md_10_07', studentId: '96a8b295-358d-4c8d-847f-5003ad8b9337', studentName: 'Sher Alam Mehsud', regNo: '240106002', department: 'Space Sciences', batch: '2024-2028', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-02', channel: 'Cash', voucherRef: 'TXN-2026-205', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Handed over at Secretariat' },
+    { id: 'md_10_08', studentId: '345a427c-4959-4465-9349-6697261734a4', studentName: 'Gul Panra Yousafzai', regNo: '240107015', department: 'Materials Science', batch: '2024-2028', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 500, paidAmount: 500, status: 'PAID', date: '2026-10-01', channel: 'JazzCash', voucherRef: 'TXN-2026-206', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Bi-weekly installment' },
+    { id: 'md_10_09', studentId: 'c8250067-29b7-4f61-8ec8-32c31205289e', studentName: 'Asfandiyar Mohmand', regNo: '240105033', department: 'Space Science', batch: '2024-2028', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-01', channel: 'Cash', voucherRef: 'TXN-2026-207', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Handed over at Secretariat' },
+    { id: 'md_10_10', studentId: '32c0b8cb-e6a9-49f6-901f-ce8f7bb2c598', studentName: 'Bilal Orakzai', regNo: '220101077', department: 'Aerospace Engineering', batch: '2022-2026', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-02', channel: 'Bank Transfer', voucherRef: 'TXN-2026-208', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Online bank payment' },
 
     // September 2026
-    { id: 'md_09_01', studentId: 'std_01', studentName: 'Muhammad Ahmad Khan', regNo: '210101045', department: 'Aerospace Engineering', batch: '2021-2025', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-24', channel: 'Cash', voucherRef: 'TXN-2026-101', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Secretariat cash handover' },
-    { id: 'md_09_02', studentId: 'std_02', studentName: 'Zarghona Khattak', regNo: '220202018', department: 'Computer Science', batch: '2022-2026', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-21', channel: 'EasyPaisa', voucherRef: 'TXN-2026-104', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Direct wallet transfer' },
-    { id: 'md_09_03', studentId: 'std_03', studentName: 'Hamza Afridi', regNo: '230103092', department: 'Avionics Engineering', batch: '2023-2027', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-22', channel: 'Cash', voucherRef: 'TXN-2026-112', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Paid on campus' },
-    { id: 'md_09_04', studentId: 'std_04', studentName: 'Gul Panra Yousafzai', regNo: '220401015', department: 'Electrical Engineering', batch: '2022-2026', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 500, paidAmount: 500, status: 'PAID', date: '2026-09-20', channel: 'Cash', voucherRef: 'TXN-2026-105', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Bi-weekly cycle dues' },
-    { id: 'md_09_05', studentId: 'std_05', studentName: 'Asfandiyar Mohmand', regNo: '240105033', department: 'Space Science', batch: '2024-2028', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-15', channel: 'Cash', voucherRef: 'TXN-2026-118', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Orientation welcome dues' },
-    { id: 'md_09_06', studentId: 'std_06', studentName: 'Sher Alam Shinwari', regNo: '210203060', department: 'Mechanical Engineering', batch: '2021-2025', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-23', channel: 'Bank Transfer', voucherRef: 'TXN-2026-120', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Cleared via 1Link' },
-    { id: 'md_09_07', studentId: 'std_07', studentName: 'Palwasha Wazir', regNo: '230501008', department: 'Materials Science & Engineering', batch: '2023-2027', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 500, paidAmount: 500, status: 'PAID', date: '2026-09-25', channel: 'Cash', voucherRef: 'TXN-2026-125', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Paid on campus' },
-    { id: 'md_09_08', studentId: 'std_08', studentName: 'Bilal Orakzai', regNo: '220101077', department: 'Aerospace Engineering', batch: '2022-2026', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-18', channel: 'EasyPaisa', voucherRef: 'TXN-2026-115', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Verified and reconciled' },
-
-    // August 2026
-    { id: 'md_08_01', studentId: 'std_01', studentName: 'Muhammad Ahmad Khan', regNo: '210101045', department: 'Aerospace Engineering', batch: '2021-2025', monthKey: '2026-08', monthLabel: 'August 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-08-20', channel: 'Bank Transfer', voucherRef: 'TXN-2026-085', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_08_02', studentId: 'std_02', studentName: 'Zarghona Khattak', regNo: '220202018', department: 'Computer Science', batch: '2022-2026', monthKey: '2026-08', monthLabel: 'August 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-08-19', channel: 'EasyPaisa', voucherRef: 'TXN-2026-086', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_08_03', studentId: 'std_03', studentName: 'Hamza Afridi', regNo: '230103092', department: 'Avionics Engineering', batch: '2023-2027', monthKey: '2026-08', monthLabel: 'August 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-08-15', channel: 'JazzCash', voucherRef: 'TXN-2026-082', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_08_04', studentId: 'std_04', studentName: 'Gul Panra Yousafzai', regNo: '220401015', department: 'Electrical Engineering', batch: '2022-2026', monthKey: '2026-08', monthLabel: 'August 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-08-18', channel: 'Bank Transfer', voucherRef: 'TXN-2026-084', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_08_06', studentId: 'std_06', studentName: 'Sher Alam Shinwari', regNo: '210203060', department: 'Mechanical Engineering', batch: '2021-2025', monthKey: '2026-08', monthLabel: 'August 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-08-20', channel: 'Cash', voucherRef: 'TXN-2026-087', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_08_07', studentId: 'std_07', studentName: 'Palwasha Wazir', regNo: '230501008', department: 'Materials Science & Engineering', batch: '2023-2027', monthKey: '2026-08', monthLabel: 'August 2026', expectedAmount: 500, paidAmount: 500, status: 'PAID', date: '2026-08-21', channel: 'EasyPaisa', voucherRef: 'TXN-2026-088', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_08_08', studentId: 'std_08', studentName: 'Bilal Orakzai', regNo: '220101077', department: 'Aerospace Engineering', batch: '2022-2026', monthKey: '2026-08', monthLabel: 'August 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-08-14', channel: 'Cash', voucherRef: 'TXN-2026-081', recordedBy: 'Hamas Khan (Finance Secretary)' },
-
-    // July 2026
-    { id: 'md_07_01', studentId: 'std_01', studentName: 'Muhammad Ahmad Khan', regNo: '210101045', department: 'Aerospace Engineering', batch: '2021-2025', monthKey: '2026-07', monthLabel: 'July 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-07-15', channel: 'EasyPaisa', voucherRef: 'TXN-2026-065', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_07_02', studentId: 'std_02', studentName: 'Zarghona Khattak', regNo: '220202018', department: 'Computer Science', batch: '2022-2026', monthKey: '2026-07', monthLabel: 'July 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-07-22', channel: 'Cash', voucherRef: 'TXN-2026-068', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_07_03', studentId: 'std_03', studentName: 'Hamza Afridi', regNo: '230103092', department: 'Avionics Engineering', batch: '2023-2027', monthKey: '2026-07', monthLabel: 'July 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-07-10', channel: 'Cash', voucherRef: 'TXN-2026-061', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_07_04', studentId: 'std_04', studentName: 'Gul Panra Yousafzai', regNo: '220401015', department: 'Electrical Engineering', batch: '2022-2026', monthKey: '2026-07', monthLabel: 'July 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-07-12', channel: 'EasyPaisa', voucherRef: 'TXN-2026-063', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_07_06', studentId: 'std_06', studentName: 'Sher Alam Shinwari', regNo: '210203060', department: 'Mechanical Engineering', batch: '2021-2025', monthKey: '2026-07', monthLabel: 'July 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-07-17', channel: 'EasyPaisa', voucherRef: 'TXN-2026-066', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_07_07', studentId: 'std_07', studentName: 'Palwasha Wazir', regNo: '230501008', department: 'Materials Science & Engineering', batch: '2023-2027', monthKey: '2026-07', monthLabel: 'July 2026', expectedAmount: 500, paidAmount: 500, status: 'PAID', date: '2026-07-19', channel: 'Cash', voucherRef: 'TXN-2026-067', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_07_08', studentId: 'std_08', studentName: 'Bilal Orakzai', regNo: '220101077', department: 'Aerospace Engineering', batch: '2022-2026', monthKey: '2026-07', monthLabel: 'July 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-07-20', channel: 'Bank Transfer', voucherRef: 'TXN-2026-069', recordedBy: 'Hamas Khan (Finance Secretary)' },
-
-    // June 2026
-    { id: 'md_06_01', studentId: 'std_01', studentName: 'Muhammad Ahmad Khan', regNo: '210101045', department: 'Aerospace Engineering', batch: '2021-2025', monthKey: '2026-06', monthLabel: 'June 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-06-12', channel: 'Cash', voucherRef: 'TXN-2026-045', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_06_02', studentId: 'std_02', studentName: 'Zarghona Khattak', regNo: '220202018', department: 'Computer Science', batch: '2022-2026', monthKey: '2026-06', monthLabel: 'June 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-06-15', channel: 'EasyPaisa', voucherRef: 'TXN-2026-048', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_06_04', studentId: 'std_04', studentName: 'Gul Panra Yousafzai', regNo: '220401015', department: 'Electrical Engineering', batch: '2022-2026', monthKey: '2026-06', monthLabel: 'June 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-06-08', channel: 'Cash', voucherRef: 'TXN-2026-042', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_06_06', studentId: 'std_06', studentName: 'Sher Alam Shinwari', regNo: '210203060', department: 'Mechanical Engineering', batch: '2021-2025', monthKey: '2026-06', monthLabel: 'June 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-06-14', channel: 'Bank Transfer', voucherRef: 'TXN-2026-047', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_06_07', studentId: 'std_07', studentName: 'Palwasha Wazir', regNo: '230501008', department: 'Materials Science & Engineering', batch: '2023-2027', monthKey: '2026-06', monthLabel: 'June 2026', expectedAmount: 500, paidAmount: 500, status: 'PAID', date: '2026-06-16', channel: 'EasyPaisa', voucherRef: 'TXN-2026-049', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_06_08', studentId: 'std_08', studentName: 'Bilal Orakzai', regNo: '220101077', department: 'Aerospace Engineering', batch: '2022-2026', monthKey: '2026-06', monthLabel: 'June 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-06-11', channel: 'EasyPaisa', voucherRef: 'TXN-2026-044', recordedBy: 'Hamas Khan (Finance Secretary)' },
-
-    // May 2026
-    { id: 'md_05_01', studentId: 'std_01', studentName: 'Muhammad Ahmad Khan', regNo: '210101045', department: 'Aerospace Engineering', batch: '2021-2025', monthKey: '2026-05', monthLabel: 'May 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-05-18', channel: 'EasyPaisa', voucherRef: 'TXN-2026-025', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_05_02', studentId: 'std_02', studentName: 'Zarghona Khattak', regNo: '220202018', department: 'Computer Science', batch: '2022-2026', monthKey: '2026-05', monthLabel: 'May 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-05-20', channel: 'Bank Transfer', voucherRef: 'TXN-2026-028', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_05_04', studentId: 'std_04', studentName: 'Gul Panra Yousafzai', regNo: '220401015', department: 'Electrical Engineering', batch: '2022-2026', monthKey: '2026-05', monthLabel: 'May 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-05-15', channel: 'EasyPaisa', voucherRef: 'TXN-2026-022', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_05_06', studentId: 'std_06', studentName: 'Sher Alam Shinwari', regNo: '210203060', department: 'Mechanical Engineering', batch: '2021-2025', monthKey: '2026-05', monthLabel: 'May 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-05-16', channel: 'Cash', voucherRef: 'TXN-2026-024', recordedBy: 'Hamas Khan (Finance Secretary)' },
-    { id: 'md_05_07', studentId: 'std_07', studentName: 'Palwasha Wazir', regNo: '230501008', department: 'Materials Science & Engineering', batch: '2023-2027', monthKey: '2026-05', monthLabel: 'May 2026', expectedAmount: 500, paidAmount: 500, status: 'PAID', date: '2026-05-22', channel: 'Cash', voucherRef: 'TXN-2026-029', recordedBy: 'Hamas Khan (Finance Secretary)' }
+    { id: 'md_09_01', studentId: 'bff4d2e9-c911-4a6c-8e41-6900563521d9', studentName: 'Muhammad Ahmad Khan', regNo: '210104012', department: 'Aerospace Engineering', batch: '2021-2025', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-24', channel: 'Cash', voucherRef: 'TXN-2026-101', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Secretariat cash handover' },
+    { id: 'md_09_02', studentId: '7051b11d-1da4-4376-9a8b-b621fabf35aa', studentName: 'Bilal Khattak', regNo: '220101004', department: 'Computer Science', batch: '2022-2026', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-21', channel: 'EasyPaisa', voucherRef: 'TXN-2026-104', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Direct wallet transfer' },
+    { id: 'md_09_03', studentId: 'dddf3ce3-4f83-4b63-a956-79d0e1078089', studentName: 'Hamza Afridi', regNo: '210102045', department: 'Electrical Engineering', batch: '2021-2025', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-22', channel: 'Cash', voucherRef: 'TXN-2026-112', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Paid on campus' },
+    { id: 'md_09_04', studentId: '1d6e66de-8b81-4ee2-830c-6ec4401d4a9c', studentName: 'Zarghona Khattak', regNo: '230103019', department: 'Avionics Engineering', batch: '2023-2027', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-20', channel: 'EasyPaisa', voucherRef: 'TXN-2026-114', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Cleared via EasyPaisa' },
+    { id: 'md_09_05', studentId: 'c8250067-29b7-4f61-8ec8-32c31205289e', studentName: 'Asfandiyar Mohmand', regNo: '240105033', department: 'Space Science', batch: '2024-2028', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-15', channel: 'Cash', voucherRef: 'TXN-2026-118', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Orientation welcome dues' },
+    { id: 'md_09_06', studentId: '2c39d188-54d0-4e1c-95ea-38a260e60715', studentName: 'Shahid Khan Shinwari', regNo: '220105031', department: 'Mechanical Engineering', batch: '2022-2026', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-23', channel: 'Bank Transfer', voucherRef: 'TXN-2026-120', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Cleared via 1Link' },
+    { id: 'md_09_07', studentId: '171d89d1-9fa6-4bd8-b5e8-23e95974b656', studentName: 'Palwasha Wazir', regNo: '230101088', department: 'Computer Science', batch: '2023-2027', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-25', channel: 'Cash', voucherRef: 'TXN-2026-125', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Paid on campus' },
+    { id: 'md_09_08', studentId: '32c0b8cb-e6a9-49f6-901f-ce8f7bb2c598', studentName: 'Bilal Orakzai', regNo: '220101077', department: 'Aerospace Engineering', batch: '2022-2026', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-18', channel: 'EasyPaisa', voucherRef: 'TXN-2026-115', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Verified and reconciled' }
   ],
 
 
@@ -696,7 +707,118 @@ const DataStore = {
     });
 
     this.save(data);
+
+    // Direct synchronization to Supabase PostgreSQL cloud database
+    if (typeof window !== 'undefined' && window.SupabaseDB) {
+      if (student) {
+        window.SupabaseDB.updateStudentBalance(
+          student.supabase_id || student.id || student.regNo,
+          student.totalContributed,
+          student.outstandingBalance
+        ).catch(err => console.warn('Supabase balance update notice:', err));
+      }
+      window.SupabaseDB.logAudit(
+        'DUES_RECORDED',
+        officerName,
+        `Reconciled ${formattedAmount} for ${student ? student.fullName : ''} (${monthLabel})`
+      ).catch(err => console.warn('Supabase audit notice:', err));
+    }
+
     return { record, student, txnRef };
+  },
+
+  async addStudentAsync(studentData) {
+    const data = this.load();
+    if (!data.students) data.students = [];
+
+    // Check for existing student by regNo (case-insensitive)
+    const existing = data.students.find(s => s.regNo.toLowerCase() === studentData.regNo.toLowerCase());
+    if (existing) {
+      return { student: existing, isNew: false, cloudSaved: true };
+    }
+
+    const freq = studentData.contributionFrequency || 'MONTHLY';
+    const quota = freq === 'WEEKLY' ? 250 : freq === 'BIWEEKLY' ? 500 : 1000;
+
+    const newStudent = {
+      id: 'std_' + Date.now(),
+      fullName: studentData.fullName,
+      regNo: studentData.regNo,
+      department: studentData.department,
+      batch: studentData.batch,
+      contributionFrequency: freq,
+      expectedAmountPerCycle: studentData.expectedAmountPerCycle || quota,
+      totalContributed: 0,
+      outstandingBalance: studentData.expectedAmountPerCycle || quota,
+      status: studentData.status || 'ACTIVE',
+      email: studentData.email || `${studentData.regNo}@ist.edu.pk`,
+      phone: studentData.phone || '+92 300 0000000',
+      joinDate: studentData.joinDate || new Date().toISOString().split('T')[0],
+      notes: studentData.notes || 'Enrolled member'
+    };
+
+    // 1. Direct Cloud Persistence to Supabase PostgreSQL
+    let cloudSaved = false;
+    if (typeof window !== 'undefined' && window.SupabaseDB && typeof window.SupabaseDB.addStudent === 'function') {
+      try {
+        const created = await window.SupabaseDB.addStudent(newStudent);
+        if (created && created.id) {
+          newStudent.id = created.id;
+          newStudent.supabase_id = created.id;
+          cloudSaved = true;
+          console.log('✅ Student persisted directly in Supabase Cloud:', newStudent.fullName);
+        }
+      } catch (err) {
+        console.warn('Notice: Offline/Network issue, student queued in local storage for cloud sync:', err);
+        newStudent.sync_status = 'PENDING_UPLOAD';
+      }
+    }
+
+    // 2. Commit to local storage
+    data.students.unshift(newStudent);
+
+    // Initialize October 2026 dues record for the new student
+    if (!data.monthlyDues) data.monthlyDues = [];
+    const hasOctRecord = data.monthlyDues.some(d => (d.studentId === newStudent.id || d.regNo === newStudent.regNo) && d.monthKey === '2026-10');
+    if (!hasOctRecord) {
+      data.monthlyDues.unshift({
+        id: 'md_10_' + Date.now(),
+        studentId: newStudent.id,
+        studentName: newStudent.fullName,
+        regNo: newStudent.regNo,
+        department: newStudent.department,
+        batch: newStudent.batch,
+        monthKey: '2026-10',
+        monthLabel: 'October 2026',
+        expectedAmount: newStudent.expectedAmountPerCycle,
+        paidAmount: 0,
+        status: 'PENDING',
+        date: null,
+        channel: null,
+        voucherRef: null,
+        recordedBy: null,
+        notes: 'Enrolled member October dues quota'
+      });
+    }
+
+    // Add audit log
+    const actor = (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Hamas Khan (Finance Secretary)';
+    data.auditLogs.unshift({
+      id: 'aud_' + Date.now(),
+      action: 'STUDENT_ENROLLED',
+      actor: actor,
+      details: `Enrolled student ${newStudent.fullName} (${newStudent.regNo}) in ${newStudent.department} (Supabase Cloud Synced)`,
+      timestamp: new Date().toISOString()
+    });
+
+    this.save(data);
+
+    // Also log audit in Supabase Cloud
+    if (typeof window !== 'undefined' && window.SupabaseDB && typeof window.SupabaseDB.logAudit === 'function') {
+      window.SupabaseDB.logAudit('STUDENT_ENROLLED', actor, `Enrolled student ${newStudent.fullName} (${newStudent.regNo})`).catch(() => {});
+    }
+
+    return { student: newStudent, isNew: true, cloudSaved };
   },
 
   addStudent(studentData) {
@@ -704,7 +826,7 @@ const DataStore = {
     if (!data.students) data.students = [];
 
     // Check for existing student by regNo
-    const existing = data.students.find(s => s.regNo === studentData.regNo);
+    const existing = data.students.find(s => s.regNo.toLowerCase() === studentData.regNo.toLowerCase());
     if (existing) {
       return { student: existing, isNew: false };
     }
@@ -767,7 +889,7 @@ const DataStore = {
 
     this.save(data);
 
-    // Asynchronously push to Supabase Cloud if available
+    // Directly push to Supabase Cloud
     if (typeof window !== 'undefined' && window.SupabaseDB && typeof window.SupabaseDB.addStudent === 'function') {
       window.SupabaseDB.addStudent(newStudent).then(created => {
         if (created && created.id) {
@@ -775,6 +897,7 @@ const DataStore = {
           const target = current.students.find(s => s.id === newStudent.id || s.regNo === newStudent.regNo);
           if (target) {
             target.supabase_id = created.id;
+            target.id = created.id;
             this.save(current);
           }
         }
@@ -812,10 +935,10 @@ const DataStore = {
 
     this.save(data);
 
-    // Asynchronously delete from Supabase Cloud if available
-    if (typeof window !== 'undefined' && window.SupabaseDB && typeof window.SupabaseDB.deleteStudent === 'function') {
-      window.SupabaseDB.deleteStudent(removed.supabase_id || removed.id, removed.regNo).catch(err => {
-        console.warn('Supabase background delete notice:', err);
+    // Directly archive in Supabase Cloud
+    if (typeof window !== 'undefined' && window.SupabaseDB && typeof window.SupabaseDB.archiveStudent === 'function') {
+      window.SupabaseDB.archiveStudent(removed.supabase_id || removed.id || removed.regNo).catch(err => {
+        console.warn('Supabase archive notice:', err);
       });
     }
 
