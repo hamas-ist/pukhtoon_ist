@@ -161,6 +161,26 @@
       const grid = document.getElementById('eventsListGrid');
       if (!grid || !data.events) return;
 
+      if (data.events.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 4.5rem 2rem; background: var(--surface-card); border-radius: 1rem; border: 1px dashed var(--border);">
+            <div style="width: 56px; height: 56px; border-radius: 16px; background: var(--accent-blue-subtle); color: var(--accent-blue); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+              <i data-lucide="calendar" class="w-7 h-7"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">No Community Events Scheduled</h3>
+            <p style="font-size: 0.875rem; color: var(--text-muted); max-width: 440px; margin: 0 auto 1.5rem; line-height: 1.5;">
+              All dummy event data has been cleared. Schedule an official semester event, define its budget ceiling, and assign organizers.
+            </p>
+            <button class="btn btn-primary" onclick="openModal('addEventModal')" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <i data-lucide="calendar-plus" class="w-4 h-4"></i>
+              <span>Schedule First Event</span>
+            </button>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
       grid.innerHTML = data.events.map(e => {
         const remaining = Math.max(0, e.plannedBudget - e.actualSpending);
         const util = e.plannedBudget > 0 ? Math.round((e.actualSpending / e.plannedBudget) * 100) : 0;

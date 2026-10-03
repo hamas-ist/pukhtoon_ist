@@ -220,9 +220,10 @@ const SupabaseDB = {
           }
         });
 
-        // 2. Upload any local students that were queued or added while offline
+        // 2. Upload any local students that were queued while offline
         for (const ls of localData.students) {
           if (ls.status === 'ARCHIVED') continue;
+          if (ls.sync_status !== 'PENDING_UPLOAD') continue;
           const inCloud = cloudStudents.some(cs => 
             cs.reg_no === ls.regNo || 
             cs.id === ls.id || 
@@ -234,11 +235,15 @@ const SupabaseDB = {
               if (inserted && inserted.id) {
                 ls.supabase_id = inserted.id;
                 ls.id = inserted.id;
+                delete ls.sync_status;
                 stateChanged = true;
               }
             } catch (uploadErr) {
               console.warn('Notice: Local student preserved, cloud sync will retry:', uploadErr);
             }
+          } else {
+            delete ls.sync_status;
+            stateChanged = true;
           }
         }
 
@@ -336,6 +341,26 @@ const SupabaseDB = {
       return Boolean(res && res.length > 0);
     } catch (err) {
       console.warn('⚠️ Supabase archiveStudent notice:', err);
+      return false;
+    }
+  },
+
+  // Update monthly collection target in Supabase PostgreSQL
+  async updateCycleTarget(monthKey, targetAmount, title) {
+    try {
+      const term = monthKey && monthKey.startsWith('2026') ? 'Fall 2026' : 'Active Term';
+      const cycles = await this.restRequest(`contribution_cycles?academic_term=eq.${encodeURIComponent(term)}&limit=1`);
+      if (cycles && cycles.length > 0) {
+        await this.restRequest(`contribution_cycles?id=eq.${cycles[0].id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ target_amount: Number(targetAmount) })
+        });
+        console.log('✅ Supabase contribution_cycles target updated:', targetAmount);
+      }
+      await this.logAudit('TARGET_CONFIGURED', 'Hamas Khan (Finance Secretary)', `Set ${title || 'Monthly'} collection target to PKR ${Number(targetAmount).toLocaleString()}`);
+      return true;
+    } catch (err) {
+      console.warn('⚠️ Supabase updateCycleTarget notice:', err);
       return false;
     }
   },

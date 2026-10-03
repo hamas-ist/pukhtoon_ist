@@ -1,10 +1,10 @@
 /**
  * PUKHTOON COMMUNITY — IST ISLAMABAD
  * Core Data Engine & LocalStorage State Synchronizer
- * Pre-seeded with realistic Institute of Space Technology (IST) student records.
+ * Clean slate configured for live student data injection & dynamic monthly collection target.
  */
 
-const PUKHTOON_STORAGE_KEY = 'pukhtoon_community_data_v3';
+const PUKHTOON_STORAGE_KEY = 'pukhtoon_community_data_v4';
 
 const DEFAULT_IST_DATA = {
   departments: [
@@ -18,181 +18,9 @@ const DEFAULT_IST_DATA = {
     'Mathematics'
   ],
 
-  batches: ['2021-2025', '2022-2026', '2023-2027', '2024-2028'],
+  batches: ['2021-2025', '2022-2026', '2023-2027', '2024-2028', '2025-2029'],
 
-  students: [
-    {
-      id: 'bff4d2e9-c911-4a6c-8e41-6900563521d9',
-      supabase_id: 'bff4d2e9-c911-4a6c-8e41-6900563521d9',
-      fullName: 'Muhammad Ahmad Khan',
-      regNo: '210104012',
-      department: 'Aerospace Engineering',
-      batch: '2021-2025',
-      contributionFrequency: 'MONTHLY',
-      expectedAmountPerCycle: 1000,
-      totalContributed: 6000,
-      outstandingBalance: 0,
-      status: 'ACTIVE',
-      email: 'ahmad.khan@ist.edu.pk',
-      phone: '+92 300 1234567',
-      joinDate: '2021-10-15',
-      notes: 'Final year project lead, regular contributor'
-    },
-    {
-      id: '7051b11d-1da4-4376-9a8b-b621fabf35aa',
-      supabase_id: '7051b11d-1da4-4376-9a8b-b621fabf35aa',
-      fullName: 'Bilal Khattak',
-      regNo: '220101004',
-      department: 'Computer Science',
-      batch: '2022-2026',
-      contributionFrequency: 'MONTHLY',
-      expectedAmountPerCycle: 1000,
-      totalContributed: 4500,
-      outstandingBalance: 1500,
-      status: 'ACTIVE',
-      email: 'bilal.khattak@ist.edu.pk',
-      phone: '+92 312 9876543',
-      joinDate: '2022-09-20',
-      notes: 'Community web council volunteer'
-    },
-    {
-      id: 'dddf3ce3-4f83-4b63-a956-79d0e1078089',
-      supabase_id: 'dddf3ce3-4f83-4b63-a956-79d0e1078089',
-      fullName: 'Hamza Afridi',
-      regNo: '210102045',
-      department: 'Electrical Engineering',
-      batch: '2021-2025',
-      contributionFrequency: 'MONTHLY',
-      expectedAmountPerCycle: 1000,
-      totalContributed: 6000,
-      outstandingBalance: 0,
-      status: 'ACTIVE',
-      email: 'hamza.afridi@ist.edu.pk',
-      phone: '+92 333 4567890',
-      joinDate: '2021-09-10',
-      notes: 'Badminton team player'
-    },
-    {
-      id: '1d6e66de-8b81-4ee2-830c-6ec4401d4a9c',
-      supabase_id: '1d6e66de-8b81-4ee2-830c-6ec4401d4a9c',
-      fullName: 'Zarghona Khattak',
-      regNo: '230103019',
-      department: 'Avionics Engineering',
-      batch: '2023-2027',
-      contributionFrequency: 'MONTHLY',
-      expectedAmountPerCycle: 1000,
-      totalContributed: 3000,
-      outstandingBalance: 0,
-      status: 'ACTIVE',
-      email: 'zarghona.k@ist.edu.pk',
-      phone: '+92 345 6789012',
-      joinDate: '2023-09-20',
-      notes: 'Cultural debate team delegate'
-    },
-    {
-      id: '2c39d188-54d0-4e1c-95ea-38a260e60715',
-      supabase_id: '2c39d188-54d0-4e1c-95ea-38a260e60715',
-      fullName: 'Shahid Khan Shinwari',
-      regNo: '220105031',
-      department: 'Mechanical Engineering',
-      batch: '2022-2026',
-      contributionFrequency: 'MONTHLY',
-      expectedAmountPerCycle: 1000,
-      totalContributed: 3000,
-      outstandingBalance: 1500,
-      status: 'ACTIVE',
-      email: 'shahid.shinwari@ist.edu.pk',
-      phone: '+92 321 2345678',
-      joinDate: '2022-11-05',
-      notes: 'Former logistics lead'
-    },
-    {
-      id: '171d89d1-9fa6-4bd8-b5e8-23e95974b656',
-      supabase_id: '171d89d1-9fa6-4bd8-b5e8-23e95974b656',
-      fullName: 'Palwasha Wazir',
-      regNo: '230101088',
-      department: 'Computer Science',
-      batch: '2023-2027',
-      contributionFrequency: 'MONTHLY',
-      expectedAmountPerCycle: 1000,
-      totalContributed: 3000,
-      outstandingBalance: 0,
-      status: 'ACTIVE',
-      email: 'palwasha.wazir@ist.edu.pk',
-      phone: '+92 334 5678901',
-      joinDate: '2023-10-12',
-      notes: 'Literary committee'
-    },
-    {
-      id: '96a8b295-358d-4c8d-847f-5003ad8b9337',
-      supabase_id: '96a8b295-358d-4c8d-847f-5003ad8b9337',
-      fullName: 'Sher Alam Mehsud',
-      regNo: '240106002',
-      department: 'Space Sciences',
-      batch: '2024-2028',
-      contributionFrequency: 'MONTHLY',
-      expectedAmountPerCycle: 1000,
-      totalContributed: 1500,
-      outstandingBalance: 0,
-      status: 'ACTIVE',
-      email: 'sher.alam@ist.edu.pk',
-      phone: '+92 316 7890123',
-      joinDate: '2024-09-01',
-      notes: 'Freshman representative'
-    },
-    {
-      id: '345a427c-4959-4465-9349-6697261734a4',
-      supabase_id: '345a427c-4959-4465-9349-6697261734a4',
-      fullName: 'Gul Panra Yousafzai',
-      regNo: '240107015',
-      department: 'Materials Science',
-      batch: '2024-2028',
-      contributionFrequency: 'BIWEEKLY',
-      expectedAmountPerCycle: 500,
-      totalContributed: 1500,
-      outstandingBalance: 0,
-      status: 'ACTIVE',
-      email: 'gul.panra@ist.edu.pk',
-      phone: '+92 335 8901234',
-      joinDate: '2024-09-15',
-      notes: 'Cultural debate team delegate'
-    },
-    {
-      id: 'c8250067-29b7-4f61-8ec8-32c31205289e',
-      supabase_id: 'c8250067-29b7-4f61-8ec8-32c31205289e',
-      fullName: 'Asfandiyar Mohmand',
-      regNo: '240105033',
-      department: 'Space Science',
-      batch: '2024-2028',
-      contributionFrequency: 'MONTHLY',
-      expectedAmountPerCycle: 1000,
-      totalContributed: 2000,
-      outstandingBalance: 0,
-      status: 'ACTIVE',
-      email: 'asfand.m@ist.edu.pk',
-      phone: '+92 315 8901234',
-      joinDate: '2024-09-01',
-      notes: 'Freshman representative'
-    },
-    {
-      id: '32c0b8cb-e6a9-49f6-901f-ce8f7bb2c598',
-      supabase_id: '32c0b8cb-e6a9-49f6-901f-ce8f7bb2c598',
-      fullName: 'Bilal Orakzai',
-      regNo: '220101077',
-      department: 'Aerospace Engineering',
-      batch: '2022-2026',
-      contributionFrequency: 'MONTHLY',
-      expectedAmountPerCycle: 1000,
-      totalContributed: 5000,
-      outstandingBalance: 0,
-      status: 'ACTIVE',
-      email: 'bilal.o@ist.edu.pk',
-      phone: '+92 346 9012345',
-      joinDate: '2022-09-15',
-      notes: 'IST Rover club coordinator'
-    }
-  ],
-
+  // Active Monthly & Custom Contribution Cycles
   cycles: [
     {
       id: 'cyc_oct_2026',
@@ -200,237 +28,29 @@ const DEFAULT_IST_DATA = {
       cycleType: 'MONTHLY',
       monthKey: '2026-10',
       targetAmount: 50000,
-      collectedAmount: 37500,
+      collectedAmount: 0,
       startDate: '2026-10-01',
       dueDate: '2026-10-31',
       status: 'ACTIVE'
-    },
-    {
-      id: 'cyc_01',
-      name: 'Fall 2026 Monthly Dues — September',
-      cycleType: 'MONTHLY',
-      monthKey: '2026-09',
-      targetAmount: 60000,
-      collectedAmount: 47500,
-      startDate: '2026-09-01',
-      dueDate: '2026-09-30',
-      status: 'COMPLETED'
-    },
-    {
-      id: 'cyc_02',
-      name: 'Khyber Cultural Gala 2026 Special Pool',
-      cycleType: 'CUSTOM',
-      targetAmount: 80000,
-      collectedAmount: 72000,
-      startDate: '2026-08-15',
-      dueDate: '2026-10-10',
-      status: 'ACTIVE'
-    },
-    {
-      id: 'cyc_03',
-      name: 'Spring 2026 End-Term Farewell Pool',
-      cycleType: 'CUSTOM',
-      targetAmount: 50000,
-      collectedAmount: 50000,
-      startDate: '2026-05-01',
-      dueDate: '2026-05-25',
-      status: 'CLOSED'
     }
   ],
 
-  monthlyDues: [
-    // October 2026 (Active Current Month)
-    { id: 'md_10_01', studentId: 'bff4d2e9-c911-4a6c-8e41-6900563521d9', studentName: 'Muhammad Ahmad Khan', regNo: '210104012', department: 'Aerospace Engineering', batch: '2021-2025', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-02', channel: 'EasyPaisa', voucherRef: 'TXN-2026-201', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'October monthly installment cleared' },
-    { id: 'md_10_02', studentId: '7051b11d-1da4-4376-9a8b-b621fabf35aa', studentName: 'Bilal Khattak', regNo: '220101004', department: 'Computer Science', batch: '2022-2026', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 0, status: 'PENDING', date: null, channel: null, voucherRef: null, recordedBy: null, notes: 'Awaiting monthly payment' },
-    { id: 'md_10_03', studentId: 'dddf3ce3-4f83-4b63-a956-79d0e1078089', studentName: 'Hamza Afridi', regNo: '210102045', department: 'Electrical Engineering', batch: '2021-2025', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-03', channel: 'JazzCash', voucherRef: 'TXN-2026-202', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Cleared via JazzCash wallet' },
-    { id: 'md_10_04', studentId: '1d6e66de-8b81-4ee2-830c-6ec4401d4a9c', studentName: 'Zarghona Khattak', regNo: '230103019', department: 'Avionics Engineering', batch: '2023-2027', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-01', channel: 'EasyPaisa', voucherRef: 'TXN-2026-203', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Cleared via EasyPaisa' },
-    { id: 'md_10_05', studentId: '2c39d188-54d0-4e1c-95ea-38a260e60715', studentName: 'Shahid Khan Shinwari', regNo: '220105031', department: 'Mechanical Engineering', batch: '2022-2026', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 0, status: 'PENDING', date: null, channel: null, voucherRef: null, recordedBy: null, notes: 'Dues notice dispatched' },
-    { id: 'md_10_06', studentId: '171d89d1-9fa6-4bd8-b5e8-23e95974b656', studentName: 'Palwasha Wazir', regNo: '230101088', department: 'Computer Science', batch: '2023-2027', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-04', channel: 'EasyPaisa', voucherRef: 'TXN-2026-204', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Paid on due date' },
-    { id: 'md_10_07', studentId: '96a8b295-358d-4c8d-847f-5003ad8b9337', studentName: 'Sher Alam Mehsud', regNo: '240106002', department: 'Space Sciences', batch: '2024-2028', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-02', channel: 'Cash', voucherRef: 'TXN-2026-205', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Handed over at Secretariat' },
-    { id: 'md_10_08', studentId: '345a427c-4959-4465-9349-6697261734a4', studentName: 'Gul Panra Yousafzai', regNo: '240107015', department: 'Materials Science', batch: '2024-2028', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 500, paidAmount: 500, status: 'PAID', date: '2026-10-01', channel: 'JazzCash', voucherRef: 'TXN-2026-206', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Bi-weekly installment' },
-    { id: 'md_10_09', studentId: 'c8250067-29b7-4f61-8ec8-32c31205289e', studentName: 'Asfandiyar Mohmand', regNo: '240105033', department: 'Space Science', batch: '2024-2028', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-01', channel: 'Cash', voucherRef: 'TXN-2026-207', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Handed over at Secretariat' },
-    { id: 'md_10_10', studentId: '32c0b8cb-e6a9-49f6-901f-ce8f7bb2c598', studentName: 'Bilal Orakzai', regNo: '220101077', department: 'Aerospace Engineering', batch: '2022-2026', monthKey: '2026-10', monthLabel: 'October 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-10-02', channel: 'Bank Transfer', voucherRef: 'TXN-2026-208', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Online bank payment' },
+  // Live Student Members (Empty — ready for real student data injection)
+  students: [],
 
-    // September 2026
-    { id: 'md_09_01', studentId: 'bff4d2e9-c911-4a6c-8e41-6900563521d9', studentName: 'Muhammad Ahmad Khan', regNo: '210104012', department: 'Aerospace Engineering', batch: '2021-2025', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-24', channel: 'Cash', voucherRef: 'TXN-2026-101', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Secretariat cash handover' },
-    { id: 'md_09_02', studentId: '7051b11d-1da4-4376-9a8b-b621fabf35aa', studentName: 'Bilal Khattak', regNo: '220101004', department: 'Computer Science', batch: '2022-2026', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-21', channel: 'EasyPaisa', voucherRef: 'TXN-2026-104', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Direct wallet transfer' },
-    { id: 'md_09_03', studentId: 'dddf3ce3-4f83-4b63-a956-79d0e1078089', studentName: 'Hamza Afridi', regNo: '210102045', department: 'Electrical Engineering', batch: '2021-2025', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-22', channel: 'Cash', voucherRef: 'TXN-2026-112', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Paid on campus' },
-    { id: 'md_09_04', studentId: '1d6e66de-8b81-4ee2-830c-6ec4401d4a9c', studentName: 'Zarghona Khattak', regNo: '230103019', department: 'Avionics Engineering', batch: '2023-2027', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-20', channel: 'EasyPaisa', voucherRef: 'TXN-2026-114', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Cleared via EasyPaisa' },
-    { id: 'md_09_05', studentId: 'c8250067-29b7-4f61-8ec8-32c31205289e', studentName: 'Asfandiyar Mohmand', regNo: '240105033', department: 'Space Science', batch: '2024-2028', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-15', channel: 'Cash', voucherRef: 'TXN-2026-118', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Orientation welcome dues' },
-    { id: 'md_09_06', studentId: '2c39d188-54d0-4e1c-95ea-38a260e60715', studentName: 'Shahid Khan Shinwari', regNo: '220105031', department: 'Mechanical Engineering', batch: '2022-2026', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-23', channel: 'Bank Transfer', voucherRef: 'TXN-2026-120', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Cleared via 1Link' },
-    { id: 'md_09_07', studentId: '171d89d1-9fa6-4bd8-b5e8-23e95974b656', studentName: 'Palwasha Wazir', regNo: '230101088', department: 'Computer Science', batch: '2023-2027', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-25', channel: 'Cash', voucherRef: 'TXN-2026-125', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Paid on campus' },
-    { id: 'md_09_08', studentId: '32c0b8cb-e6a9-49f6-901f-ce8f7bb2c598', studentName: 'Bilal Orakzai', regNo: '220101077', department: 'Aerospace Engineering', batch: '2022-2026', monthKey: '2026-09', monthLabel: 'September 2026', expectedAmount: 1000, paidAmount: 1000, status: 'PAID', date: '2026-09-18', channel: 'EasyPaisa', voucherRef: 'TXN-2026-115', recordedBy: 'Hamas Khan (Finance Secretary)', notes: 'Verified and reconciled' }
-  ],
+  // Live Monthly Dues Records (Empty — generated dynamically as students are enrolled/collected)
+  monthlyDues: [],
 
+  // Live Community Events (Empty — ready for scheduled events)
+  events: [],
 
-  events: [
-    {
-      id: 'evt_01',
-      title: 'Khyber Cultural Night & Annual Gala 2026',
-      date: '2026-10-15',
-      location: 'IST Main Auditorium, Islamabad',
-      plannedBudget: 120000,
-      actualSpending: 94500,
-      status: 'UPCOMING',
-      description: 'The signature annual cultural festivity of IST Pukhtoon Community featuring traditional Attan performance, Pashto literary mushaira, folkloric instrumentation, and ethnic delicacies.',
-      leadOrganizer: 'Zarghona Khattak'
-    },
-    {
-      id: 'evt_02',
-      title: 'Freshers Welcome & Orientation Gathering',
-      date: '2026-09-10',
-      location: 'IST Student Activity Center',
-      plannedBudget: 45000,
-      actualSpending: 41200,
-      status: 'COMPLETED',
-      description: 'Official welcoming ceremony for new Batch 2024-2028 Pukhtoon freshmen across all university faculties.',
-      leadOrganizer: 'Muhammad Ahmad Khan'
-    },
-    {
-      id: 'evt_03',
-      title: 'Annual Pashto Poetry Mushaira 2026',
-      date: '2026-11-20',
-      location: 'IST Space Sciences Seminar Hall',
-      plannedBudget: 35000,
-      actualSpending: 0,
-      status: 'UPCOMING',
-      description: 'Literary symposium featuring prominent contemporary poets and student writers from Islamabad universities.',
-      leadOrganizer: 'Palwasha Wazir'
-    },
-    {
-      id: 'evt_04',
-      title: 'Inter-University Pashto Debate Competition',
-      date: '2026-04-18',
-      location: 'IST Video Conference Hall',
-      plannedBudget: 30000,
-      actualSpending: 28400,
-      status: 'COMPLETED',
-      description: 'Parliamentary debate tournament with delegations from NUST, FAST, and COMSATS.',
-      leadOrganizer: 'Gul Panra Yousafzai'
-    }
-  ],
+  // Live Expense Vouchers (Empty — ready for real vouchers)
+  expenses: [],
 
-  expenses: [
-    {
-      id: 'exp_01',
-      eventId: 'evt_01',
-      eventTitle: 'Khyber Cultural Night & Annual Gala 2026',
-      title: 'Traditional Catering & Refreshments Advance',
-      amount: 45000,
-      category: 'Food',
-      date: '2026-09-20',
-      voucherRef: 'VCH-2026-081',
-      approvedBy: 'Huzaifa Tariq (President)'
-    },
-    {
-      id: 'exp_02',
-      eventId: 'evt_01',
-      eventTitle: 'Khyber Cultural Night & Annual Gala 2026',
-      title: 'Traditional Attan & Cultural Stage Decoration',
-      amount: 28000,
-      category: 'Decoration',
-      date: '2026-09-22',
-      voucherRef: 'VCH-2026-082',
-      approvedBy: 'Hamas Khan (Finance Secretary)'
-    },
-    {
-      id: 'exp_03',
-      eventId: 'evt_01',
-      eventTitle: 'Khyber Cultural Night & Annual Gala 2026',
-      title: 'Rubab & Mangay Sound System Rental',
-      amount: 21500,
-      category: 'Sound & Media',
-      date: '2026-09-23',
-      voucherRef: 'VCH-2026-083',
-      approvedBy: 'Hamas Khan (Finance Secretary)'
-    },
-    {
-      id: 'exp_04',
-      eventId: 'evt_02',
-      eventTitle: 'Freshers Welcome & Orientation Gathering',
-      title: 'Chai, Pakora & Traditional Sweets for 120 Guests',
-      amount: 26500,
-      category: 'Food',
-      date: '2026-09-10',
-      voucherRef: 'VCH-2026-074',
-      approvedBy: 'Hamas Khan (Finance Secretary)'
-    },
-    {
-      id: 'exp_05',
-      eventId: 'evt_02',
-      eventTitle: 'Freshers Welcome & Orientation Gathering',
-      title: 'Welcome Badges & IST Community Souvenirs',
-      amount: 14700,
-      category: 'Printing',
-      date: '2026-09-08',
-      voucherRef: 'VCH-2026-075',
-      approvedBy: 'Huzaifa Tariq (President)'
-    }
-  ],
+  // Double-Entry Master Transactions Ledger (Empty — recorded on real payments/expenses)
+  transactions: [],
 
-  transactions: [
-    {
-      id: 'txn_01',
-      transactionRef: 'TXN-2026-101',
-      date: '2026-09-24',
-      description: 'Monthly Pool Dues — Muhammad Ahmad Khan (Reg: 210101045)',
-      amount: 1000,
-      type: 'INFLOW',
-      category: 'Student Dues',
-      recordedBy: 'Hamas Khan'
-    },
-    {
-      id: 'txn_02',
-      transactionRef: 'TXN-2026-102',
-      date: '2026-09-23',
-      description: 'Catering Advance for Khyber Cultural Gala 2026',
-      amount: -45000,
-      type: 'OUTFLOW',
-      category: 'Event Expense',
-      recordedBy: 'Hamas Khan'
-    },
-    {
-      id: 'txn_03',
-      transactionRef: 'TXN-2026-103',
-      date: '2026-09-22',
-      description: 'Stage Backdrop & Cultural Props (VCH-2026-082)',
-      amount: -28000,
-      type: 'OUTFLOW',
-      category: 'Event Expense',
-      recordedBy: 'Hamas Khan'
-    },
-    {
-      id: 'txn_04',
-      transactionRef: 'TXN-2026-104',
-      date: '2026-09-21',
-      description: 'Monthly Pool Dues — Zarghona Khattak (Reg: 220202018)',
-      amount: 1000,
-      type: 'INFLOW',
-      category: 'Student Dues',
-      recordedBy: 'Hamas Khan'
-    },
-    {
-      id: 'txn_05',
-      transactionRef: 'TXN-2026-105',
-      date: '2026-09-20',
-      description: 'Monthly Pool Dues — Gul Panra Yousafzai (Reg: 220401015)',
-      amount: 500,
-      type: 'INFLOW',
-      category: 'Student Dues',
-      recordedBy: 'Hamas Khan'
-    },
-    {
-      id: 'txn_06',
-      transactionRef: 'TXN-2026-106',
-      date: '2026-09-19',
-      description: 'Khyber Gala Sponsorship Token — Al-Makkah Printers',
-      amount: 15000,
-      type: 'INFLOW',
-      category: 'Sponsorship',
-      recordedBy: 'Huzaifa Tariq'
-    }
-  ],
-
+  // Executive Council Access & RBAC Accounts (Hamas Khan Super Admin)
   organizers: [
     {
       id: 'org_01',
@@ -480,32 +100,11 @@ const DEFAULT_IST_DATA = {
 
   auditLogs: [
     {
-      id: 'aud_01',
-      action: 'CYCLE_CREATED',
-      actor: 'Hamas Khan (Finance Secretary)',
-      details: 'Created Fall 2026 Monthly Dues — September (Target: PKR 60,000)',
-      timestamp: '2026-09-01T09:00:00Z'
-    },
-    {
-      id: 'aud_02',
-      action: 'EXPENSE_APPROVED',
-      actor: 'Huzaifa Tariq (President)',
-      details: 'Approved VCH-2026-081 (PKR 45,000) for Khyber Gala Catering',
-      timestamp: '2026-09-20T14:30:00Z'
-    },
-    {
-      id: 'aud_03',
-      action: 'DUES_RECORDED',
-      actor: 'Hamas Khan (Finance Secretary)',
-      details: 'Recorded PKR 1,000 contribution from Zarghona Khattak',
-      timestamp: '2026-09-21T11:15:00Z'
-    },
-    {
-      id: 'aud_04',
-      action: 'EVENT_SCHEDULED',
-      actor: 'Zarghona Khattak (Event Director)',
-      details: 'Scheduled Annual Pashto Poetry Mushaira 2026 for Nov 20, 2026',
-      timestamp: '2026-09-22T16:00:00Z'
+      id: 'aud_init',
+      action: 'SYSTEM_INITIALIZED',
+      actor: 'Hamas Khan (Super Admin)',
+      details: 'Pukhtoon Community Portal ready for live student data injection',
+      timestamp: '2026-10-01T00:00:00Z'
     }
   ]
 };
@@ -514,18 +113,47 @@ const DEFAULT_IST_DATA = {
 const DataStore = {
   load() {
     try {
+      // Clear legacy storage keys if present to ensure no stale dummy data persists
+      ['pukhtoon_community_data_v1', 'pukhtoon_community_data_v2', 'pukhtoon_community_data_v3'].forEach(k => {
+        try { localStorage.removeItem(k); } catch (e) {}
+      });
+
       const stored = localStorage.getItem(PUKHTOON_STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
         let updated = false;
-        if (!parsed.monthlyDues || parsed.monthlyDues.length === 0) {
-          parsed.monthlyDues = JSON.parse(JSON.stringify(DEFAULT_IST_DATA.monthlyDues || []));
-          updated = true;
-        }
-        if (!parsed.cycles || !parsed.cycles.some(c => c.id === 'cyc_oct_2026')) {
+
+        // Ensure cycles array exists and has active October cycle
+        if (!parsed.cycles || !Array.isArray(parsed.cycles) || parsed.cycles.length === 0) {
           parsed.cycles = JSON.parse(JSON.stringify(DEFAULT_IST_DATA.cycles));
           updated = true;
+        } else if (!parsed.cycles.some(c => c.monthKey === '2026-10' || c.id === 'cyc_oct_2026')) {
+          parsed.cycles.unshift(JSON.parse(JSON.stringify(DEFAULT_IST_DATA.cycles[0])));
+          updated = true;
         }
+
+        // Ensure metadata lists
+        if (!parsed.departments || !Array.isArray(parsed.departments)) {
+          parsed.departments = JSON.parse(JSON.stringify(DEFAULT_IST_DATA.departments));
+          updated = true;
+        }
+        if (!parsed.batches || !Array.isArray(parsed.batches)) {
+          parsed.batches = JSON.parse(JSON.stringify(DEFAULT_IST_DATA.batches));
+          updated = true;
+        }
+        if (!parsed.organizers || !Array.isArray(parsed.organizers)) {
+          parsed.organizers = JSON.parse(JSON.stringify(DEFAULT_IST_DATA.organizers));
+          updated = true;
+        }
+
+        // Ensure data arrays exist
+        if (!Array.isArray(parsed.students)) { parsed.students = []; updated = true; }
+        if (!Array.isArray(parsed.monthlyDues)) { parsed.monthlyDues = []; updated = true; }
+        if (!Array.isArray(parsed.events)) { parsed.events = []; updated = true; }
+        if (!Array.isArray(parsed.expenses)) { parsed.expenses = []; updated = true; }
+        if (!Array.isArray(parsed.transactions)) { parsed.transactions = []; updated = true; }
+        if (!Array.isArray(parsed.auditLogs)) { parsed.auditLogs = []; updated = true; }
+
         if (updated) {
           this.save(parsed);
         }
@@ -551,14 +179,71 @@ const DataStore = {
     return this.load();
   },
 
+  /**
+   * Set how much money should be collected for this month in figures (PKR)
+   * Dynamically updates cycle target, logs audit, and synchronizes to Supabase.
+   */
+  setMonthlyTarget(amount, monthKey = '2026-10') {
+    const numAmount = Math.max(0, parseInt(amount, 10) || 0);
+    const data = this.load();
+    if (!data.cycles) data.cycles = [];
+
+    let cycle = data.cycles.find(c => c.monthKey === monthKey || (monthKey === '2026-10' && c.id === 'cyc_oct_2026'));
+    if (cycle) {
+      cycle.targetAmount = numAmount;
+    } else {
+      const monthNames = {
+        '2026-10': 'October', '2026-11': 'November', '2026-12': 'December',
+        '2026-09': 'September', '2027-01': 'January 2027'
+      };
+      const label = monthNames[monthKey] || monthKey;
+      cycle = {
+        id: 'cyc_' + monthKey.replace('-', '_'),
+        name: `Monthly Dues Collection — ${label}`,
+        cycleType: 'MONTHLY',
+        monthKey: monthKey,
+        targetAmount: numAmount,
+        collectedAmount: 0,
+        startDate: `${monthKey}-01`,
+        dueDate: `${monthKey}-28`,
+        status: 'ACTIVE'
+      };
+      data.cycles.unshift(cycle);
+    }
+
+    const actor = (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Hamas Khan (Super Admin)';
+    const formattedAmount = (typeof formatPKR === 'function') ? formatPKR(numAmount) : 'PKR ' + numAmount.toLocaleString();
+    data.auditLogs.unshift({
+      id: 'aud_' + Date.now(),
+      action: 'TARGET_CONFIGURED',
+      actor: actor,
+      details: `Configured monthly collection target for ${monthKey} to ${formattedAmount}`,
+      timestamp: new Date().toISOString()
+    });
+
+    this.save(data);
+
+    // Synchronize to Supabase Cloud contribution_cycles
+    if (typeof window !== 'undefined' && window.SupabaseDB && typeof window.SupabaseDB.updateCycleTarget === 'function') {
+      window.SupabaseDB.updateCycleTarget(monthKey, numAmount, cycle.name).catch(err => {
+        console.warn('Supabase cycle target update notice:', err);
+      });
+      if (typeof window.SupabaseDB.logAudit === 'function') {
+        window.SupabaseDB.logAudit('TARGET_CONFIGURED', actor, `Configured target for ${monthKey} to ${formattedAmount}`).catch(() => {});
+      }
+    }
+
+    return cycle;
+  },
+
   getMonthlyDuesSummary(monthKey) {
     const data = this.load();
     const dues = data.monthlyDues || [];
     const activeKey = monthKey || '2026-10';
     const monthRecords = dues.filter(d => d.monthKey === activeKey);
 
-    const matchingCycle = (data.cycles || []).find(c => c.monthKey === activeKey);
-    const targetAmount = matchingCycle ? matchingCycle.targetAmount : 50000;
+    const matchingCycle = (data.cycles || []).find(c => c.monthKey === activeKey || (activeKey === '2026-10' && c.id === 'cyc_oct_2026'));
+    const targetAmount = matchingCycle ? Number(matchingCycle.targetAmount) : 50000;
     
     const collectedAmount = monthRecords.reduce((sum, r) => sum + (r.paidAmount || 0), 0);
     const pendingAmount = monthRecords.reduce((sum, r) => sum + (r.status === 'PENDING' ? ((r.expectedAmount || 1000) - (r.paidAmount || 0)) : 0), 0);
@@ -569,18 +254,36 @@ const DataStore = {
 
     // Distinct available months with labels
     const monthMap = new Map();
+    // Always guarantee October 2026 exists
+    monthMap.set('2026-10', 'October 2026');
+    (data.cycles || []).forEach(c => {
+      if (c.monthKey && !monthMap.has(c.monthKey)) {
+        const parts = (c.name || '').split('—');
+        monthMap.set(c.monthKey, parts[1] ? parts[1].trim() : c.monthKey);
+      }
+    });
     dues.forEach(d => {
       if (d.monthKey && !monthMap.has(d.monthKey)) {
         monthMap.set(d.monthKey, d.monthLabel || d.monthKey);
       }
     });
+
     const availableMonths = Array.from(monthMap.entries())
       .map(([key, label]) => ({ key, label }))
       .sort((a, b) => b.key.localeCompare(a.key));
 
+    const monthNames = {
+      '2026-10': 'October 2026',
+      '2026-11': 'November 2026',
+      '2026-12': 'December 2026',
+      '2026-09': 'September 2026',
+      '2026-08': 'August 2026'
+    };
+    const monthLabel = monthRecords[0]?.monthLabel || monthNames[activeKey] || (matchingCycle ? matchingCycle.name.split('—')[1]?.trim() : activeKey);
+
     return {
       monthKey: activeKey,
-      monthLabel: monthRecords[0]?.monthLabel || (matchingCycle ? matchingCycle.name.split('—')[1]?.trim() : activeKey),
+      monthLabel,
       cycle: matchingCycle,
       targetAmount,
       collectedAmount,
@@ -685,6 +388,7 @@ const DataStore = {
     }
 
     // Append Inflow Transaction
+    if (!data.transactions) data.transactions = [];
     data.transactions.unshift({
       id: 'txn_' + Date.now(),
       transactionRef: txnRef,
@@ -698,6 +402,7 @@ const DataStore = {
 
     // Append Audit Log
     const formattedAmount = (typeof formatPKR === 'function') ? formatPKR(amount) : 'PKR ' + amount.toLocaleString();
+    if (!data.auditLogs) data.auditLogs = [];
     data.auditLogs.unshift({
       id: 'aud_' + Date.now(),
       action: 'DUES_RECORDED',
@@ -803,6 +508,7 @@ const DataStore = {
 
     // Add audit log
     const actor = (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Hamas Khan (Finance Secretary)';
+    if (!data.auditLogs) data.auditLogs = [];
     data.auditLogs.unshift({
       id: 'aud_' + Date.now(),
       action: 'STUDENT_ENROLLED',
@@ -879,6 +585,7 @@ const DataStore = {
 
     // Add audit log
     const actor = (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Hamas Khan (Finance Secretary)';
+    if (!data.auditLogs) data.auditLogs = [];
     data.auditLogs.unshift({
       id: 'aud_' + Date.now(),
       action: 'STUDENT_ENROLLED',
@@ -925,6 +632,7 @@ const DataStore = {
 
     // Add audit log
     const actor = (typeof Auth !== 'undefined' && Auth.getUser()) ? Auth.getUser().name : 'Hamas Khan (Finance Secretary)';
+    if (!data.auditLogs) data.auditLogs = [];
     data.auditLogs.unshift({
       id: 'aud_' + Date.now(),
       action: 'STUDENT_REMOVED',
@@ -947,19 +655,28 @@ const DataStore = {
 
   getStats() {
     const data = this.load();
-    const totalCollected = data.students.reduce((acc, s) => acc + (s.totalContributed || 0), 0);
-    const totalSpent = data.expenses.reduce((acc, e) => acc + (e.amount || 0), 0);
+    const students = data.students || [];
+    const expenses = data.expenses || [];
+    const dues = data.monthlyDues || [];
+
+    const totalCollected = students.reduce((acc, s) => acc + (s.totalContributed || 0), 0);
+    const totalSpent = expenses.reduce((acc, e) => acc + (e.amount || 0), 0);
     const availableBalance = totalCollected - totalSpent;
-    const activeContributors = data.students.filter(s => s.status === 'ACTIVE').length;
-    const pendingDues = data.students.reduce((acc, s) => acc + (s.outstandingBalance || 0), 0);
+    const activeContributors = students.filter(s => s.status === 'ACTIVE').length;
+    const pendingDues = students.reduce((acc, s) => acc + (s.outstandingBalance || 0), 0);
     
     // Dynamic monthly collections for current active month (October 2026)
-    const octRecords = (data.monthlyDues || []).filter(d => d.monthKey === '2026-10');
-    const monthlyCollections = octRecords.length > 0 
-      ? octRecords.reduce((acc, r) => acc + (r.paidAmount || 0), 0)
-      : 37500;
-    const monthlyTarget = 50000;
-    const monthlyExpenses = 35000;
+    const octRecords = dues.filter(d => d.monthKey === '2026-10');
+    const monthlyCollections = octRecords.reduce((acc, r) => acc + (r.paidAmount || 0), 0);
+
+    // Active cycle target figure
+    const octCycle = (data.cycles || []).find(c => c.monthKey === '2026-10' || c.id === 'cyc_oct_2026');
+    const monthlyTarget = octCycle ? Number(octCycle.targetAmount) : 50000;
+    
+    // Dynamic monthly expenses for October 2026
+    const monthlyExpenses = expenses
+      .filter(e => (e.date || '').startsWith('2026-10'))
+      .reduce((acc, e) => acc + (e.amount || 0), 0);
 
     return {
       totalCollected,
@@ -970,8 +687,8 @@ const DataStore = {
       monthlyCollections,
       monthlyTarget,
       monthlyExpenses,
-      totalStudents: data.students.length,
-      totalEvents: data.events.length
+      totalStudents: students.length,
+      totalEvents: (data.events || []).length
     };
   }
 };

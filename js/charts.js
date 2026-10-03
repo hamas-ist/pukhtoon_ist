@@ -36,14 +36,34 @@ const ChartManager = {
     gradSpent.addColorStop(0, 'rgba(0, 113, 227, 0.35)');
     gradSpent.addColorStop(1, 'rgba(0, 113, 227, 0.0)');
 
+    const data = (typeof DataStore !== 'undefined' ? DataStore.load() : null) || {};
+    const txns = data.transactions || [];
+    const dues = data.monthlyDues || [];
+    const expenses = data.expenses || [];
+
+    const monthKeys = ['2026-05', '2026-06', '2026-07', '2026-08', '2026-09', '2026-10'];
+    const monthLabels = ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct 2026'];
+
+    const inflowData = monthKeys.map(k => {
+      const fromDues = dues.filter(d => d.monthKey === k).reduce((s, d) => s + (d.paidAmount || 0), 0);
+      const fromTxns = txns.filter(t => t.type === 'INFLOW' && (t.date || '').startsWith(k)).reduce((s, t) => s + (t.amount || 0), 0);
+      return Math.max(fromDues, fromTxns);
+    });
+
+    const expenseData = monthKeys.map(k => {
+      const fromExp = expenses.filter(e => (e.date || '').startsWith(k)).reduce((s, e) => s + (e.amount || 0), 0);
+      const fromTxns = txns.filter(t => t.type === 'OUTFLOW' && (t.date || '').startsWith(k)).reduce((s, t) => s + Math.abs(t.amount || 0), 0);
+      return Math.max(fromExp, fromTxns);
+    });
+
     this.instances[canvasId] = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct (Est)'],
+        labels: monthLabels,
         datasets: [
           {
             label: 'Contributions Inflow (PKR)',
-            data: [35000, 42000, 38000, 45000, 47500, 52000],
+            data: inflowData,
             borderColor: '#10B981',
             backgroundColor: gradCollected,
             tension: 0.35,
@@ -54,7 +74,7 @@ const ChartManager = {
           },
           {
             label: 'Event Expenditures (PKR)',
-            data: [28000, 15000, 12000, 31000, 35000, 48000],
+            data: expenseData,
             borderColor: '#0071E3',
             backgroundColor: gradSpent,
             tension: 0.35,
@@ -92,11 +112,12 @@ const ChartManager = {
             ticks: { color: tc.textColor, font: { size: 11, family: 'var(--font-sans)' } }
           },
           y: {
+            beginAtZero: true,
             grid: { color: tc.gridColor },
             ticks: {
               color: tc.textColor,
               font: { size: 11, family: 'var(--font-sans)' },
-              callback: (val) => `${val / 1000}k`
+              callback: (val) => val === 0 ? '0' : `${val / 1000}k`
             }
           }
         }
@@ -113,15 +134,23 @@ const ChartManager = {
     }
 
     const tc = this.getThemeColors();
-    const data = DataStore.load();
+    const data = (typeof DataStore !== 'undefined' ? DataStore.load() : null) || {};
+    const expenses = data.expenses || [];
     const categories = {};
-    data.expenses.forEach(e => {
+    expenses.forEach(e => {
       categories[e.category] = (categories[e.category] || 0) + e.amount;
     });
 
-    const labels = Object.keys(categories);
-    const values = Object.values(categories);
-    const colors = ['#0071E3', '#10B981', '#F59E0B', '#8B5CF6', '#06B6D4', '#EF4444'];
+    let labels = Object.keys(categories);
+    let values = Object.values(categories);
+    let colors = ['#0071E3', '#10B981', '#F59E0B', '#8B5CF6', '#06B6D4', '#EF4444'];
+
+    const isEmpty = labels.length === 0 || values.every(v => v === 0);
+    if (isEmpty) {
+      labels = ['No Expenses Incurred'];
+      values = [1];
+      colors = [document.body.classList.contains('dark') ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'];
+    }
 
     this.instances[canvasId] = new Chart(canvas.getContext('2d'), {
       type: 'doughnut',
@@ -133,7 +162,7 @@ const ChartManager = {
             backgroundColor: colors,
             borderWidth: 2,
             borderColor: document.body.classList.contains('dark') ? '#101010' : '#FFFFFF',
-            hoverOffset: 6
+            hoverOffset: isEmpty ? 0 : 6
           }
         ]
       },
@@ -150,7 +179,7 @@ const ChartManager = {
             bodyColor: tc.tooltipText,
             padding: 12,
             callbacks: {
-              label: (context) => ` ${context.label}: PKR ${context.parsed.toLocaleString()}`
+              label: (context) => isEmpty ? ' No expenses recorded yet' : ` ${context.label}: PKR ${context.parsed.toLocaleString()}`
             }
           }
         },
@@ -168,10 +197,15 @@ const ChartManager = {
     }
 
     const tc = this.getThemeColors();
-    const data = DataStore.load();
-    const labels = data.events.map(e => e.title.length > 20 ? e.title.substring(0, 18) + '...' : e.title);
-    const planned = data.events.map(e => e.plannedBudget);
-    const actual = data.events.map(e => e.actualSpending);
+    const data = (typeof DataStore !== 'undefined' ? DataStore.load() : null) || {};
+    const events = data.events || [];
+
+    const isEmpty = events.length === 0;
+    const labels = isEmpty
+      ? ['No Events Scheduled']
+      : events.map(e => e.title.length > 20 ? e.title.substring(0, 18) + '...' : e.title);
+    const planned = isEmpty ? [0] : events.map(e => e.plannedBudget);
+    const actual = isEmpty ? [0] : events.map(e => e.actualSpending);
 
     this.instances[canvasId] = new Chart(canvas.getContext('2d'), {
       type: 'bar',
@@ -215,11 +249,12 @@ const ChartManager = {
             ticks: { color: tc.textColor, font: { size: 10 } }
           },
           y: {
+            beginAtZero: true,
             grid: { color: tc.gridColor },
             ticks: {
               color: tc.textColor,
               font: { size: 10 },
-              callback: (val) => `${val / 1000}k`
+              callback: (val) => val === 0 ? '0' : `${val / 1000}k`
             }
           }
         }

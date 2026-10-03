@@ -115,21 +115,32 @@
               </div>
             </div>
 
-            <!-- Month Selector Dropdown -->
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <label for="monthlyCycleSelect" style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Billing Month:</label>
-              <select id="monthlyCycleSelect" class="form-select" style="min-width: 175px; padding: 0.4rem 0.75rem; font-size: 0.8125rem; font-weight: 600;" onchange="changeActiveMonth(this.value)">
-                <!-- Dynamically populated -->
-              </select>
+            <!-- Month Selector Dropdown & Set Target Action -->
+            <div style="display: flex; align-items: center; gap: 0.625rem; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <label for="monthlyCycleSelect" style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted);">Billing Month:</label>
+                <select id="monthlyCycleSelect" class="form-select" style="min-width: 175px; padding: 0.4rem 0.75rem; font-size: 0.8125rem; font-weight: 600;" onchange="changeActiveMonth(this.value)">
+                  <!-- Dynamically populated -->
+                </select>
+              </div>
+              <button class="btn btn-outline-emerald btn-sm" onclick="openSetTargetModal()" style="display: inline-flex; align-items: center; gap: 0.375rem; font-weight: 700; padding: 0.425rem 0.875rem;" title="Configure Monthly Target in Figures">
+                <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                <span>Set Target Figure</span>
+              </button>
             </div>
           </div>
 
           <!-- 4 Stat Boxes -->
           <div class="monthly-stat-grid">
-            <div class="monthly-stat-item">
-              <span style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Target This Month</span>
+            <div class="monthly-stat-item" style="cursor: pointer; position: relative; transition: border-color 0.2s ease, transform 0.2s ease;" onclick="openSetTargetModal()" title="Click to adjust monthly target figure">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Target This Month</span>
+                <span style="font-size: 0.6875rem; color: var(--accent-emerald); font-weight: 700; display: flex; align-items: center; gap: 0.25rem;">
+                  <i data-lucide="edit-3" class="w-3 h-3"></i> Set
+                </span>
+              </div>
               <div class="num-tabular" style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary); margin-top: 0.25rem;" id="heroTargetAmount">PKR 50,000</div>
-              <span style="font-size: 0.6875rem; color: var(--text-muted);">Monthly pool quota</span>
+              <span style="font-size: 0.6875rem; color: var(--accent-emerald); font-weight: 600;">Configurable pool quota</span>
             </div>
 
             <div class="monthly-stat-item" style="border-color: rgba(16, 185, 129, 0.3);">
@@ -344,6 +355,74 @@
     </div>
   </div>
 
+  <!-- Modal: Set Monthly Collection Target -->
+  <div id="setTargetModal" class="modal-backdrop" onclick="closeModal('setTargetModal')">
+    <div class="modal-dialog" onclick="event.stopPropagation()" style="max-width: 480px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.625rem;">
+          <div style="width: 36px; height: 36px; border-radius: 10px; background: var(--accent-emerald-subtle); color: var(--accent-emerald); display: flex; align-items: center; justify-content: center;">
+            <i data-lucide="sliders" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="modal-title" style="font-size: 1.125rem;">Set Monthly Collection Target</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.125rem;">Define the collection quota in figures for IST student members</p>
+          </div>
+        </div>
+        <button class="btn btn-icon" onclick="closeModal('setTargetModal')"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="handleSetTargetSubmit(event)">
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div class="form-group">
+            <label class="form-label" for="targetMonthSelect">Billing Month</label>
+            <select id="targetMonthSelect" class="form-select" onchange="updateTargetModalMonth(this.value)">
+              <option value="2026-10">October 2026 (Active Month)</option>
+              <option value="2026-11">November 2026</option>
+              <option value="2026-12">December 2026</option>
+              <option value="2026-09">September 2026</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.375rem;">
+              <label class="form-label" for="targetAmountFigure" style="margin-bottom: 0;">Target Amount (in Figures)</label>
+              <span id="targetFormattedPreview" style="font-size: 0.8125rem; font-weight: 700; color: var(--accent-emerald);">PKR 50,000</span>
+            </div>
+            <div style="position: relative;">
+              <span style="position: absolute; left: 0.875rem; top: 50%; transform: translateY(-50%); font-weight: 700; font-size: 0.875rem; color: var(--text-muted);">PKR</span>
+              <input type="number" id="targetAmountFigure" class="form-input num-tabular" required min="1000" step="1000" value="50000" style="padding-left: 3.25rem; font-size: 1.125rem; font-weight: 700;" oninput="updateTargetPreview(this.value)">
+            </div>
+          </div>
+
+          <!-- Quick Figure Presets -->
+          <div>
+            <label style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Quick Presets</label>
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.375rem;">
+              <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(25000)">25k</button>
+              <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(50000)">50k</button>
+              <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(75000)">75k</button>
+              <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(100000)">100k</button>
+              <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(150000)">150k</button>
+            </div>
+          </div>
+
+          <div style="background: var(--surface-secondary); padding: 0.875rem; border-radius: 0.75rem; border: 1px solid var(--border); font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5;">
+            <div style="display: flex; gap: 0.5rem; align-items: flex-start;">
+              <i data-lucide="info" class="w-4 h-4 text-accent-blue shrink-0" style="margin-top: 0.125rem;"></i>
+              <span>Setting this figure immediately updates the Hero target metric, recalculates the collection progress bar and realization rate across all dashboards, and persists to Supabase cloud.</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('setTargetModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" style="font-weight: 700;">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>Save & Apply Target</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase.js"></script>
   <script src="js/data.js"></script>
@@ -468,11 +547,28 @@
       if (records.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
-              No student records found matching current filter criteria.
+            <td colspan="8" style="text-align: center; padding: 3.5rem 1.5rem; color: var(--text-muted);">
+              <div style="max-width: 440px; margin: 0 auto;">
+                <i data-lucide="wallet" class="w-10 h-10" style="margin: 0 auto 0.75rem; color: var(--text-muted); opacity: 0.5;"></i>
+                <div style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem;">No Collections Logged for ${summary.monthLabel}</div>
+                <p style="font-size: 0.8125rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">
+                  All dummy records have been removed. Enroll students or collect dues to start tracking progress towards your <strong>${formatPKR(summary.targetAmount)}</strong> collection target.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 0.5rem;">
+                  <a href="students.html" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 0.375rem;">
+                    <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                    <span>Enroll Member</span>
+                  </a>
+                  <button class="btn btn-outline btn-sm" onclick="openSetTargetModal()" style="display: inline-flex; align-items: center; gap: 0.375rem;">
+                    <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                    <span>Adjust Target Figure</span>
+                  </button>
+                </div>
+              </div>
             </td>
           </tr>
         `;
+        if (window.lucide) lucide.createIcons();
         return;
       }
 
@@ -702,6 +798,68 @@
       DataStore.save(data);
       closeModal('createCycleModal');
       showToast('Cycle Launched', `"${title}" has been created.`);
+      renderCycles();
+    }
+
+    // Set Monthly Target Functions
+    function openSetTargetModal() {
+      const summary = DataStore.getMonthlyDuesSummary(currentSelectedMonth);
+      const targetMonthSelect = document.getElementById('targetMonthSelect');
+      if (targetMonthSelect) {
+        targetMonthSelect.value = currentSelectedMonth;
+      }
+      const targetInput = document.getElementById('targetAmountFigure');
+      if (targetInput) {
+        targetInput.value = summary.targetAmount || 50000;
+        updateTargetPreview(targetInput.value);
+      }
+      openModal('setTargetModal');
+    }
+
+    function updateTargetModalMonth(monthKey) {
+      const summary = DataStore.getMonthlyDuesSummary(monthKey);
+      const targetInput = document.getElementById('targetAmountFigure');
+      if (targetInput) {
+        targetInput.value = summary.targetAmount || 50000;
+        updateTargetPreview(targetInput.value);
+      }
+    }
+
+    function updateTargetPreview(val) {
+      const preview = document.getElementById('targetFormattedPreview');
+      if (preview) {
+        const num = Math.max(0, parseInt(val, 10) || 0);
+        preview.textContent = formatPKR(num);
+      }
+    }
+
+    function applyTargetPreset(amount) {
+      const targetInput = document.getElementById('targetAmountFigure');
+      if (targetInput) {
+        targetInput.value = amount;
+        updateTargetPreview(amount);
+      }
+    }
+
+    function handleSetTargetSubmit(e) {
+      e.preventDefault();
+      if (!requireSuperAdmin('configure monthly collection target')) return;
+
+      const monthKey = document.getElementById('targetMonthSelect').value || currentSelectedMonth;
+      const amount = Number(document.getElementById('targetAmountFigure').value);
+
+      if (isNaN(amount) || amount <= 0) {
+        showToast('Invalid Amount', 'Please enter a valid target figure greater than 0', 'warning');
+        return;
+      }
+
+      const cycle = DataStore.setMonthlyTarget(amount, monthKey);
+      closeModal('setTargetModal');
+
+      showToast('Target Configured & Synced', `Monthly collection target set to ${formatPKR(amount)} (Synced to Supabase Cloud)`);
+
+      // Refresh hero box, cycles, and stats
+      renderMonthlyHeroBox();
       renderCycles();
     }
 

@@ -312,7 +312,26 @@
       const data = DataStore.load();
       currentStudent = data.students.find(s => s.id === id) || data.students[0];
 
-      if (!currentStudent) return;
+      if (!currentStudent) {
+        const body = document.querySelector('.content-body');
+        if (body) {
+          body.innerHTML = `
+            <div style="text-align: center; padding: 5rem 1.5rem; max-width: 480px; margin: 0 auto;">
+              <i data-lucide="users" class="w-12 h-12" style="margin: 0 auto 1rem; color: var(--text-muted); opacity: 0.4;"></i>
+              <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Student Profile Not Found</h2>
+              <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.5rem;">
+                No student record was found with this ID or all dummy students have been removed. Return to the student directory to enroll or view members.
+              </p>
+              <a href="students.html" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 0.375rem;">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                <span>Back to Student Directory</span>
+              </a>
+            </div>
+          `;
+          if (window.lucide) lucide.createIcons();
+        }
+        return;
+      }
 
       const initials = currentStudent.fullName.split(' ').map(n => n[0]).slice(0, 2).join('');
       document.getElementById('stdAvatar').textContent = initials;
