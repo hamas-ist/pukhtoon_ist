@@ -461,9 +461,14 @@
   <script src="js/charts.js"></script>
   <script src="js/app.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       renderDashboard();
       populateStudentDropdown();
+      if (window.SupabaseDB) {
+        await SupabaseDB.syncToDataStore();
+        renderDashboard();
+        populateStudentDropdown();
+      }
     });
 
     function renderDashboard() {

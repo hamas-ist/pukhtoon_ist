@@ -302,10 +302,14 @@
   <script>
     let currentStudent = null;
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const studentId = urlParams.get('id') || 'std_01';
+      const studentId = urlParams.get('id');
       renderStudentProfile(studentId);
+      if (window.SupabaseDB) {
+        await SupabaseDB.syncToDataStore();
+        renderStudentProfile(studentId);
+      }
     });
 
     function renderStudentProfile(id) {

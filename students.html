@@ -287,8 +287,12 @@
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       renderStudentsTable();
+      if (window.SupabaseDB) {
+        await SupabaseDB.syncToDataStore();
+        renderStudentsTable();
+      }
     });
 
     function renderStudentsTable(filterList = null) {
@@ -378,14 +382,19 @@
     }
 
     function filterStudents() {
-      const q = document.getElementById('searchInput').value.toLowerCase().trim();
-      const dept = document.getElementById('deptFilter').value;
-      const batch = document.getElementById('batchFilter').value;
-      const freq = document.getElementById('freqFilter').value;
+      const qInput = document.getElementById('searchInput');
+      const deptInput = document.getElementById('deptFilter');
+      const batchInput = document.getElementById('batchFilter');
+      const freqInput = document.getElementById('freqFilter');
+
+      const q = qInput ? qInput.value.toLowerCase().trim() : '';
+      const dept = deptInput ? deptInput.value : 'ALL';
+      const batch = batchInput ? batchInput.value : 'ALL';
+      const freq = freqInput ? freqInput.value : 'ALL';
 
       const data = DataStore.load();
-      const filtered = data.students.filter(s => {
-        const matchQ = !q || s.fullName.toLowerCase().includes(q) || s.regNo.toLowerCase().includes(q);
+      const filtered = (data.students || []).filter(s => {
+        const matchQ = !q || (s.fullName && s.fullName.toLowerCase().includes(q)) || (s.regNo && s.regNo.toLowerCase().includes(q));
         const matchDept = dept === 'ALL' || s.department === dept;
         const matchBatch = batch === 'ALL' || s.batch === batch;
         const matchFreq = freq === 'ALL' || s.contributionFrequency === freq;
