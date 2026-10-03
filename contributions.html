@@ -389,19 +389,20 @@
             </div>
             <div style="position: relative;">
               <span style="position: absolute; left: 0.875rem; top: 50%; transform: translateY(-50%); font-weight: 700; font-size: 0.875rem; color: var(--text-muted);">PKR</span>
-              <input type="number" id="targetAmountFigure" class="form-input num-tabular" required min="1000" step="1000" value="50000" style="padding-left: 3.25rem; font-size: 1.125rem; font-weight: 700;" oninput="updateTargetPreview(this.value)">
+              <input type="number" id="targetAmountFigure" class="form-input num-tabular" required min="100" step="any" value="50000" style="padding-left: 3.25rem; font-size: 1.125rem; font-weight: 700;" oninput="updateTargetPreview(this.value)">
             </div>
           </div>
 
           <!-- Quick Figure Presets -->
           <div>
             <label style="font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Quick Presets</label>
-            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.375rem;">
+            <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.375rem;">
+              <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(500)">500</button>
+              <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(1000)">1k</button>
+              <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(10000)">10k</button>
               <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(25000)">25k</button>
               <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(50000)">50k</button>
-              <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(75000)">75k</button>
               <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(100000)">100k</button>
-              <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.25rem; font-size: 0.6875rem; font-weight: 600;" onclick="applyTargetPreset(150000)">150k</button>
             </div>
           </div>
 
@@ -848,8 +849,8 @@
       const monthKey = document.getElementById('targetMonthSelect').value || currentSelectedMonth;
       const amount = Number(document.getElementById('targetAmountFigure').value);
 
-      if (isNaN(amount) || amount <= 0) {
-        showToast('Invalid Amount', 'Please enter a valid target figure greater than 0', 'warning');
+      if (isNaN(amount) || amount < 100) {
+        showToast('Invalid Amount', 'Please enter a target figure of at least PKR 100', 'warning');
         return;
       }
 
